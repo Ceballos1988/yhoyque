@@ -1,0 +1,17 @@
+# Ignora la carpeta de archivos temporales
+uploads/
+
+# Ignora los archivos de configuración sensibles
+.env
+
+# Node modules (carpeta de dependencias de Node.js)
+node_modules/
+
+# Logs de errores
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Otros archivos de sistema o temporales
+.DS_Store
+Thumbs.db

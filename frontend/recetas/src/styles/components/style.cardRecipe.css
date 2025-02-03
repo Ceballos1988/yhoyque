@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+
+.recipe-card h1 {
+  font-size: 1.8rem !important;
+}
+
+.recipe-card h2 {
+  font-size: 1.5rem;
+  color: #ee8532;
+  font-family: "Poppins", sans-serif;
+  margin-bottom: 1rem;
+}
+
+.recipe-card h3 {
+  font-size: 1rem !important;
+}
+
+.recipe-card p {
+  font-size: 1rem !important;
+  margin: 0.1rem 0;
+}
+
+.recipe-card span {
+  font-size: 0.8rem !important;
+}
+
+.recipe-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 300px;
+  background-color: #1e293b;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(230, 85, 23, 0.28) !important;
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1) !important;
+  max-width: 450px;
+  width: 100%;
+  transition: all 0.3s ease-in-out; /* Suaviza la expansión */
+  color: #fff;
+  margin-bottom: 20px;
+  
+}
+
+.recipe-card.expanded {
+  height: auto; /* Permite que el contenido determine la altura */
+}
+
+.ingredients-container,
+.steps-container {
+  max-height: 8em; /* Altura inicial limitada */
+  overflow: hidden; /* Oculta contenido adicional */
+  transition: max-height 0.3s ease-in-out; /* Transición suave */
+}
+
+.recipe-card.expanded .ingredients-container,
+.recipe-card.expanded .steps-container {
+  max-height: none; /* Elimina el límite de altura */
+}
+
+.recipe-card.expanded {
+  height: auto !important; /* Asegura que el contenedor pueda crecer */
+}
+
+.ingredients-container,
+.steps-container {
+  max-height: 8em; /* Limitar la altura inicial */
+  overflow: hidden; /* Ocultar el contenido adicional */
+  transition: max-height 0.3s ease-in-out; /* Transición suave al expandir o colapsar */
+}
+
+.expanded-ingredients,
+.expanded-steps {
+  max-height: none !important; /* Expandir para mostrar todo el contenido */
+  overflow: visible !important;
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px);
+}
+
+.list-ingredientes,
+.list-pasos {
+  min-height: 100px; /* Asegurar una altura mínima */
+  overflow: visible; /* Permitir que se expandan correctamente */
+}
+
+.list-disc,
+.list-decimal {
+  margin-left: 1rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9rem;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  transition: color 0.3s ease;
+}
+
+button:hover {
+  color: #ee8532;
+}
+
+textarea {
+  background-color: #ffffff;
+}
+
+.text-red-500 {
+  color: red;
+}
+
+.w-5 {
+  width: 20px;
+  height: 20px;
+}
+
+/* Estilos del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #0f172b;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.recipe-card .recipe-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.recipe-card .recipe-details {
+  margin-bottom: 1rem;
+}
+
+.recipe-card .ingredients-section {
+  min-height: 150px;
+}
+
+.recipe-card .steps-section {
+  margin-top: 1rem;
+}
+
+.recipe-card .interaction-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.recipe-card li {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.comments-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  z-index: 10; /* Asegura que esté por encima de las tarjetas */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.custom-comments-section {
+  max-height: 300px;
+  overflow-y: auto; /* Agrega scroll si hay muchos comentarios */
+  scrollbar-width: thin; /* Para Firefox */
+  scrollbar-color: #ee8532 #2c2f36; /* Para Firefox: color de la barra y el fondo */
+}
+
+.comments-section {
+  display: none;
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.no-hover-effect:hover {
+  color: black; /* Mantiene el color tal como está */
+  background-color: none; /* Mantiene el fondo igual, si aplica */
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* Limitar a 4 líneas */
+  overflow: hidden; /* Ocultar el contenido adicional */
+  max-height: 8em; /* Ajusta según la altura promedio de 4 líneas de tu contenido */
+}
+
+.recipe-card.expanded .line-clamp-4 {
+  max-height: none !important;
+  display: block;
+}
+
+/* Estilo del overlay del modal */
+.user-modal-overlay-list-delete {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.user-modal-overlay-list-delete h2 {
+  font-family: "Josefin Slab", serif;
+}
+
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Botones del modal */
+.modal-button {
+  display: inline-block;
+  margin: 10px 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-button.cancel {
+  background: #e63946;
+}
+
+.modal-button.cancel:hover {
+  background: #c53030;
+}
+
+.modal-button.add {
+  background: #ee8532;
+}
+
+.modal-button.add:hover {
+  background: #d97a2b;
+}
+
+@media (max-width: 550px) {
+  .recipe-card h1 {
+    font-size: 1rem!important;
+  }
+  
+  .recipe-card h2 {
+    font-size: 1rem!important;
+   
+  }
+  
+  .recipe-card h3 {
+    font-size: 0.80rem!important;
+  }
+  
+  .recipe-card p {
+    font-size: 0.50rem!important;
+    margin: 0.1rem 0;
+  }
+  .recipe-card li{
+    font-size: 0.8rem!important;
+    margin: 0.1rem 0;
+  }
+  
+  
+  .recipe-card span {
+    font-size: 0.8rem !important;
+  }
+  
+  .recipe-card {
+   
+    width: 350px;
+   
+  }
+  
+.bg-transparent,
+.list-pasos {
+  font-size: 0.8rem;
+}
+.footer-card  span,
+.footer-card  button{
+  font-size: 0.6rem!important;
+
+}
+
+.modal-button {
+ 
+  margin: 5px 5px!important;
+  padding: 10px 15px!important;
+  font-size: 0.8rem!important;
+  
+}
+}

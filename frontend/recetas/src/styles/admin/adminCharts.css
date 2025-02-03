@@ -1,0 +1,40 @@
+.admin-charts {
+    padding: 20px;
+    color: white;
+    text-align: center;
+  }
+  
+  .charts-title {
+    font-size: 2rem;
+    color: #ff8c00;
+    margin-bottom: 20px;
+  }
+  
+  .charts-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .chart-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    width: 45%;
+    text-align: center;
+  }
+  
+  .chart-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+  
+  @media (max-width: 768px) {
+    .chart-item {
+      width: 100%;
+    }
+  }
+  

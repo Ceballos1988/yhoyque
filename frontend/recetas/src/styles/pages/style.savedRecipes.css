@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+
+/* Estilos generales similares a las otras páginas */
+.saved-recipes-container h1 {
+  font-size: 1.8rem !important;
+}
+
+.saved-recipes-container h2 {
+  font-size: 1.2rem !important;
+}
+
+.saved-recipes-container h3 {
+  font-size: 1rem !important;
+}
+
+.rsaved-recipes-container p {
+  font-size: 1rem !important;
+}
+
+.saved-recipes-container {
+  display: flex;
+  justify-content: center;
+  background-color: #0f172b;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  margin-top: 80px;
+}
+
+.saved-recipes-container .breadcrumb-container-wall {
+  justify-content: center;
+}
+
+.saved-recipes-container .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.saved-recipes-container .login-prompt h2 {
+  color: white;
+  margin-bottom: 3rem !important;
+  text-align: center;
+}
+
+.saved-recipes-container button {
+  margin: 0.5rem;
+}
+
+.saved-recipe-content {
+  flex: 1;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+@media (min-width: 500px) and (max-width: 1024px) {
+  .saved-recipes-container {
+    margin-top: 100px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .saved-recipes-container h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .saved-recipes-container h2 {
+    font-size: 1rem !important;
+  }
+  
+  .ssaved-recipes-container h3 {
+    font-size: 0.75rem !important;
+  }
+  
+  .saved-recipes-container p {
+    font-size: 0.85rem !important;
+  }
+  
+  .saved-recipe-content {
+    width: 60% !important;
+    padding: 20px;
+  }
+
+  .saved-recipes-container {
+    padding: 20px;
+  }
+}

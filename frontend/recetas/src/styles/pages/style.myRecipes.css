@@ -1,0 +1,147 @@
+/* styles/pages/style.myRecipes.css */
+
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+
+.my-recipes-container h1 {
+  font-size: 1.8rem !important;
+}
+
+.my-recipes-container h2 {
+  font-size: 1.2rem !important;
+}
+
+.my-recipes-container h3 {
+  font-size: 1rem !important;
+}
+
+.my-recipes-container p {
+  font-size: 1rem !important;
+}
+
+.my-recipes-container {
+  display: flex;
+  justify-content: center;
+  background-color: #0f172b;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  margin-top: 80px;
+}
+
+.my-recipes-content {
+  flex: 1;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.my-recipes-container .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-recipes-container .login-prompt h2 {
+  color: white;
+  margin-bottom: 3rem !important;
+  text-align: center;
+}
+
+.my-recipes-container button {
+  margin: 0.5rem;
+}
+
+.search-bar-container p {
+  color: white !important;
+}
+
+.my-recipes-container .breadcrumb-container-wall {
+  color: white !important;
+}
+
+.my-recipes-container .filter-modal {
+  position: absolute;
+  top: 50px;
+  left: -120px;
+  background-color: #828362;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  z-index: 10;
+}
+
+.recipe-wall {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.auth-message {
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  background-color: #ee8532;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 0 0.5rem;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  background-color: #b3b3b3;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  color: white;
+  font-size: 1rem;
+  margin: 0 1rem;
+}
+
+
+
+@media (min-width: 500px) and (max-width: 1024px) {
+  .my-recipes-content {
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 500px) {
+  .my-recipes-content h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .my-recipes-content h2 {
+    font-size: 1rem !important;
+  }
+  
+  .my-recipes-content h3 {
+    font-size: 0.75rem !important;
+  }
+  
+  .my-recipes-content p {
+    font-size: 0.85rem !important;
+  }
+  .my-recipes-content {
+    width: 60% !important;
+    padding: 20px;
+  }
+}

@@ -1,0 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+/* src/styles/components/home/style.downloadSection.css */
+.download-section h1 {
+  font-size: 2rem !important;
+  margin-top: 100px !important;
+}
+.download-section h2 {
+  font-size: 1.5rem !important;
+}
+.download-section h3 {
+  font-size: 1.2rem !important;
+}
+.download-section p {
+  font-size: 1.2rem !important;
+}
+
+.download-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.download-content {
+  display: flex;
+  align-items: center;
+  max-width: 1200px !important;
+  gap: 2rem;
+  text-align: center;
+}
+
+.download-image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.download-image {
+  width: 80%;
+  max-width: 100%;
+  border-radius: 8px;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5));
+}
+
+.download-text {
+  width: 100%;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-family: "Josefin Slab", serif;
+  color: #ee8532;
+  margin-bottom: 1rem;
+}
+
+.download-section p {
+  font-size: 1.2rem;
+  font-family: "Raleway", sans-serif;
+  color: #f1f1f1;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+.button-download {
+  background-color: #0f172b;
+  color: #fff;
+  padding: 10px 25px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-download:hover {
+  background-color: #fff;
+  color: #ee8532;
+}
+
+/* Verduras Flotantes */
+.floating-vegetables {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.floating-vegetable {
+  position: absolute;
+  width: 80px;
+  opacity: 0.8;
+  animation: float 6s ease-in-out infinite;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
+}
+
+/* Posicionamiento específico para cada verdura */
+.vegetable-1 {
+  top: 5%;
+  left: 5%;
+}
+.vegetable-2 {
+  top: 2%;
+  left: 50%;
+}
+.vegetable-3 {
+  top: 40%;
+  left: 90%;
+}
+.vegetable-4 {
+  top: 2%;
+  left: 90%;
+}
+.vegetable-5 {
+  top: 80%;
+  left: 5%;
+}
+.vegetable-6 {
+  top: 80%;
+  left: 50%;
+}
+.vegetable-7 {
+  top: 44%;
+  left: 2%;
+}
+.vegetable-8 {
+  top: 85%;
+  left: 90%;
+}
+
+/* Animación de flotación */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.download-image-container {
+  width: 50%;
+}
+
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  
+  .download-section h2 {
+    font-size: 1.5rem !important;
+  }
+  .download-section h3 {
+    font-size: 1.2rem !important;
+  }
+  .download-section p {
+    font-size: 1.2rem !important;
+  }
+
+  .download-image-container {
+    width: 50vw;
+  }
+}
+
+@media (max-width: 550px) {
+
+
+.download-section h2 {
+  font-size: 1rem !important;
+  margin-top:50px;
+}
+
+.download-section p {
+  font-size: 1rem !important;
+}
+
+.button-download {
+  padding: 10px 15px;
+  font-size:0.8rem !important;
+
+}
+}

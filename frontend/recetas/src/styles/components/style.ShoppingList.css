@@ -1,0 +1,285 @@
+/* styles/components/style.ShoppingList.css */
+
+/* Contenedor principal de la lista */
+.shopping-list-card {
+  background: rgba(122, 118, 118, 0.1);
+  backdrop-filter: blur(50px)!important;
+  border: 1px solid rgba(230, 85, 23, 0.28) !important;
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1) !important;
+  backdrop-filter: blur(50px) !important;
+  padding: 20px; /* Espaciado interno */
+  color: #ffffff; /* Texto blanco */
+  font-family: "Raleway", sans-serif; /* Tipografía elegante */
+  width: 400px; /* Ancho máximo */
+  width: 100%;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Encabezado de la lista */
+.shopping-list-card h2 {
+  font-size: 1.8rem !important;
+  color: white;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* Subtítulo o fecha */
+.shopping-list-card p {
+  font-size: 0.85rem;
+  color: #c0c0c0;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Categorías */
+.shopping-list-card h3 {
+  font-size: 1rem;
+  color: #ff8c00;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #ff8c00;
+  padding-bottom: 5px;
+  text-align: left;
+}
+
+/* Lista de ítems */
+.shopping-list-card ul {
+  list-style: disc;
+  margin-bottom: 15px;
+}
+
+.shopping-list-card span {
+  font-size: 1rem !important;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 5px 0;
+}
+
+.shopping-list-card span:hover {
+  color: white;
+}
+
+/* Ítems comprados */
+.shopping-list-card ul li.line-through {
+  text-decoration: line-through;
+  color: #ee8532;
+}
+
+/* Botones dentro de cada ítem */
+.shopping-list-card ul li button {
+  font-size: 0.9rem;
+  color: #ee8532;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.shopping-list-card ul li button:hover {
+  color: white;
+  text-decoration: none;
+}
+
+/* Botón para agregar ítems */
+.shopping-list-card .add-item-btn {
+  font-size: 1rem;
+  color: #ff8c00;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  margin-top: 5px;
+  transition: color 0.3s ease;
+}
+
+.shopping-list-card .add-item-btn:hover {
+  color: #e67300;
+  text-decoration: underline;
+}
+
+/* Botón para agregar categoría */
+.shopping-list-card .bg-naranja-bg {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.shopping-list-card .bg-naranja-bg:hover {
+  background-color: #1f2937;
+  color: #ff8c00;
+}
+
+.shopping-list-card p.create{
+  font-size:14px!important;
+}
+
+/* Personalización de la lista con círculos blancos */
+.custom-list {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.custom-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.custom-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid #ff8c00;
+}
+
+/* Fondo del overlay (mismo estilo que el modal de perfil) */
+.user-modal-overlay-list {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100; /* Sobre otros elementos */
+}
+
+/* Contenedor principal del modal */
+.user-modal-list {
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Sombra */
+  color: #ffffff; /* Texto blanco */
+  font-family: "Raleway", sans-serif;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Campos de entrada del modal */
+.user-modal-list input,
+.user-modal-list select {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.2); /* Fondo semi-transparente */
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.user-modal-list input::placeholder {
+  color: white; /* Texto gris claro */
+}
+
+.user-modal-list select option {
+  color: black; /* Texto gris claro */
+}
+
+/* Botones del modal */
+.user-modal-list .modal-button {
+  display: inline-block;
+  margin: 10px 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+button.category:hover{
+color: white!important;
+background-color:#0f172b!important;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .shopping-list-card {
+    padding: 15px;
+  }
+
+  .shopping-list-card h2 {
+    font-size: 1.2rem!important;
+  }
+
+  .shopping-list-card p.create{
+    font-size:11px!important;
+    margin-bottom: 5px;
+  }
+
+  .custom-list {
+    padding-left: 0rem;
+  }
+
+  .shopping-list-card h3.create{
+    font-size: 1rem!important;
+  }
+  .shopping-list-card span {
+    font-size:0.8rem!important;
+  }
+
+  .shopping-list-card ul li {
+    font-size: 0.9rem;
+  }
+
+  .shopping-list-card ul li button{
+    font-size: 0.8rem;
+  }
+  .shopping-list-card  button{
+    font-size: 0.8rem;
+  }
+
+
+  .glass-modal {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .shopping-list-card {
+    width: 350px; /* Ancho máximo */
+    width: 100%;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+ 
+  .shopping-list-card .bg-naranja-bg {
+    padding:10px 12px;
+    font-size:0.8rem;
+    margin-top: 10px;
+  }
+  
+}
+

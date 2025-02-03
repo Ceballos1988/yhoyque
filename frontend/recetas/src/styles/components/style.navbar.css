@@ -1,0 +1,241 @@
+/* General */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  overflow-x: hidden;
+}
+
+.text-white {
+  color: white;
+}
+
+.navbar {
+  background-color: #0f172b;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -2px rgba(255, 255, 255, 0.5);
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar .logo-img {
+  height: 60px;
+  width: auto;
+  margin-top: 8px;
+  transition: height 0.3s ease;
+}
+
+.navbar-links {
+  display: flex;
+  flex-direction: row;
+  position: static;
+  background-color: transparent;
+  transform: none;
+  width: auto;
+  height: auto;
+}
+
+.navbar-link,
+.sub-menu-link {
+  color: white;
+  font-size: 1rem !important;
+}
+
+.navbar-links ul {
+  padding-top: 20px;
+}
+
+.navbar-link.active-page,
+.sub-menu-link.active-page {
+  color: #ee8532;
+}
+
+.navbar-link:hover,
+.sub-menu-link:hover,
+span:hover {
+  color: #ee8532;
+}
+
+/* Sub-menu styles */
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background-color: #0f172b;
+  border-radius: 8px;
+  text-align: center;
+  flex-direction: column;
+  border: 1px solid rgba(230, 85, 23, 0.28) !important;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 200;
+  font-size: 2rem;
+  padding-bottom: 10px;
+  padding-top: 25px;
+}
+
+@media (max-width: 1200px) {
+  .navbar-content {
+    max-width: 900px;
+  }
+}
+
+li:hover > .sub-menu,
+li:focus-within > .sub-menu,
+li.active > .sub-menu {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+}
+
+.navbar .navbar-link,
+.hamburger-menu,
+.hamburger-close,
+.logo-container span {
+  font-size: 1rem !important;
+}
+
+.navbar span {
+  font-size: 1rem !important;
+}
+
+.navbar .sub-menu-link {
+  font-size: 0.8rem;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Mobile styles (less than 1024px) */
+@media (max-width: 1023px) {
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100vh;
+    background: #0f172b;
+    padding-top: 50px;
+    text-align: center;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 100;
+  }
+
+  .navbar-links.active {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .hamburger-menu {
+    display: block;
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  .hamburger-close {
+    display: block;
+    font-size: 1.5rem;
+    color: white;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 101;
+    cursor: pointer;
+  }
+
+  /* Sub-menu styles for mobile */
+  .sub-menu {
+    display: flex;
+    position: static;
+    transform: none;
+    flex-direction: column;
+    background-color: #0f172b;
+    padding: 5px;
+    width: 100%; /* Ensures full width in the mobile menu */
+    z-index: 200;
+  }
+
+  .navbar .logo-img {
+    height: 60px;
+  }
+}
+
+h2.modal-session {
+  font-size: 1.8rem !important;
+}
+
+p.modal-session {
+  font-size: 1.2rem !important;
+}
+
+/* Estilos del overlay (fondo oscuro y difuminado) */
+.user-modal-overlay-list {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100; /* Sobre otros elementos */
+}
+
+/* Contenedor principal del modal */
+.user-modal-list {
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Sombra */
+  color: #ffffff;
+  font-family: "Raleway", sans-serif;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Botones del modal */
+.modal-button {
+  display: inline-block;
+  margin: 10px 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}

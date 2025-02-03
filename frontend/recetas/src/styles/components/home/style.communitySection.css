@@ -1,0 +1,127 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+/* src/styles/components/home/style.communitySection.css */
+
+.community-section {
+  background-color: #0f172b;
+  padding: 4rem 2rem;
+  text-align: center;
+  margin-top: 50px !important;
+}
+
+.community-section h2 {
+  font-family: "Josefin Slab", serif;
+  font-weight: 700;
+  color: white;
+  font-size: 1.5rem !important;
+}
+
+.community-section p {
+  font-family: "Raleway", sans-serif;
+  color: white;
+  font-size: 1.2rem!important;
+}
+
+.list-marked {
+  list-style: none;
+  padding: 0;
+}
+
+.list-marked li {
+  font-family: "Raleway", sans-serif;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 1.2rem!important;
+}
+
+.list-marked li strong {
+  color: #ee8532;
+}
+
+.button-ig {
+  background-color: #ee8532;
+  color: #fff;
+  padding: 10px 25px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.button-ig:hover {
+  background-color: #0f172b;
+  color: #ee8532;
+}
+
+.instagram-post-container {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.instagram-post {
+  width: 60%;
+  max-width: 100%;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5));
+  border-radius: 8px;
+}
+
+.container-community {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  gap: 2rem;
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .container-community {
+    flex-direction: column;
+    text-align: center;
+  }
+  .community-section{
+    margin-top: 10px;
+  }
+
+  .text-container {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .instagram-post-container {
+    margin-top: 1.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .instagram-post {
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+.community-section h2 {
+ 
+  font-size: 1rem !important;
+}
+
+.community-section p {
+  font-size: 1rem!important;
+}
+.community-section li {
+  font-size: 0.8rem!important;
+}
+.button-ig {
+  padding: 10px 15px;
+  font-size:0.8rem!important;
+
+}
+}

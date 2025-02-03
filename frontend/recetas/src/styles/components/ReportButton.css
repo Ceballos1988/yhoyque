@@ -1,0 +1,78 @@
+
+/* Alinea las opciones de reporte a la izquierda */
+.report-reasons {
+  display: flex;
+  flex-direction: column; /* Apila los elementos verticalmente */
+  gap: 5px; /* Espaciado entre las opciones */
+  
+}
+
+.reason-item {
+  display: flex;
+  gap: 5px; /* Espaciado entre el radio button y el texto */
+  color: #ffffff; /* Color del texto */
+  font-size: 1rem; /* Tamaño de texto */
+  line-height: 1.5; /* Asegura un espacio uniforme entre las líneas */
+}
+
+.reason-item input[type="radio"] {
+  accent-color: #ee8532; /* Color personalizado para los botones radio */
+  width: 10px;
+
+}
+
+
+.report-reasons label {
+  display: flex;
+  align-items: baseline;
+  color: #ffffff; /* Color del texto */
+  font-size: 1rem; /* Tamaño del texto */
+}
+
+
+.report-reasons .filter-dropdown select{
+  color: red; /* Color del texto */
+
+}
+
+.user-modal-list input, .user-modal-list select {
+  font-size: 1.2rem!important;
+  color: white!important;
+}
+
+/* Estilo del contenido del modal */
+.user-modal-list {
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+  background: #0f172b; /* Fondo oscuro para el modal */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque */
+}
+
+.text-error {
+  color: #22c55e; /* Verde Tailwind */
+  font-weight: bold;
+}
+
+@media (max-width: 550px) {
+  .user-modal-list h2{
+    font-size: 1.5rem!important;
+  }
+
+  .user-modal-list p{
+    font-size: 1rem!important;
+  }
+
+  .user-modal-list label{
+    font-size: 1rem!important;
+  }
+  
+
+  
+}

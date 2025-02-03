@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap');
+
+/* Sección de comentarios */
+.custom-comments-section {
+  max-height: 300px;
+  overflow-y: auto; /* Agrega scroll si hay muchos comentarios */
+ 
+}
+
+.custom-comment {
+  display: flex;
+  justify-content: space-between; /* Alinea el texto a la izquierda y el botón a la derecha */
+  align-items: center; /* Alinea verticalmente el contenido */
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.custom-comment-content {
+  flex-grow: 1; /* Hace que el contenido ocupe todo el espacio disponible */
+}
+
+.custom-comment p {
+  margin: 5px 0;
+  line-height: 1;
+}
+
+.custom-comment strong {
+  color: #ff9800; /* Color para el nombre del usuario */
+}
+
+.custom-comment-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.custom-textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ff9800;
+  color: #ffffff;
+}
+
+.custom-textarea::placeholder {
+  color: #b0b0b0;
+}
+
+.custom-add-comment-button {
+  background-color: #ee8532;
+  font-family: 'Josefin Slab', serif;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.custom-add-comment-button:hover {
+  background-color: #0f172b;
+  color: white;
+}
+
+.custom-delete-button {
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  padding: 2px;
+  font-size: 0.6rem;
+  margin-left: 10px; /* Añadir espacio entre el contenido y el botón */
+  width: 20px; /* Ajusta el tamaño del botón circular */
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra la 'X' dentro del círculo */
+}
+
+.custom-delete-button:hover {
+  background-color: #0f172b;
+  color: white;
+}
+
+.custom-error-message {
+  color: #ff4d4d;
+  margin-top: 10px;
+}
+
+
+/* Modal de reporte */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-modal {
+  background-color: #0f172b; /* Fondo oscuro */
+  color: #ffffff; /* Texto blanco */
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-modal h2 {
+  font-size: 1.5rem;
+  font-family: "Josefin Slab", serif;
+  color: #ff9800; /* Naranja para el título */
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.custom-modal p {
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+  color: #ffffff;
+}
+
+.custom-modal select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ff9800;
+  background-color: #0f172b;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+}
+
+.custom-modal textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ff9800;
+  background-color: #0f172b;
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  resize: none; /* Evita redimensionar el textarea */
+}
+
+.custom-modal button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-modal .submit-btn {
+  background-color: #ee8532;
+  color: #ffffff;
+}
+
+.custom-modal .submit-btn:hover {
+  background-color: #ff9800;
+}
+
+.custom-modal .cancel-btn {
+  background-color: #b0b0b0;
+  color: #0f172b;
+}
+
+.custom-modal .cancel-btn:hover {
+  background-color: #ffffff;
+  color: #0f172b;
+}
+
+.custom-modal .message {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.custom-modal .message.success {
+  color: #4caf50; /* Verde para éxito */
+}
+
+.custom-modal .message.error {
+  color: #f44336; /* Rojo para errores */
+}
+
+
+@media (max-width: 550px) {
+  
+.custom-comment-actions button {
+  font-size: 0.7rem;
+
+}
+
+.custom-add-comment-button {
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+}

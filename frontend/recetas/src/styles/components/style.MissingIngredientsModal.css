@@ -1,0 +1,241 @@
+/* Contenedor del modal */
+.modal-container {
+  position: absolute;
+  top: 100%; /* Justo debajo del botón */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20; /* Asegura que esté por encima de otros elementos */
+  width: 300px; /* Tamaño fijo para que no se deforme */
+}
+
+/* Fondo semitransparente opcional */
+.modal-overlay-ingredients {
+  position: fixed; /* Fijo para que cubra toda la pantalla */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+}
+
+/* Contenedor del modal */
+.modal-content-ingredients {
+  position: relative;
+  background: #1f2937; /* Fondo oscuro */
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  text-align: center;
+  font-family: "Raleway", sans-serif;
+  z-index: 20;
+}
+
+/* Título del modal */
+.modal-content-ingredients h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #ff8c00; /* Naranja para el título */
+  text-align: center;
+}
+
+/* Lista de ingredientes */
+.modal-content-ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px; /* Tamaño máximo del scroll */
+  overflow-y: auto; /* Agregar scroll si hay muchos ingredientes */
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: #ff8c00 #1f2937; /* Scroll personalizado */
+}
+
+.modal-content-ingredients ul::-webkit-scrollbar {
+  width: 8px; /* Grosor del scroll */
+}
+
+.modal-content-ingredients ul::-webkit-scrollbar-track {
+  background: #1f2937; /* Fondo del track */
+  border-radius: 5px;
+}
+
+.modal-content-ingredients ul::-webkit-scrollbar-thumb {
+  background-color: #ff8c00; /* Color del scroll */
+  border-radius: 5px;
+}
+
+/* Elementos de la lista */
+.modal-content-ingredients ul li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.modal-content-ingredients ul li input {
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: #ff8c00; /* Color de la marca del checkbox */
+}
+
+.modal-content-ingredients ul li label {
+  cursor: pointer;
+}
+
+/* Contenedor de acciones */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* Botones principales */
+.modal-overlay-ingredients .btn-primary {
+  background: #ff8c00;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px; /* Ajusta el tamaño del botón */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.modal-overlay-ingredients .btn-primary:hover {
+  background: #e67300;
+}
+
+/* Botones secundarios */
+.modal-overlay-ingredients .btn-secondary {
+  background: #374151; /* Gris oscuro */
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px; /* Ajusta el tamaño del botón */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.modal-overlay-ingredients .btn-secondary:hover {
+  background: #4b5563;
+}
+
+/* Responsividad */
+@media (max-width: 780px) {
+  .modal-content-ingredients {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .modal-content-ingredients h3 {
+    font-size: 1rem;
+  }
+
+  .modal-content-ingredients ul li {
+    font-size: 0.9rem;
+  }
+
+  .modal-overlay-ingredients .btn-primary,
+  .btn-secondary {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Estilo general para todos los select */
+.modal-content-ingredients select {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  background-color: #1f2937; /* Fondo oscuro */
+  color: #ffffff; /* Texto blanco */
+  border: 2px solid #ff8c00; /* Borde naranja */
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-family: "Raleway", sans-serif;
+  cursor: pointer;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover y focus del select */
+.modal-content-ingredients select:hover,
+.modal-content-ingredients select:focus {
+  border-color: #e67300; /* Borde más oscuro al hover */
+  box-shadow: 0 0 5px rgba(255, 140, 0, 0.5); /* Sombra suave */
+  outline: none;
+}
+
+/* Opciones del select */
+.modal-content-ingredients select option {
+  background-color: #1f2937; /* Fondo oscuro para las opciones */
+  color: #ffffff; /* Texto blanco */
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+/* Scroll personalizado para opciones largas */
+.modal-content-ingredients select::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content-ingredients select::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.modal-content-ingredients select::-webkit-scrollbar-thumb {
+  background-color: #ff8c00;
+  border-radius: 5px;
+}
+
+/* Placeholder para el select (primer opción vacía) */
+.modal-content-ingredients select option[value=""] {
+  color: #9ca3af; /* Gris claro */
+}
+
+/* Estilo para el input de nueva categoría */
+.modal-content-ingredients input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  background-color: #1f2937; /* Fondo oscuro */
+  color: #ffffff; /* Texto blanco */
+  border: 2px solid #ff8c00; /* Borde naranja */
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-family: "Raleway", sans-serif;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover y focus para el input */
+.modal-content-ingredients input[type="text"]:hover,
+.modal-content-ingredients input[type="text"]:focus {
+  border-color: #e67300; /* Borde más oscuro al hover */
+  box-shadow: 0 0 5px rgba(255, 140, 0, 0.5); /* Sombra suave */
+}
+
+/* Responsividad */
+@media (max-width: 780px) {
+  .modal-content-ingredients select,
+  .modal-content-ingredients input[type="text"] {
+    font-size: 0.85rem;
+    padding: 6px;
+  }
+}
+
+.success-message {
+  color: #4caf50;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  z-index: 99;
+}

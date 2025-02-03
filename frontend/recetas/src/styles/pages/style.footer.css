@@ -1,0 +1,119 @@
+.footer-container {
+  display: flex;
+  flex-direction: column; /* Posicionamiento en columnas para pantallas pequeñas y medianas */
+  color: white;
+  background-color: #0f172b;
+  padding: 2rem;
+}
+
+.footer-logo-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.footer-description {
+  font-family: "Josefin Slab", serif;
+  font-size: 0.9rem;
+  color: #cccccc;
+  margin-top: 0.5rem;
+}
+
+.footer-links {
+  text-align: center;
+  margin-bottom: 1rem; /* Espaciado para separar las secciones */
+}
+
+.footer-link {
+  color: #ffffff;
+  font-family: "Raleway", sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-link:hover {
+  color: #ee8532;
+}
+
+.footer-contact {
+  font-size: 0.9rem;
+  color: #cccccc;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+.footer-icon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.footer-icon:hover {
+  transform: scale(1.2);
+}
+
+.footer-rights {
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 1rem; /* Asegura que haya espacio con el contenido superior */
+}
+
+.footer-logo {
+  width: 80px;
+  height: auto;
+}
+
+/* Responsive adjustments for screens smaller than 1024px */
+@media (min-width: 1024px) {
+  .footer-container {
+    flex-direction: row; /* Cambia a fila en pantallas grandes */
+    align-items: center;
+    text-align: left;
+  }
+
+  .footer-logo,
+  .footer-links,
+  .footer-social,
+  .footer-rights {
+    margin-bottom: 0;
+  }
+
+  .footer-logo {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .icon-social {
+    margin-left: 20px !important ;
+  }
+  .footer-social {
+    flex-direction: row;
+  }
+
+  .footer-rights {
+    text-align: center;
+  }
+}
+
+@media (max-width: 550px) {
+  .footer-link {
+    font-size: 0.7rem;
+  }
+  .footer-rights {
+    font-size: 0.7rem;
+  }
+}

@@ -1,0 +1,592 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+
+/* Estilos específicos para CreateRecipe */
+
+.create-recipe-container h1 {
+  font-size: 2rem !important;
+}
+
+.create-recipe-container h2 {
+  font-size: 1.2rem !important;
+}
+.create-recipe-container span {
+  font-size: 1.2rem !important;
+}
+
+.span-real span {
+  font-size: 0.9rem !important;
+}
+.create-recipe-container h3 {
+  font-size: 1rem !important;
+}
+
+.create-recipe-container p {
+  font-size: 1.2rem !important;
+  color: #cccccc;
+}
+
+/* Contenedor principal */
+.create-recipe-container {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  margin-top: 80px;
+  background-image: url("../img/fondo.svg"); /* Ruta hacia tu archivo SVG */
+  background-repeat: repeat; /* Hace que el patrón se repita */
+  background-size: container; /* Ajusta el tamaño del patrón */
+  background-position: center; /* Posiciona el patrón en el centro */
+}
+
+.intro-message {
+  max-width: 1200px !important;
+}
+.create-recipe-title {
+  margin-top: 100px !important;
+}
+.create-recipe-container .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-recipe-container .login-prompt h2 {
+  color: white;
+  margin-bottom: 3rem !important;
+  text-align: center;
+}
+
+.login-prompt button {
+  margin: 0.5rem;
+}
+
+.create-recipe-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 550px;
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #0f172b;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Etiquetas del formulario */
+.create-recipe-label {
+  font-size: 1rem;
+  color: #ee8532;
+}
+
+/* Inputs, selects y textarea */
+.create-recipe-input,
+.create-recipe-select,
+.create-recipe-textarea {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  width: 100%;
+  color: black;
+  font-family: "Raleway", sans-serif;
+}
+
+/* Inputs, selects y textarea */
+
+.create-recipe-select {
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  width: 100%;
+  color: black;
+  font-family: "Raleway", sans-serif;
+}
+
+.create-recipe-input {
+  padding: 0.75rem;
+  background-color: white;
+  min-height: 40px;
+}
+
+input[type="file"] {
+  display: block;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.create-recipe-textarea {
+  min-height: 80px;
+}
+
+/* Contenedor de ingredientes y pasos */
+.create-recipe-ingredient-item,
+.create-recipe-step-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+}
+
+/* Botones */
+.create-recipe-delete-btn,
+.create-recipe-add-btn {
+  display: inline-block;
+  width: auto;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  margin: 0;
+}
+
+.create-recipe-delete-btn:hover,
+.create-recipe-add-btn:hover {
+  background-color: #0f172b;
+}
+
+/* Mensajes de éxito o error */
+.create-recipe-message {
+  text-align: center;
+  font-size: 1rem;
+  padding: 10px;
+  margin-top: 1rem;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Imagen de previsualización */
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Modal para previsualización */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Previsualización de imagen */
+.preview-image {
+  max-width: 50%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Previsualización de receta - card */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #ee8532;
+}
+
+.modal-content-createm,
+.preview-card-create {
+  background-color: #0f172b;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(50px);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal h4 {
+  font-size: 1rem;
+}
+/* Secciones de ingredientes y pasos */
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  color: white;
+}
+
+.dates-recipe-create p {
+  font-size: 1rem;
+  text-align: left;
+}
+
+.ingredients-list,
+.steps-list {
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  color: white;
+  font-family: "Raleway", sans-serif;
+}
+
+/* Imagen centrada */
+.preview-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Indicador de imagen cargada */
+.image-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+  width: 300px;
+}
+
+/* Ajustes en la imagen en miniatura */
+.preview-thumbnail {
+  max-width: 200px;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  position: relative;
+}
+/* Agrupación de botones en fila */
+.button-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Estilos para el botón de eliminar la imagen */
+.image-indicator button {
+  position: absolute;
+  top: -10px;
+  right: 60px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-indicator button:hover {
+  background-color: #e60000;
+}
+
+@media (max-width: 1024px) {
+  .create-recipe-form {
+    min-width: 350px;
+  }
+  .create-recipe-container h1 {
+    font-size: 1.5rem !important;
+    color: #ffffff; /* Color del texto */
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 12rem !important;
+  }
+
+  .create-recipe-container h2 {
+    font-size: 1rem !important;
+    color: #ee8532; /* Naranja */
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .create-recipe-container h3 {
+    font-size: 1.1rem;
+  }
+
+  .create-recipe-container p {
+    font-size: 1rem !important;
+    color: #cccccc; /* Gris claro */
+    margin-bottom: 1rem;
+    text-align: left;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  10%,
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Botones de añadir y eliminar */
+button[title="Añadir ingrediente"] {
+  font-family: "Raleway", sans-serif;
+  font-size: 1rem;
+}
+
+button[title="Eliminar ingrediente"] img {
+  display: block;
+}
+
+.ico-delete img {
+  width: 50px;
+  height: 60px;
+  margin-top: 10px !important;
+}
+
+.ico-delete-1 img:hover,
+.ico-delete img:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(
+    0px 0px 4px #ffffff
+  ); /* Sombra blanca alrededor de la silueta de la imagen */
+}
+
+.ico-delete-1 img {
+  width: 55px;
+  height: 60px;
+}
+
+.ingredients-scroll-container {
+  max-height: 300px; /* Altura máxima antes de activar el scroll */
+  overflow-y: auto; /* Scroll vertical cuando se excede la altura */
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+/* Opcional: Estilo para la barra de scroll */
+.ingredients-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredients-scroll-container::-webkit-scrollbar-thumb {
+  background-color: #ee8532;
+  border-radius: 4px;
+}
+
+.ingredients-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: #ff8c00;
+}
+
+.steps-scroll-container {
+  max-height: 300px; /* Altura máxima antes de activar el scroll */
+  overflow-y: auto; /* Scroll vertical cuando se excede la altura */
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+/* Opcional: Estilo para la barra de scroll */
+.steps-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.steps-scroll-container::-webkit-scrollbar-thumb {
+  background-color: #ee8532;
+  border-radius: 4px;
+}
+
+.steps-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: #ff8c00;
+}
+
+/* Estilo para el checkbox personalizado */
+.custom-checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: white; /* Color del texto */
+}
+
+/* Ocultar el checkbox predeterminado */
+.custom-checkbox input[type="checkbox"] {
+  appearance: none; /* Oculta el checkbox predeterminado */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ee8532; /* Borde color naranja */
+  border-radius: 4px; /* Bordes ligeramente redondeados */
+  background-color: transparent;
+  margin-right: 8px; /* Espacio entre el checkbox y el texto */
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Checkbox marcado (checkmark personalizado) */
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: #ee8532; /* Fondo naranja */
+  border-color: #ee8532; /* Borde naranja */
+}
+
+.custom-checkbox input[type="checkbox"]:checked::before {
+  content: "✔";
+  color: white; /* Color del tilde */
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  display: block;
+}
+
+.create-recipe-container .breadcrumb-container-wall {
+  z-index: 999;
+}
+
+/* Mensajes de éxito y error en el formulario */
+.success-message-profile {
+  color: #38a169 !important;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border-radius: 0.375rem;
+  font-size: 1rem !important;
+  text-align: center;
+}
+
+.error-message-profile {
+  color: #e63946 !important;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border-radius: 0.375rem;
+  font-size: 1rem !important;
+  text-align: center;
+}
+
+.modal-content-createm {
+  background-color: #0f172b;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(50px);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 500px;
+  max-height: 90vh; /* Limita la altura máxima */
+  overflow-y: auto; /* Habilita el scroll vertical */
+  overflow-x: hidden; /* Evita el scroll horizontal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Scroll estilizado */
+.modal-content-createm::-webkit-scrollbar {
+  width: 8px; /* Ancho del scroll */
+}
+
+.modal-content-createm::-webkit-scrollbar-thumb {
+  background-color: #ee8532; /* Color del scroll */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+.modal-content-createm::-webkit-scrollbar-thumb:hover {
+  background-color: #ff8c00; /* Color al pasar el cursor */
+}
+
+.modal-content-createm::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1); /* Fondo del track */
+}
+
+@media (max-width: 500px) {
+  .create-recipe-form {
+    width: 90% !important;
+    padding: 10px;
+  }
+
+  /* Botones */
+  .create-recipe-delete-btn,
+  .create-recipe-add-btn {
+    width: auto;
+    color: white;
+    padding: 0.5rem !important;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin: 0;
+  }
+
+  .create-recipe-container h1 {
+    font-size: 1.3rem !important;
+  }
+
+  .create-recipe-container h2 {
+    font-size: 0.9rem !important;
+  }
+  .create-recipe-container span {
+    font-size: 0.9rem !important;
+  }
+
+
+  .create-recipe-container h3 {
+    font-size: 0.8rem !important;
+  }
+
+  .create-recipe-container p {
+    font-size: 0.8rem !important;
+  }
+
+  .create-recipe-form {
+    width: 350px;
+  }
+  .create-recipe-form label {
+    font-size: 0.8rem !important;
+  }
+
+  .create-recipe-form select {
+    font-size: 0.8rem !important;
+  }
+
+  .create-recipe-form button{
+    font-size: 0.8rem !important;
+  }
+
+  .create-recipe-input,
+  .create-recipe-select {
+    padding: 0.5rem;
+    font-size: 0.8rem !important;
+
+  }
+  .span-real span{
+    font-size: 0.7rem !important;
+
+  }
+ 
+}

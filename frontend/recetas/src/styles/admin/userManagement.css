@@ -1,0 +1,286 @@
+.user-management {
+  padding: 20px;
+  max-width: 1400px;
+  min-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 2rem;
+  color: #ee8532;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(230, 85, 23, 0.28);
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1);
+  table-layout: fixed;
+}
+
+.user-table th,
+.user-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-table th {
+  background-color: #ee8532;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.user-table td {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.input-edit,
+.select-edit {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.select-edit option {
+  background-color: rgba(0, 0, 0, 0.9); /* Fondo negro sólido */
+  color: white; /* Texto blanco */
+}
+
+.input-edit::placeholder {
+  color: #bbb;
+}
+
+/* Botones */
+.edit-btn,
+.save-btn,
+.cancel-btn,
+.delete-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  margin: 5px; /* Espaciado entre botones */
+}
+
+.edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #e63946;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #e63946;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #0f172b;
+}
+
+.save-btn:hover {
+  background-color: #0f172b;
+}
+
+.cancel-btn:hover,
+.delete-btn:hover {
+  background-color: #0f172b;
+}
+
+/* Mensajes de éxito/error */
+.message {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.message.success {
+  color: #4caf50;
+}
+
+.message.error {
+  color: #e63946;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ee8532;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: #f57c00;
+}
+
+.pagination button:disabled {
+  background-color: #b3b3b3;
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #0f172b !important;
+  color: #fff;
+  pointer-events: none;
+  box-shadow: 0px 0px 4px 1px white;
+}
+
+.pagination span {
+  margin: 0 0.3rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+}
+
+
+/* Estilo para la barra de búsqueda */
+.container-search .search-bar-container {
+  display: flex;
+  flex-direction: row!important;
+  gap: 10px;
+  margin: 0!important;
+  align-items: center;
+}
+
+
+.user-management .search-bar {
+  width: 250px; /* Tamaño más pequeño */
+  padding: 8px 10px;
+  border: 2px solid #ee8532;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.user-management .search-bar::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.user-management .search-bar:focus {
+  border-color: #ffa541;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 6px 10px rgba(255, 133, 50, 0.3);
+}
+
+/* Botones de búsqueda y limpieza */
+.icon-button,
+.icon-button-delete {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+
+.icon-button-borrar img {
+  width: 40px!important;
+  height: 50px!important;
+  transition: transform 0.2s ease;
+}
+
+.icon-button:hover img,
+.icon-button-delete:hover img {
+  transform: scale(1.2);
+  filter: drop-shadow(0px 0px 4px #ffffff);
+}
+
+/* Scrollbars personalizados */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ee8532;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffa541;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172b;
+}
+
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .user-table {
+    font-size: 0.9rem;
+  }
+
+  .delete-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+/* Estilo para la barra de búsqueda */
+.container-search .search-bar-container {
+  display: flex;
+  flex-direction: column!important;
+  gap: 10px;
+  align-items: center;
+}
+
+
+
+.user-table {
+  margin-left: 70px;
+  
+}
+
+}
+
+/* Responsividad */
+@media (max-width: 500px) {
+ 
+.user-table {
+  margin-left: 230px;
+  
+}
+
+}

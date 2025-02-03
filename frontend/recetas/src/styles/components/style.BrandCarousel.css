@@ -1,0 +1,44 @@
+.brand-carousel-container {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .brand-carousel-track {
+    display: flex;
+    animation: marquee 15s linear infinite;
+  }
+  
+  .brand-carousel-item {
+    flex: 0 0 auto;
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 50px;
+  }
+  
+  .brand-carousel-item img {
+    width: 100px; /* Ajusta el tamaño de las imágenes si es necesario */
+    height: 100px; /* Ajusta el tamaño de las imágenes si es necesario */
+    object-fit: contain; /* Asegura que la imagen se ajuste sin distorsión */
+    box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.9); /* Sombra blanca alrededor */
+    border-radius: 10px; /* Opcional: bordes ligeramente redondeados */
+    background-color: #fff; /* Fondo blanco para destacar aún más */
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+@media (max-width: 550px) {
+  
+  .brand-carousel-item img {
+    width: 60px; /* Ajusta el tamaño de las imágenes si es necesario */
+    height: 60px; /* Ajusta el tamaño de las imágenes si es necesario */
+  
+  }
+}

@@ -1,0 +1,279 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+/* styles/pages/style.recipeWall.css */
+.recipe-wall-container h1 {
+  font-size: 1.8rem;
+}
+
+.recipe-wall-container h2 {
+  font-size: 1.2rem;
+}
+
+.recipe-wall-container h3 {
+  font-size: 1rem;
+}
+
+.recipe-wall-container p {
+  font-size: 1rem;
+}
+
+.recipe-wall-container .search-instruction p {
+  font-size: 1.2rem;
+}
+
+.error-message,
+p {
+  font-size: 1rem !important;
+}
+
+.recipes-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 100px;
+  justify-content: center;
+  align-items: start;
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 400px; /* Ancho fijo para el sidebar expandido */
+  transition: width 0.3s ease; /* Transición suave al colapsar */
+  overflow: hidden; /* Oculta el contenido cuando está colapsado */
+  height: calc(100vh - 40px); /* Ocupa toda la altura menos un margen */
+  padding: 20px;
+  overflow-y: auto; /* Permite desplazarse si el contenido es muy alto */
+  scrollbar-width: thin; /* Para Firefox */
+  scrollbar-color: #ee8532 #0f172b; /* Para Firefox: color del thumb y track */
+  z-index: 1000; /* Aseguramos que el sidebar esté por encima del contenido */
+  background: rgba(122, 118, 118, 0.1);
+  backdrop-filter: blur(50px);
+  border: 1px solid rgba(230, 85, 23, 0.28) !important;
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1) !important;
+}
+
+.sidebar-container.collapsed {
+  width: 50px !important; /* Ancho cuando está colapsado */
+}
+
+.recipe-wall-container {
+  background-image: url("../img/fondo.svg"); /* Ruta hacia tu archivo SVG */
+  background-repeat: repeat; /* Hace que el patrón se repita */
+  background-size: container; /* Ajusta el tamaño del patrón */
+  background-position: center; /* Posiciona el patrón en el centro */
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  margin-top: 80px;
+  padding: 0 20px; /* Añadir padding para margen interno */
+}
+
+.recipe-wall-content {
+  max-width: 1200px; /* Ancho máximo del contenido principal */
+  display: flex;
+  flex-direction: column;
+  margin: auto; /* Centrar el contenido */
+}
+
+.recipe-wall-filters {
+  width: 100%;
+  display: block;
+  gap: 1.5rem;
+}
+
+.welcome-message-wall {
+  text-align: center;
+  margin-bottom: 2rem;
+  margin-top: 50px;
+}
+
+.no-recipes-message-wall {
+  color: red;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.recipe-wall-container .login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipe-wall-container .login-prompt h2 {
+  color: white;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.login-prompt button {
+  margin: 0.5rem;
+}
+
+/* Nueva sección para la paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ee8532; /* Color de fondo de los botones */
+  color: white; /* Color del texto */
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: #f57c00; /* Color al pasar el cursor */
+}
+
+.pagination button:disabled {
+  background-color: #b3b3b3; /* Botones deshabilitados */
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #0f172b !important; /* Fondo del botón activo */
+  color: #fff; /* Color del texto del botón activo */
+  pointer-events: none;
+  box-shadow: 0px 0px 4px 1px white; /* Sombra blanca alrededor del botón */
+}
+
+.pagination span {
+  margin: 0 0.3rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+}
+
+.bg-glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 1024px) {
+  .recipe-wall-container h1 {
+    margin-top: 150px !important;
+    font-size: 1.5rem !important;
+  }
+
+  .recipe-wall-container h2 {
+    font-size: 1rem !important;
+  }
+
+  .recipe-wall-container h3 {
+    font-size: 0.75rem !important;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .recipe-wall-container .breadcrumb-container-wall {
+    z-index: 50;
+  }
+
+  .pagination button {
+    margin: 0.2rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .recipes-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espaciado entre las tarjetas */
+    padding: 0 10px; /* Márgenes laterales */
+  }
+}
+
+@media (max-width: 550px) {
+  .recipe-wall-container h1 {
+    margin-top: 150px !important;
+    font-size: 1.3rem !important;
+  }
+
+  .recipe-wall-container h2 {
+    font-size: 0.9rem !important;
+  }
+
+  .recipe-wall-container h3 {
+    font-size: 0.8rem !important;
+  }
+
+  .recipe-wall-container p {
+    font-size: 0.8rem !important;
+  }
+
+  .recipes-flex {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: repeat(1fr);
+    gap: 20px;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .sidebar-container {
+    width: 340px !important; /* Ancho fijo para el sidebar expandido */
+    height: 85vh !important;
+    padding: 8px !important;
+  }
+
+  .sidebar-container h1 {
+    font-size: 0.9rem !important;
+  }
+
+  .sidebar-container span {
+    font-size: 0.6rem !important;
+  }
+
+  .sidebar-container label {
+    font-size: 0.9rem !important;
+  }
+
+  .sidebar-container.collapsed {
+    width: 50px !important; /* Ancho cuando está colapsado */
+    background: none;
+    backdrop-filter: none;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  /* Quitar el efecto "glass" cuando el sidebar está colapsado */
+  .sidebar-container.collapsed {
+    backdrop-filter: none !important;
+  }
+
+  .expand-sidebar-button {
+    margin-top: 80px;
+  }
+
+  .welcome-message-wall h1,
+  .welcome-message-wall h2 {
+    margin: 15px;
+  }
+  .search-instruction p {
+    margin: 35px;
+  }
+
+  .pagination button {
+   
+    font-size: 0.6rem!important;
+  }
+}

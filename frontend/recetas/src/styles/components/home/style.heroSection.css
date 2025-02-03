@@ -1,0 +1,222 @@
+/* src/styles/components/home/style.heroSection.css */
+
+.home-section-hero {
+  display: flex;
+  min-height: 90vh; /* Altura mínima para asegurar que siempre ocupa suficiente espacio */
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(15, 23, 43, 0.8), rgba(15, 23, 43, 0.5)),
+    url("/img/bg-hero.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  color: #ffffff;
+}
+
+.content-container-hero {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  gap: 2rem;
+}
+
+.text-content-hero {
+  max-width: 100%;
+}
+
+.home-section-hero h1,
+span {
+  font-family: "Poppins", sans-serif;
+  font-size: 2.5rem !important;
+  color: #ffffff;
+  margin-top: 10px !important;
+  text-align: center;
+}
+
+.home-section-hero span {
+  font-family: "Poppins", sans-serif;
+  font-size: 3rem !important;
+  color: #ee8532;
+  margin-top: 10px !important;
+  text-align: center;
+}
+
+.home-section-hero h2 {
+  font-size: 1.8rem !important;
+  font-family: "Josefin Slab", serif;
+  color: white;
+  margin-bottom: 1.25rem;
+}
+
+.home-section-hero p {
+  font-size: 1.25rem !important;
+  font-family: "Raleway", sans-serif;
+  color: #ffffff;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.home-section-hero .button-content-hero {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.home-section-hero .image-container-hero {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.home-section-hero .rotating-image {
+  max-width: 70%;
+  height: auto;
+  border-radius: 50%;
+  animation: rotate 20s infinite linear;
+}
+
+/* Pausar la animación cuando tenga la clase 'paused' */
+.home-section-hero .rotating-image.paused {
+  animation-play-state: paused;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.modal h2 {
+  font-family: "Poppins", sans-serif !important;
+}
+/* Estilo del botón de pausa */
+.home-section-hero .pause-button {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Estilo del icono de pausa/play */
+.home-section-hero .pause-button .pause-icon {
+  width: 60px;
+  height: 60px;
+}
+
+/* Mostrar el botón de pausa en hover */
+.image-container-hero:hover .pause-button {
+  display: block;
+}
+
+/* Responsive Adjustments */
+
+/* Tablets and smaller devices */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .home-section-hero {
+    height: auto;
+  }
+  .content-container-hero {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    padding-top: 100px;
+    padding-bottom: 50px;
+    text-align: center;
+    gap: 60px;
+  }
+
+  .home-section-hero h1,
+  span {
+    font-size: 2rem !important;
+    text-align: center;
+  }
+
+  .home-section-hero span {
+    font-size: 2rem !important;
+    text-align: center;
+  }
+
+  .home-section-hero h2 {
+    font-size: 1.2rem !important;
+    text-align: center;
+  }
+
+  .home-section-hero p {
+    font-size: 1rem !important;
+    text-align: center;
+    width: 500px;
+  }
+
+  .home-section-hero .button-content {
+    justify-content: left;
+  }
+
+  .image-container-hero {
+    max-width: 450px;
+
+    padding: 20px;
+    margin-top: 40px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .content-container-hero {
+    flex-direction: column;
+    overflow-x: hidden;
+    align-items: center;
+    height: auto;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+    gap: 60px;
+  }
+
+  .home-section-hero h1, span {
+    font-size: 1.8rem !important;
+    text-align: center;
+  }
+
+  .home-section-hero span {
+    font-size: 2rem !important;
+    text-align: center;
+  }
+
+  .home-section-hero h2 {
+    font-size: 1.3rem !important;
+    text-align: center;
+  }
+
+  .home-section-hero p {
+    font-size: 1rem !important;
+    text-align: center;
+    width: 300px;
+  }
+
+  .home-section-hero .button-content {
+    justify-content: left;
+  }
+
+  .image-container-hero {
+    max-width: 400px;
+    padding: 20px;
+    margin-top: 40px;
+  }
+
+  .button-content-hero button {
+    font-size: 0.8rem !important;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+}

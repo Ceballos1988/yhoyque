@@ -1,0 +1,43 @@
+.preloader {
+  position: fixed;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(122, 118, 118, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease; /* Transición suave */
+  backdrop-filter: blur(50px);
+  opacity: 1;
+  visibility: visible;
+}
+
+.preloader.hidden {
+  opacity: 0; /* Gradualmente invisible */
+  visibility: hidden; /* Ocultar completamente después de la transición */
+}
+
+.spinner-image {
+  width: 300px;
+  height: 300px;
+  animation: fade-in-out 1s infinite;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}

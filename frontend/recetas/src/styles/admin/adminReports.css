@@ -1,0 +1,482 @@
+/* Estilos principales */
+.admin-reports {
+  padding: 20px;
+  max-width: 1500px;
+  min-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "Raleway", sans-serif;
+  color: white;
+}
+
+/* Título principal */
+.reports-title {
+  font-size: 2rem;
+  color: #ee8532;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Tabla de reportes */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(230, 85, 23, 0.28);
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1);
+  table-layout: fixed;
+}
+
+.report-table th,
+.report-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.report-table th {
+  background-color: #ee8532;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.report-table td {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  word-wrap: break-word;
+}
+
+/* Botones */
+.resolve-btn,
+.delete-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+.resolve-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #e63946;
+  color: white;
+}
+
+.resolve-btn:hover {
+  background-color: #0f172b;
+}
+
+.delete-btn:hover {
+  background-color: #0f172b;
+}
+
+/* Estado del reporte */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: black;
+}
+
+.status-reviewed {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.status-resolved {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Mensajes */
+.message {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.message.success {
+  color: #4caf50;
+}
+
+.message.error {
+  color: #e63946;
+}
+
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ee8532;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: #f57c00;
+}
+
+.pagination button:disabled {
+  background-color: #b3b3b3;
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #0f172b !important;
+  color: #fff;
+  pointer-events: none;
+  box-shadow: 0px 0px 4px 1px white;
+}
+
+.pagination span {
+  margin: 0 0.3rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: white;
+}
+
+.page-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.page-btn:hover {
+  background-color: #ee8532;
+  color: #0f172b;
+}
+
+.page-btn.active {
+  background-color: #ee8532;
+  color: white;
+  font-weight: bold;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.search-bar-label {
+  font-size: 1.3rem;
+  font-family: "Josefin Slab", serif;
+
+  color: white;
+  margin-right: 10px;
+}
+
+.filter-dropdown {
+  width: 250px;
+  padding: 8px 10px;
+  border: 2px solid #ee8532;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  appearance: none;
+  cursor: pointer;
+  font-family: "Josefin Slab", serif;
+  font-size: 1.2rem;
+}
+
+.filter-dropdown::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.filter-dropdown:focus {
+  border-color: #ffa541;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 6px 10px rgba(255, 133, 50, 0.3);
+}
+
+.filter-dropdown option {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-family: "Josefin Slab", serif;
+}
+
+.icon-button-borrar:hover img {
+  transform: scale(1.2);
+  filter: drop-shadow(0px 0px 4px #ffffff);
+}
+
+.filter-label {
+  margin-right: 10px;
+  color: white;
+  font-size: 1rem;
+  align-self: center; /* Centra verticalmente el texto con respecto al dropdown */
+}
+
+.no-reports-message {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ee8532;
+  text-align: center;
+}
+
+/* Modal */
+.modal-class {
+  background-color: rgba(15, 23, 43, 0.95); /* Fondo oscuro con transparencia */
+  color: white; /* Texto en blanco */
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  margin: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  position: relative;
+  font-family: "Raleway", sans-serif;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-class h2 {
+  font-size: 1.5rem;
+  font-family: "Josefin Slab", serif;
+  color: #ee8532; /* Naranja para el título */
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.modal-class p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  text-align: justify;
+}
+
+.close-modal-btn {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.close-modal-btn:hover {
+  background-color: #c53030;
+}
+
+/* Botón Ver Comentario */
+.view-comment-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-comment-btn:hover {
+  background-color: #0f172b;
+}
+
+.resolved-text {
+  color: #4caf50; /* Verde */
+  font-weight: bold;
+  font-size: 1rem !important;
+}
+
+.resolved-text:hover {
+  color: #4caf50; /* Verde */
+  font-weight: bold;
+  font-size: 1rem !important;
+}
+
+.deleted-text {
+  color: #e63946; /* Rojo para denotar que está eliminado */
+  font-weight: bold;
+  font-size: 1rem !important;
+  text-align: center;
+}
+
+.deleted-text:hover {
+  color: #e63946; /* Rojo para denotar que está eliminado */
+  font-weight: bold;
+  font-size: 1rem !important;
+  text-align: center;
+}
+
+.resolved-text {
+  color: #4caf50; /* Verde para denotar resuelto */
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+td span {
+  color: #4caf50; /* Verde para denotar resuelto */
+  font-weight: bold;
+  font-size: 0.9rem !important;
+  text-align: center;
+}
+
+
+
+
+
+/* Responsividad */
+@media (max-width: 1024) {
+  .icon-button-borrar:hover img {
+    transform: scale(1.2);
+    filter: drop-shadow(0px 0px 4px #ffffff);
+  }
+
+  .report-table {
+    font-size: 0.9rem;
+  }
+
+  .resolve-btn,
+  .delete-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .status-badge {
+    font-size: 0.8rem;
+  }
+.admin-reports .filter-container {
+    display: flex;
+    flex-direction: column!important;
+    align-items: flex-start!important;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+.report-table{
+  width: 800px;
+}
+
+
+  
+}
+
+@media (max-width: 480px) {
+  .admin-reports {
+    padding: 10px;
+  }
+
+  .reports-title {
+    font-size: 1.8rem;
+  }
+  .admin-reports {
+    padding: 20px;
+    max-width: 500px;
+    min-width: 350px;
+   
+  }
+ .admin-reports .filter-container {
+    display: flex;
+    flex-direction: column!important;
+    align-items: flex-start!important;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+
+  .report-table{
+    width: 1200px;
+  }
+}
+
+
+@media (max-width: 800px) {
+.admin-reports{
+  margin-left: 100px!important;
+}
+}
+
+/* 🔹 Contenedor de paginación */
+.reports-pagination-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* 🔹 Botones de paginación */
+.reports-page-button {
+  background: #ff8c00;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.reports-page-button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+
+/* 🔹 Info de paginación */
+.reports-pagination-info {
+  font-size: 16px;
+  color: white;
+}
