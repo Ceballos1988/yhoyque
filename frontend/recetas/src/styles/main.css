@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+/* Evita el desbordamiento en el documento */
+html,
+body {
+  max-width: 100vw; /* Limita el ancho máximo al viewport */
+  margin: 0;
+  padding: 0;
+  background-color: #0f172b;
+}
+
+body,
+div {
+  cursor: default;
+}
+
+input,
+textarea,
+[contenteditable] {
+  cursor: text;
+}
+
+/* Botón de flecha para volver */
+.back-button {
+  border: none;
+  cursor: pointer;
+  display: flex; /* Asegura que el contenido esté alineado */
+  align-items: center; /* Alineación vertical */
+}
+
+.arrow-icon {
+  width: 40px;
+  height: auto;
+}
+
+/* Efecto de sombra blanca al pasar el cursor */
+.back-button:hover {
+  box-shadow: 0 0 10px white;
+  border-radius: 100%;
+}
+
+.glass-effect {
+  background: rgba(122, 118, 118, 0.1);
+  backdrop-filter: blur(50px);
+  border: 1px solid rgba(230, 85, 23, 0.28) !important;
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1) !important;
+
+}
+
+h1 {
+  font-family: "Josefin Slab", serif;
+}
+
+h2 {
+  font-family: "Josefin Slab", serif;
+}
+
+h3 {
+  font-family: Raleway;
+}
+h4 {
+  font-family: Raleway;
+}
+
+/* Breadcrumb */
+.breadcrumb-wall {
+  font-size: 0.9rem !important; /* Tamaño de letra más pequeño */
+  flex-wrap: wrap;
+  color: white;
+  text-align: left !important; /* Alinea el contenido a la izquierda */
+}
+
+.breadcrumb-wall span {
+  margin: 0.2rem !important;
+  font-size: 0.9rem !important; /* Tamaño de letra más pequeño */
+}
+
+.breadcrumb-wall span.comunity {
+  color: #ee8532 !important; /* Naranja para la sección actual */
+  font-weight: bold !important; /* Destacar Comunidad */
+}
+
+.breadcrumb-wall span:hover {
+  color: #ee8532; /* Cambiar a naranja en hover */
+}
+
+.breadcrumb-wall span.separator {
+  color: white !important; /* Blanco para las "/" */
+}
+
+.breadcrumb-container-wall {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start !important; /* Alinea a la izquierda */
+  gap: 0.5rem;
+  padding: 0.5rem 1rem; /* Agrega espacio interno */
+}
+
+
+@media (min-width: 0px) and (max-width: 1024px) {
+  .breadcrumb-container-wall {
+    flex-direction: column;
+    justify-content: left;
+    text-align: left;
+    align-items: flex-start;
+    left: 0;
+    margin-left: 20px;
+    
+  }
+
+  .breadcrumb-wall {
+    margin-top: 10px;
+    font-size: 1rem !important; /* Reducimos el tamaño de fuente */
+    flex-wrap: wrap; /* Permitir que el texto se ajuste */
+  }
+
+  .breadcrumb-wall span {
+    margin: 0.2rem; /* Espacio menor entre elementos */
+    font-size: 0.9rem !important; /* Reducimos el tamaño de fuente */
+  }
+}
+
+/* Scrollbars personalizados */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ee8532;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffa541;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172b;
+}
+
+
+@media (max-width: 550px) {
+
+
+  .back-button {
+    width: 30px!important;
+    height: 30px!important;
+  }
+
+  .breadcrumb-wall span {
+    font-size: 0.7rem !important; /* Reducimos el tamaño de fuente */
+  }
+}
+
+
+.offline-banner {
+  position: fixed;
+  font-size: 0.7rem !important; /* Reducimos el tamaño de fuente */
+  top: 0;
+  width: 100%;
+  height: 20px;
+  background-color: #dc2626; /* Rojo */
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  z-index: 1050;
+}
