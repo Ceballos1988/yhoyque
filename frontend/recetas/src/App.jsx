@@ -24,7 +24,7 @@ import ShoppingListsPage from "./pages/ShoppingListsPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { OfflineProvider } from "./context/OfflineContext"; // ✅ Importar el Provider
-import './index.css';
+import "./styles/main.css";
 /**
  * Componente principal de la aplicación.
  */
