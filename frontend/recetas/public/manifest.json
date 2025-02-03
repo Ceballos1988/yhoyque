@@ -28,7 +28,7 @@
       "url": "/recipe-wall",
       "icons": [
         {
-          "src": "/img/icon-192x192.png",
+          "src": "public/img/icon-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
