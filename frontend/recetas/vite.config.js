@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  root: "frontend/recetas", // Asegura que esta es la ruta correcta
   plugins: [react()],
   server: {
     proxy: {
@@ -16,7 +15,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     rollupOptions: {
-      input: "src/main.jsx", // Asegura que Vite use src/main.jsx como punto de entrada
+      input: "src/main.jsx", // Apunta al archivo correcto
     },
   },
 });
