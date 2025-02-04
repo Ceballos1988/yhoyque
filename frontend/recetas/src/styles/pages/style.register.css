@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&display=swap");
 
 .register-container {
-  background-image: url("../img/fondo.svg"); /* Ruta hacia tu archivo SVG */
+  background-image: url("/img/fondo.svg");
   background-repeat: repeat; /* Hace que el patrón se repita */
   background-size: container; /* Ajusta el tamaño del patrón */
   background-position: center; /* Posiciona el patrón en el centro */
@@ -48,12 +48,12 @@
   width: 450px;
 }
 
-.register-form .w-1/2 {
+.register-form .width-50 {
   width: 50%;
 }
 
 @media (max-width: 768px) {
-  .register-form .w-1/2 {
+  .register-form .width-50 {
     width: 100%;
   }
 }

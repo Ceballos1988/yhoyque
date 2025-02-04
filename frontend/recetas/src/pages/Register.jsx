@@ -142,7 +142,7 @@ function Register() {
         aria-label="Formulario de registro de usuario"
       >
         <div className="flex gap-4">
-          <div className="w-1/2">
+          <div className="width-50">
             <label
               htmlFor="first-name"
               className="block font-semibold mb-2 text-naranja-bg"
@@ -160,7 +160,7 @@ function Register() {
               aria-required="true"
             />
           </div>
-          <div className="w-1/2">
+          <div className="width-50">
             <label
               htmlFor="last-name"
               className="block font-semibold mb-2 text-naranja-bg"
@@ -181,7 +181,7 @@ function Register() {
         </div>
 
         <div className="flex gap-4">
-          <div className="w-1/2">
+          <div className="width-50">
             <label
               htmlFor="username"
               className="block font-semibold mb-2 text-naranja-bg"
@@ -199,7 +199,7 @@ function Register() {
               aria-required="true"
             />
           </div>
-          <div className="w-1/2">
+          <div className="width-50">
             <label
               htmlFor="email"
               className="block font-semibold mb-2 text-naranja-bg"
@@ -221,7 +221,7 @@ function Register() {
         </div>
 
         <div className="flex gap-4">
-          <div className="w-1/2">
+          <div className="width-50">
             <label
               htmlFor="password"
               className="block font-semibold mb-2 text-naranja-bg"
@@ -240,7 +240,7 @@ function Register() {
               autoComplete="new-password"
             />
           </div>
-          <div className="w-1/2">
+          <div className="width-50">
             <label
               htmlFor="confirm-password"
               className="block font-semibold mb-2 text-naranja-bg"
