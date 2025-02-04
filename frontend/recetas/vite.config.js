@@ -14,9 +14,11 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    manifest: true, // **Asegura que se genere el manifest.json**
+    manifest: true,
+    assetsDir: "assets",
     rollupOptions: {
-      input: "src/main.jsx",
+      input: "index.html", // ✅ Vite lo detecta automáticamente
     },
+    copyPublicDir: true, // ✅ Asegura que los archivos en public/ se copien bien
   },
 });

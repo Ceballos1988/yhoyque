@@ -30,7 +30,7 @@
 
 /* Contenedor principal */
 .shopping-lists-page {
-  background-image: url("../img/fondo.svg"); /* Ruta hacia tu archivo SVG */
+  background-image: url("/img/fondo.svg"); /* Ruta hacia tu archivo SVG */
   background-repeat: repeat; /* Hace que el patrón se repita */
   background-size: container; /* Ajusta el tamaño del patrón */
   background-position: center; /* Posiciona el patrón en el centro */
@@ -148,7 +148,7 @@
   }
   /* Contenedor principal */
   .shopping-lists-page {
-    background-image: url("../img/fondo-chico.svg");
+    background-image: url("/img/fondo-chico.svg");
     background-repeat: repeat;
     background-size: cover;
     padding: 0 20px;
