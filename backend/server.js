@@ -21,11 +21,10 @@ const app = express();
 // Middleware para habilitar CORS
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
-    credentials: true,
+    origin: [process.env.FRONTEND_URL, "http://localhost:5173"], // Asegúrate de tener la URL correcta en tu .env
+    credentials: true, // Permite el uso de cookies para autenticación
   })
 );
-
 
 // Middleware para analizar cookies y procesar solicitudes JSON
 app.use(cookieParser());
