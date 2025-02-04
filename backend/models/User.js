@@ -34,7 +34,5 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// 🔹 Indexa los usernames en minúsculas para evitar duplicados sin importar mayúsculas/minúsculas
-userSchema.index({ username: 1 }, { unique: true });
 
 export default mongoose.model("User", userSchema);
