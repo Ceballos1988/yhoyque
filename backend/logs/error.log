@@ -1,9 +1,0 @@
-[2025-02-03T15:06:33.670Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T17:52:12.527Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T18:11:09.373Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T18:11:48.830Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T18:28:57.277Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T18:31:57.655Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T18:32:30.294Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T18:38:19.590Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-03T19:32:45.764Z] ERROR: Error al verificar el token: jwt malformed
