@@ -9,6 +9,11 @@ lerna-debug.log*
 
 node_modules
 dist
+!dist/index.html
+!dist/manifest.json
+!dist/assets/
+!dist/styles/
+!dist/img/
 dist-ssr
 *.local
 
