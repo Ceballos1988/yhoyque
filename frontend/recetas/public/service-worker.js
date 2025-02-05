@@ -2,7 +2,7 @@
  * Nombre de la caché utilizada en la aplicación.
  * Asegúrate de cambiar la versión cada vez que hagas cambios importantes.
  */
-const CACHE_NAME = "v11";
+const CACHE_NAME = "v12";
 
 /**
  * Lista de archivos a cachear.

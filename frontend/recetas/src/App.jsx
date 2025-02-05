@@ -18,7 +18,7 @@ import Privacy from "./pages/Privacy";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { AuthProvider } from "./context/AuthContext";
+import AuthProvider from "./context/AuthContext"; // ✅ Importación correcta para exportación por defecto
 import { FilterProvider } from "./context/FilterContext";
 import ShoppingListsPage from "./pages/ShoppingListsPage";
 import ForgotPassword from "./components/ForgotPassword";

@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export const AuthContext = createContext();
+const AuthContext = createContext(); // Se mantiene el contexto sin exportación directa
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
@@ -16,9 +16,9 @@ const API_BASE_URL =
  * @param {React.ReactNode} props.children - Componentes hijos que serán envueltos por el proveedor de autenticación.
  * @returns {JSX.Element} - Proveedor de contexto con las funciones y estados de autenticación.
  */
-export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario actual
-  const [isLoading, setIsLoading] = useState(true); // Estado para manejar la carga
+const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * Obtiene la información del usuario autenticado desde la API.
@@ -55,37 +55,34 @@ export const AuthProvider = ({ children }) => {
    * También dispara un evento para actualizar otros componentes que dependan de la autenticación.
    */
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Limpiar el token de localStorage
-    setCurrentUser(null); // Limpiar el estado del usuario
-    window.dispatchEvent(new Event("authChanged")); // Disparar evento para actualizar otros componentes
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.clear(); // Opcional: limpiar toda la sesión
+    setCurrentUser(null);
+    window.dispatchEvent(new Event("authChanged"));
   };
 
   // Memoizamos handleAuthChange para evitar recrearla en cada render
   const handleAuthChange = useCallback(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetchUser(); // Reintentar obtener el usuario si se detecta un token
+      fetchUser();
     } else {
-      setCurrentUser(null); // Si no hay token, limpiar el usuario actual
+      setCurrentUser(null);
     }
-  }, []); // Dependencias vacías porque no depende de ninguna variable externa
+  }, []);
 
   useEffect(() => {
-    // Llamar a fetchUser al montar el componente
     fetchUser();
 
-    // Escuchar cambios en el evento 'authChanged' para detectar cambios de autenticación
     window.addEventListener("authChanged", handleAuthChange);
-
-    // Escuchar el almacenamiento local para detectar cambios entre pestañas (multi-tab)
     window.addEventListener("storage", handleAuthChange);
 
-    // Limpiar los listeners cuando el componente se desmonte
     return () => {
       window.removeEventListener("authChanged", handleAuthChange);
       window.removeEventListener("storage", handleAuthChange);
     };
-  }, [handleAuthChange]); // Ahora handleAuthChange está memoizada y no cambia entre renders
+  }, [handleAuthChange]);
 
   return (
     <AuthContext.Provider
@@ -99,3 +96,7 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+// ✅ Exportamos el contexto de forma nombrada y el provider como default
+export { AuthContext };
+export default AuthProvider;

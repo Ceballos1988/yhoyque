@@ -64,7 +64,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       if (import.meta.env.MODE === "development") {
         console.log("Token encontrado:", token);
       }
-      
+
       if (!token) {
         console.warn("No hay token, se configurará como 'guest'.");
         return;
@@ -76,7 +76,6 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        
 
         const isInFavorites = response.data.recipes.some((favorite) => {
           return favorite._id.toString() === recipe._id.toString();
@@ -108,7 +107,6 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         console.error("Error al obtener el nombre de usuario:", error);
       }
     };
-    
 
     updateUserName();
   }, [recipe.userId]);
@@ -124,7 +122,6 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         console.error("Error al cargar el conteo de comentarios:", error);
       }
     };
-    
 
     fetchCommentsCount();
   }, [recipe._id]);
@@ -134,7 +131,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/comments/recipe/${recipeId}`
       );
-      
+
       setComments((prevComments) => ({
         ...prevComments,
         [recipeId]: res.data.comments || [],
@@ -168,8 +165,6 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     });
     setCommentsCount((prevCount) => Math.max(0, prevCount - 1));
   };
-
-  
 
   const handleLikeRecipe = async () => {
     const token = localStorage.getItem("token");
@@ -211,7 +206,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           `${import.meta.env.VITE_API_URL}/api/favorites/${recipe._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
+
         setIsFavorited(false);
       } else {
         response = await axios.post(
@@ -219,12 +214,12 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           { recipeId: recipe._id },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
+
         setIsFavorited(true);
       }
       if (import.meta.env.MODE === "development") {
-      console.log(response.data.message);
-    } 
+        console.log(response.data.message);
+      }
       localStorage.setItem(`favorite-${recipe._id}`, isFavorited);
     } catch (error) {
       console.error("Error al manejar favorito:", error);
@@ -241,9 +236,12 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     }
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/recipes/${recipe._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/recipes/${recipe._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setShowDeleteModal(false);
       onDelete(recipe._id);
@@ -264,12 +262,11 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   const handleUserClick = async () => {
     try {
       if (import.meta.env.MODE === "development") {
-      console.log("Fetching user details for:", recipe.userId);
-    }
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
-    );
-    
+        console.log("Fetching user details for:", recipe.userId);
+      }
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
+      );
 
       setUserDetails(res.data);
       setShowUserModal(true);
@@ -288,6 +285,10 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       fetchComments(recipeId);
     }
   };
+
+  console.log("Receta ID Usuario (verificando existencia):", recipe.userId || "No definido");
+  console.log("Usuario Actual ID:", currentUserId);
+  console.log("Comparación:", String(recipe.userId) === String(currentUserId));
 
   return (
     <div
@@ -345,7 +346,8 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
                 onClose={() => setIsModalOpen(false)}
                 onAddToList={(selected) => {
                   if (import.meta.env.MODE === "development") {
-                  console.log("Ingredientes añadidos a la lista:", selected);}
+                    console.log("Ingredientes añadidos a la lista:", selected);
+                  }
                 }}
               />
             </div>
@@ -490,7 +492,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         </div>
       )}
 
-      {recipe.userId === currentUser?._id && (
+      {String(recipe.userId) === String(currentUser?.id) && (
         <div className="mt-4 flex justify-end space-x-4">
           <button
             onClick={() => setShowDeleteModal(true)}
