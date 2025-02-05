@@ -69,6 +69,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminUserRoutes);
 app.use("/api/admin/users", adminUserRoutes);
+
 app.use("/api", brandRoutes); // Rutas de marcas
 
 // Ruta de prueba
@@ -91,6 +92,7 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   res.json({ message: "Servidor funcionando correctamente en Railway 🚀" });
 });
+
 
 
 // Configuración del puerto en el que correrá el servidor
