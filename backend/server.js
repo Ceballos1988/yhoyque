@@ -77,11 +77,12 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.json({ message: "Servidor funcionando correctamente" });
+  res.json({ message: "Servidor funcionando correctamente en Railway 🚀" });
 });
 
+
 // Configuración del puerto en el que correrá el servidor
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000; // Asegura que Railway use su puerto asignado
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
