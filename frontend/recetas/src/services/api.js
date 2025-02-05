@@ -42,7 +42,7 @@ export const getAdminStatistics = async (token) => {
 
 
 export const getTopRecipesByLikes = async (token) => {
-  const response = await api.get(`${API_BASE_URL}/top-likes`, {
+  const response = await api.get(`${API_BASE_URL}/api/admin/top-likes`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
