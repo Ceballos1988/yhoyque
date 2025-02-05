@@ -21,10 +21,11 @@ const app = express();
 // Middleware para habilitar CORS
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://yhoyque-recetas.netlify.app", // SOLO Netlify permitido
     credentials: true,
   })
 );
+
 
 // Middleware para analizar cookies y procesar solicitudes JSON
 app.use(cookieParser());
