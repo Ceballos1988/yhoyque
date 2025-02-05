@@ -82,16 +82,13 @@ app.get("/", (req, res) => {
 
 
 // Configuración del puerto en el que correrá el servidor
-const PORT = process.env.PORT || 5000; // Asegura que Railway use su puerto asignado
+
+const PORT = process.env.PORT || 5000;
+console.log(`🚀 Servidor intentará correr en el puerto: ${PORT}`);
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
+  console.log(`✅ Servidor corriendo en puerto ${PORT}`);
 });
-
-console.log(
-  "MONGO_URI:",
-  process.env.MONGO_URI ? "Cargado ✅" : "No definido ❌"
-);
 console.log(
   "JWT_SECRET:",
   process.env.JWT_SECRET ? "Cargado ✅" : "No definido ❌"
