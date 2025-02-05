@@ -83,7 +83,7 @@ app.get("/", (req, res) => {
 
 // Configuración del puerto en el que correrá el servidor
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 console.log(`🚀 Servidor intentará correr en el puerto: ${PORT}`);
 
 app.listen(PORT, () => {
