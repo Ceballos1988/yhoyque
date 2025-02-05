@@ -312,3 +312,73 @@
 [2025-02-05T20:57:27.873Z] INFO: Token generado para usuario: molina
 [2025-02-05T21:20:20.492Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
 [2025-02-05T21:20:20.599Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:02.613Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:02.720Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:02.830Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:02.933Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:16.091Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:16.091Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:24:16.259Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:16.259Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:24:17.094Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:17.095Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:24:17.589Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:17.590Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:24:18.050Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:18.166Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:18.778Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:18.778Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:24:19.038Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:19.038Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:24:28.060Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:28.265Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:28.340Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:28.583Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:28.740Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:28.910Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:29.084Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:29.262Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:29.424Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:29.588Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:29.769Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:29.947Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:30.148Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:30.359Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:30.610Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:30.792Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:30.951Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:31.144Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:36.816Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:36.827Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:36.919Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:36.992Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:37.033Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:37.144Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:37.164Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:37.340Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:39.960Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:24:41.254Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:26:16.412Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:26:16.412Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:26:16.520Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:26:16.520Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:26:59.935Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:26:59.937Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:27:05.507Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:27:05.508Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:27:10.761Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:27:10.761Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:27:41.358Z] INFO: Usuario encontrado: mceballos
+[2025-02-05T21:27:41.416Z] INFO: Token generado para usuario: mceballos
+[2025-02-05T21:27:59.573Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:27:59.573Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:30:12.865Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:30:12.865Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:30:18.749Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:30:18.749Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:30:24.276Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:30:24.276Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:30:29.209Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:30:29.209Z] INFO: Intento de acceso con rol: admin
+[2025-02-05T21:31:08.434Z] INFO: Información del usuario adjuntada a la solicitud: {"id":"670fcd293f9c5f4310b80da5","role":"admin","email":"maria.ceballos@davinci.edu.ar","username":"mceballos"}
+[2025-02-05T21:31:08.435Z] INFO: Intento de acceso con rol: admin
