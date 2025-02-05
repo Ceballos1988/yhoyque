@@ -34,11 +34,12 @@ export const searchRecipeById = async (id, token) => {
 
 // 🔹 Reemplazar axios.get por api.get en las funciones existentes
 export const getAdminStatistics = async (token) => {
-  const response = await api.get(`${API_BASE_URL}/statistics`, {
+  const response = await api.get(`${API_BASE_URL}/api/admin/statistics`, { 
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };
+
 
 export const getTopRecipesByLikes = async (token) => {
   const response = await api.get(`${API_BASE_URL}/top-likes`, {
