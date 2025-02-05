@@ -19,9 +19,20 @@ dotenv.config();
 const app = express();
 
 // Middleware para habilitar CORS
+const allowedOrigins = [
+  "http://localhost:5173", // Desarrollo
+  "https://yhoyque-recetas.netlify.app" // Producción en Netlify
+];
+
 app.use(
   cors({
-    origin: "https://yhoyque-recetas.netlify.app", // SOLO Netlify permitido
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -84,7 +95,7 @@ app.get("/", (req, res) => {
 
 // Configuración del puerto en el que correrá el servidor
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 console.log(`🚀 Servidor intentará correr en el puerto: ${PORT}`);
 
 app.listen(PORT, () => {
