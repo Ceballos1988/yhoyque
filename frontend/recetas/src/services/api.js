@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/admin`;
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com"; // Fallback
 
 // 🔹 Crear una instancia de axios con configuración base
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com",
 });
 
 // 🔹 Interceptor de respuestas para manejar errores de red

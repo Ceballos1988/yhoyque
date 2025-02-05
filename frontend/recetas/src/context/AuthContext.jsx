@@ -4,6 +4,9 @@ import PropTypes from "prop-types";
 
 export const AuthContext = createContext();
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
+
 /**
  * Proveedor de contexto de autenticación para manejar la información del usuario autenticado.
  * Incluye funciones para obtener la información del usuario, manejar el logout y gestionar el estado de autenticación.
@@ -31,12 +34,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/auth/user-info`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/auth/user-info`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCurrentUser({
         id: response.data._id,
         role: response.data.role,

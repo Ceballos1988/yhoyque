@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "../styles/components/style.BrandCarousel.css";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
+
 const BrandCarousel = () => {
   const [brands, setBrands] = useState([]); // Estado dinámico para marcas
   const [isLoading, setIsLoading] = useState(true); // Estado para mostrar un spinner
@@ -12,7 +14,7 @@ const BrandCarousel = () => {
     const fetchBrands = async () => {
       try {
         const token = localStorage.getItem("token"); // Obtener el token del local storage
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/brands`, {
+        const response = await axios.get(`${API_BASE_URL}/api/brands`, {
           headers: {
             Authorization: `Bearer ${token}`, // Incluir el token en el encabezado
           },
