@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types"; // Importar PropTypes
 
-export const FilterContext = createContext();
+const FilterContext = createContext(); // ✅ NO EXPORTAR AQUÍ
 
 /**
  * Proveedor de contexto para manejar los filtros aplicados en la aplicación.

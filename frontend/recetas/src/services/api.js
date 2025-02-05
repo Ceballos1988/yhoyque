@@ -49,7 +49,7 @@ export const getTopRecipesByLikes = async (token) => {
 };
 
 export const getTopRecipesByReports = async (token) => {
-  const response = await api.get(`${API_BASE_URL}/top-reports`, {
+  const response = await api.get(`${API_BASE_URL}/api/admin/top-reports`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
@@ -63,15 +63,16 @@ export const getReportMotives = async (token) => {
 };
 
 export const getUsersAndRecipesByMonth = async (year, token) => {
-  const response = await api.get(`${API_BASE_URL}/users-recipes-by-month`, {
+  const response = await api.get(`${API_BASE_URL}/api/admin/users-recipes-by-month`, {  // ✅ Correcto
     headers: { Authorization: `Bearer ${token}` },
     params: { year },
   });
   return response.data;
 };
 
+
 export const getRecipeDistribution = async (token) => {
-  const response = await api.get(`${API_BASE_URL}/recipe-distribution`, {
+  const response = await api.get(`${API_BASE_URL}/api/admin/recipe-distribution`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
@@ -79,26 +80,18 @@ export const getRecipeDistribution = async (token) => {
 
 // Obtener distribución por categoría
 export const getRecipeCategoryDistribution = async (token) => {
-  try {
-    const response = await api.get(`${API_BASE_URL}/category-distribution`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error al obtener la distribución por categoría:", error);
-    throw new Error("Error al obtener la distribución por categoría.");
-  }
+  const response = await api.get(`${API_BASE_URL}/api/admin/users/category-distribution`, { // ✅ Correcto
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
 };
+
+
 
 // Obtener distribución por tipo de dieta
 export const getRecipeDietTypeDistribution = async (token) => {
-  try {
-    const response = await api.get(`${API_BASE_URL}/diet-type-distribution`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error al obtener la distribución por tipo de dieta:", error);
-    throw new Error("Error al obtener la distribución por tipo de dieta.");
-  }
+  const response = await api.get(`${API_BASE_URL}/api/admin/users/diet-type-distribution`, { // ✅ Correcto
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
 };
