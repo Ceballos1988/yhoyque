@@ -763,7 +763,7 @@ const CreateRecipe = () => {
                   <div className="mt-5">
                     <label
                       htmlFor="image"
-                      className="flex justify-center items-center create-recipe-add-btn text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]"
+                      className="flex justify-center items-center  text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]"
                     >
                       <input
                         id="image"
@@ -781,13 +781,13 @@ const CreateRecipe = () => {
             </div>
 
             {/* Botones de Previsualización y Crear Receta */}
-            <div className="button-group mt-6 flex justify-end ">
+            <div className="mt-6 flex justify-end ">
               <buttonbg-naranja-bg
                 font-bold
                 hover:text-white
                 mt-4
                 type="button"
-                className="create-recipe-add-btn bg-naranja-bg font-bold hover:text-white mt-4"
+                className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]"
                 onClick={handlePreview}
                 disabled={isPreviewLoading} // Deshabilitar mientras está cargando
               >
@@ -796,7 +796,7 @@ const CreateRecipe = () => {
 
               <button
                 type="submit"
-                className={`create-recipe-add-btn bg-naranja-bg font-bold hover:text-white mt-4 ${
+                className={`text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] ${
                   isLoading ? "opacity-50 cursor-not-allowed" : ""
                 } text-white`}
                 disabled={isLoading}
@@ -815,7 +815,7 @@ const CreateRecipe = () => {
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="create-recipe-add-btn text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-red-500 hover:bg-red-700 hover:text-naranja-bg"
+                  className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-red-500 hover:bg-red-700 hover:text-naranja-bg"
                 >
                   Cancelar
                 </button>

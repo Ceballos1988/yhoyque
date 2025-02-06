@@ -2,7 +2,7 @@
  * Nombre de la caché utilizada en la aplicación.
  * Asegúrate de cambiar la versión cada vez que hagas cambios importantes.
  */
-const CACHE_NAME = "v12";
+const CACHE_NAME = "v13";
 
 /**
  * Lista de archivos a cachear.
@@ -24,8 +24,12 @@ const urlsToCache = [
  * Evento de instalación: Se encarga de cachear los archivos esenciales.
  */
 self.addEventListener("install", (event) => {
+  console.log("[Service Worker] Instalando el service worker...");
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("[Service Worker] Archivos cacheados:", urlsToCache);
+      return cache.addAll(urlsToCache);
+    })
   );
   self.skipWaiting();
 });
@@ -34,11 +38,13 @@ self.addEventListener("install", (event) => {
  * Evento de activación: Elimina cachés antiguas cuando se actualiza el SW.
  */
 self.addEventListener("activate", (event) => {
+  console.log("[Service Worker] Activando el service worker...");
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
+            console.log("[Service Worker] Eliminando caché antigua:", cacheName);
             return caches.delete(cacheName);
           }
         })

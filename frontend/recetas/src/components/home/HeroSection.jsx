@@ -157,7 +157,7 @@ function HeroSection({ isAuthenticated, logout }) {
             aria-label={isPaused ? "Reanudar animación" : "Pausar animación"}
           >
             <img
-              src={`/img/${isPaused ? "play" : "pause"}.webp`}
+              src={`/img/${isPaused ? "play" : "pause"}.png`}
               alt={isPaused ? "Icono para reanudar animación" : "Icono para pausar animación"}
               className="pause-icon"
             />
