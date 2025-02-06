@@ -169,6 +169,7 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "None",  // 🔹 Necesario para solicitudes cross-origin
     });
 
     res.status(200).json({ message: "Inicio de sesión exitoso", token });
