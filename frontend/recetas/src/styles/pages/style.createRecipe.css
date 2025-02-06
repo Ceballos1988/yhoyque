@@ -590,6 +590,7 @@ button[title="Eliminar ingrediente"] img {
 .loading-spinner {
   border: 5px solid rgba(255, 255, 255, 0.3);  /* Borde más grueso y contraste */
   border-left-color: #EE8532;
+  margin-top: 250px;
   width: 50px;  /* Tamaño más grande */
   height: 50px;
   animation: spin 0.8s linear infinite;  /* Más rápido */

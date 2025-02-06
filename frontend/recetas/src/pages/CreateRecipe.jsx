@@ -773,7 +773,7 @@ const CreateRecipe = () => {
             </div>
 
             {/* Botones de Previsualización y Crear Receta */}
-            <div className="mt-6 flex justify-end ">
+            <div className="mt-6 flex justify-around">
               <button
                 type="button"
                 className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] text-white"
