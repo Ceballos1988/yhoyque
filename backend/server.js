@@ -6,9 +6,9 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import recipeRoutes from "./routes/recipe.js";
-import favoritesRoutes from "./routes/favorites.js"; // Ruta de favoritos
+import favoritesRoutes from "./routes/favorites.js";
 import commentsRoutes from "./routes/comments.js";
-import shoppingListRoutes from "./routes/shoppingListRoutes.js"; // Importa las rutas de listas de compras
+import shoppingListRoutes from "./routes/shoppingListRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import missingIngredientsRouter from "./routes/missingIngredientsRouter.js";
 import reportRoutes from "./routes/reportRoutes.js";
@@ -20,9 +20,13 @@ const app = express();
 
 // Middleware para habilitar CORS
 const allowedOrigins = [
-  "http://localhost:5173", // Desarrollo
-  "https://yhoyque-recetas.netlify.app" // Producción en Netlify
+  process.env.FRONTEND_URL,
+  "http://localhost:5173", // Desarrollo local
 ];
+
+if (process.env.NODE_ENV === "production") {
+  allowedOrigins.push(process.env.BACKEND_URL);
+}
 
 app.use(
   cors({
@@ -37,7 +41,6 @@ app.use(
   })
 );
 
-
 // Middleware para analizar cookies y procesar solicitudes JSON
 app.use(cookieParser());
 app.use(express.json());
@@ -45,11 +48,11 @@ app.use(express.json());
 // Conexión a la base de datos de MongoDB usando Mongoose
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI); // Conectar a MongoDB sin opciones obsoletas
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB conectado");
   } catch (error) {
     console.error("Error en la conexión con MongoDB:", error);
-    process.exit(1); // Finalizar la aplicación en caso de error
+    process.exit(1);
   }
 };
 
@@ -63,14 +66,11 @@ app.use("/api/favorites", favoritesRoutes);
 app.use("/api/comments", commentsRoutes);
 app.use("/api/shopping-lists", shoppingListRoutes);
 app.use("/api/missing-ingredients", missingIngredientsRouter);
-
-// Rutas específicas de administración
 app.use("/api/reports", reportRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminUserRoutes);
 app.use("/api/admin/users", adminUserRoutes);
-
-app.use("/api", brandRoutes); // Rutas de marcas
+app.use("/api", brandRoutes);
 
 // Ruta de prueba
 app.get("/api/test/ping", (req, res) => {
@@ -89,20 +89,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// Ruta principal
 app.get("/", (req, res) => {
   res.json({ message: "Servidor funcionando correctamente en Railway 🚀" });
 });
 
-
-
-// Configuración del puerto en el que correrá el servidor
-
+// Configuración del puerto
 const PORT = process.env.PORT || 5000;
 console.log(`🚀 Servidor intentará correr en el puerto: ${PORT}`);
 
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en puerto ${PORT}`);
 });
+
+// Verificación de variables de entorno
 console.log(
   "JWT_SECRET:",
   process.env.JWT_SECRET ? "Cargado ✅" : "No definido ❌"
