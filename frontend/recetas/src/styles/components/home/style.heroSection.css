@@ -73,7 +73,7 @@ span {
   justify-content: center;
 }
 
-.spinner-overlay {
+.spinner-overlay-2 {
   position: absolute;
   top: 0;
   left: 0;
@@ -83,7 +83,8 @@ span {
   justify-content: center;
   align-items: center;
   z-index: 2;
-  background-color: red!important; /* Fondo completamente transparente */
+  background-color: none!important;
+  background: none!important; /* Fondo completamente transparente */
 }
 
 
