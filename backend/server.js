@@ -20,13 +20,9 @@ const app = express();
 
 // Middleware para habilitar CORS
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173", // Desarrollo local
+  process.env.FRONTEND_URL,    // Netlify
+  "http://localhost:5173",     // Desarrollo local
 ];
-
-if (process.env.NODE_ENV === "production") {
-  allowedOrigins.push(process.env.BACKEND_URL);
-}
 
 app.use(
   cors({
@@ -37,9 +33,20 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,
+    credentials: true,  // Necesario si usas cookies o headers de autorización
   })
 );
+
+// Agregar encabezados CORS globales
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
 
 // Middleware para analizar cookies y procesar solicitudes JSON
 app.use(cookieParser());
