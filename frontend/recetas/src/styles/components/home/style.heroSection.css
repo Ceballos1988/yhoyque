@@ -83,7 +83,9 @@ span {
   justify-content: center;
   align-items: center;
   z-index: 2;
+  background: transparent; /* Fondo completamente transparente */
 }
+
 
 
 .home-section-hero .rotating-image {
