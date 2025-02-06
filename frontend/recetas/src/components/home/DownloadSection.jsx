@@ -15,49 +15,44 @@ function DownloadSection() {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
   useEffect(() => {
-    const checkIfInstalled = async () => {
+    const checkIfInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {
         setIsInstallable(false);
         return;
-      }
-      if (window.navigator.getInstalledRelatedApps) {
-        const relatedApps = await window.navigator.getInstalledRelatedApps();
-        if (relatedApps.length > 0) {
-          setIsInstallable(false);
-          return;
-        }
       }
       setIsInstallable(true);
     };
 
     checkIfInstalled();
-    window.addEventListener("appinstalled", checkIfInstalled);
+    window.addEventListener("appinstalled", () => {
+      console.log("La aplicación ha sido instalada.");
+      setIsInstallable(false);
+    });
 
     return () => {
       window.removeEventListener("appinstalled", checkIfInstalled);
     };
   }, []);
 
-  const handleInstallApp = async () => {
-    if (deferredPrompt && typeof deferredPrompt.prompt === "function") {
+  const handleInstallApp = () => {
+    if (deferredPrompt) {
       deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (import.meta.env.MODE === "development") {
-        console.log(`Instalación ${outcome === "accepted" ? "aceptada" : "rechazada"}.`);
-      }
-      
-      setDeferredPrompt(null);
+      deferredPrompt.userChoice.then(({ outcome }) => {
+        if (outcome === "accepted") {
+          console.log("La instalación fue aceptada.");
+        } else {
+          console.log("La instalación fue rechazada.");
+        }
+        setDeferredPrompt(null);
+      });
     } else {
       alert(
-        "Para instalar la aplicación, haz clic en el icono de instalación en la barra de direcciones."
+        "La instalación no está disponible en este momento. Intenta desde el navegador."
       );
     }
   };
@@ -81,10 +76,7 @@ function DownloadSection() {
 
       <div className="download-content container mx-auto flex flex-col lg:flex-row justify-center items-center gap-10">
         <div className="download-text lg:w-1/2 text-left mt-10 mb-10 ml-10">
-          <h2
-            id="download-title"
-            className="section-title text-left pb-10 text-azul-bg"
-          >
+          <h2 id="download-title" className="section-title text-left pb-10 text-azul-bg">
             ¡DESCARGÁ NUESTRA APP!
           </h2>
 
