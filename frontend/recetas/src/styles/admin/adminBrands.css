@@ -55,7 +55,7 @@ input[type="file"] {
   font-family: "Raleway", sans-serif !important;
 }
 
-.button-group {
+.button-group-a {
   font-family: "Raleway", sans-serif;
   display: flex;
   justify-content: flex-start;
@@ -96,14 +96,14 @@ input[type="file"] {
 .custom-file-upload {
   font-family: "Raleway", sans-serif !important;
   font-size: 1.1rem !important;
-  padding: 10px 20px;
-  background-color: #EE8532;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s;
+  padding: 10px 20px!important;
+  background-color: #EE8532!important;
+  color: #ffffff!important;
+  border: none!important;
+  border-radius: 8px!important;
+  cursor: pointer!important;
+  font-weight: bold!important;
+  transition: background-color 0.3s ease, transform 0.2s!important;
 }
 
 .submit-button:hover {

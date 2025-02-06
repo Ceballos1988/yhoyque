@@ -73,6 +73,20 @@ span {
   justify-content: center;
 }
 
+.spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+
 .home-section-hero .rotating-image {
   max-width: 70%;
   height: auto;
