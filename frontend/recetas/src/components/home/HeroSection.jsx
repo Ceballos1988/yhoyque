@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import CustomButton from "../CustomButton";
-import LoadingSpinner from "../LoadingSpinner"; // Importar el spinner
 import "../../styles/components/home/style.heroSection.css";
 
 /**
@@ -19,7 +18,6 @@ function HeroSection({ isAuthenticated, logout }) {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
-  const [isImageLoading, setIsImageLoading] = useState(true); // Estado para controlar la carga de la imagen
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +30,10 @@ function HeroSection({ isAuthenticated, logout }) {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
@@ -143,17 +144,13 @@ function HeroSection({ isAuthenticated, logout }) {
 
         <div className="image-container-hero relative">
           {/* Spinner mientras la imagen carga */}
-          {isImageLoading && (
-            <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
-              <LoadingSpinner />
-            </div>
-          )}
+
+          <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50"></div>
 
           <img
             src="/img/hero.webp"
             alt="Plato giratorio"
             className={`rotating-image ${isPaused ? "paused" : ""}`}
-            onLoad={() => setIsImageLoading(false)} // Oculta el spinner cuando la imagen carga
           />
 
           <button
@@ -163,7 +160,11 @@ function HeroSection({ isAuthenticated, logout }) {
           >
             <img
               src={`/img/${isPaused ? "play" : "pause"}.png`}
-              alt={isPaused ? "Icono para reanudar animación" : "Icono para pausar animación"}
+              alt={
+                isPaused
+                  ? "Icono para reanudar animación"
+                  : "Icono para pausar animación"
+              }
               className="pause-icon"
             />
           </button>
@@ -171,15 +172,30 @@ function HeroSection({ isAuthenticated, logout }) {
       </div>
 
       {showLogoutModal && (
-        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="logout-confirm-title">
+        <div
+          className="modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="logout-confirm-title"
+        >
           <div className="modal-content">
-            <h2 id="logout-confirm-title" className="modal-header">¿Estás seguro?</h2>
+            <h2 id="logout-confirm-title" className="modal-header">
+              ¿Estás seguro?
+            </h2>
             <p className="modal-body">¿Realmente deseas cerrar sesión?</p>
             <div className="modal-buttons">
-              <button className="btn-cancel" onClick={handleCancelLogout} aria-label="Cancelar cierre de sesión">
+              <button
+                className="btn-cancel"
+                onClick={handleCancelLogout}
+                aria-label="Cancelar cierre de sesión"
+              >
                 Cancelar
               </button>
-              <button className="btn-confirm" onClick={handleConfirmLogout} aria-label="Confirmar cierre de sesión">
+              <button
+                className="btn-confirm"
+                onClick={handleConfirmLogout}
+                aria-label="Confirmar cierre de sesión"
+              >
                 Cerrar Sesión
               </button>
             </div>
