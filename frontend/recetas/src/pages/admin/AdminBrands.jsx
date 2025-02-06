@@ -236,7 +236,7 @@ const AdminBrands = () => {
             id="file-upload"
             className="hidden"
           />
-          <button type="submit" className="submit-button">
+          <button type="submit" className="submit-button text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]  text-white">
             Agregar +
           </button>
         </div>
