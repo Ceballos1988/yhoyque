@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://yhoyque-producción.up.railway.app",
+        target: "https://yhoyque.onrender.com",  // Cambiar al backend correcto
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
@@ -17,8 +17,9 @@ export default defineConfig({
     manifest: true,
     assetsDir: "assets",
     rollupOptions: {
-      input: "index.html", // ✅ Vite lo detecta automáticamente
+      input: "index.html",
     },
-    copyPublicDir: true, // ✅ Asegura que los archivos en public/ se copien bien
+    copyPublicDir: true,
   },
 });
+
