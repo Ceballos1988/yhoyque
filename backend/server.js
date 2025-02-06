@@ -27,24 +27,26 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || [process.env.FRONTEND_URL, "http://localhost:5173"].includes(origin)) {
         callback(null, true);
       } else {
+        console.error(`Bloqueado por CORS: ${origin}`); // Esto ayudará a depurar
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,  // Necesario si usas cookies o headers de autorización
+    credentials: true,
   })
 );
 
-// Agregar encabezados CORS globales
+// Asegúrate de que estos encabezados también se añadan para todas las respuestas
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
 
