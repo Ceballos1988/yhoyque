@@ -18,7 +18,7 @@ import adminUserRoutes from "./routes/adminUserRoutes.js";
 dotenv.config();
 const app = express();
 
-// Middleware para habilitar CORS
+// Middleware para habilitar CORS de forma correcta
 const allowedOrigins = [
   process.env.FRONTEND_URL,    // Netlify
   "http://localhost:5173",     // Desarrollo local
@@ -26,29 +26,10 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || [process.env.FRONTEND_URL, "http://localhost:5173"].includes(origin)) {
-        callback(null, true);
-      } else {
-        console.error(`Bloqueado por CORS: ${origin}`); // Esto ayudará a depurar
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
+    origin: allowedOrigins,
+    credentials: true, // Necesario si se usan cookies o tokens en las solicitudes
   })
 );
-
-// Asegúrate de que estos encabezados también se añadan para todas las respuestas
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
 
 // Middleware para analizar cookies y procesar solicitudes JSON
 app.use(cookieParser());
@@ -58,9 +39,9 @@ app.use(express.json());
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB conectado");
+    console.log("✅ MongoDB conectado");
   } catch (error) {
-    console.error("Error en la conexión con MongoDB:", error);
+    console.error("❌ Error en la conexión con MongoDB:", error);
     process.exit(1);
   }
 };
@@ -100,7 +81,7 @@ app.use((req, res, next) => {
 
 // Ruta principal
 app.get("/", (req, res) => {
-  res.json({ message: "Servidor funcionando correctamente en Railway 🚀" });
+  res.json({ message: "Servidor funcionando correctamente en Render 🚀" });
 });
 
 // Configuración del puerto
@@ -113,10 +94,14 @@ app.listen(PORT, () => {
 
 // Verificación de variables de entorno
 console.log(
+  "FRONTEND_URL:",
+  process.env.FRONTEND_URL ? process.env.FRONTEND_URL : "❌ No definido"
+);
+console.log(
   "JWT_SECRET:",
-  process.env.JWT_SECRET ? "Cargado ✅" : "No definido ❌"
+  process.env.JWT_SECRET ? "Cargado ✅" : "❌ No definido"
 );
 console.log(
   "CLOUDINARY_CLOUD_NAME:",
-  process.env.CLOUDINARY_CLOUD_NAME ? "Cargado ✅" : "No definido ❌"
+  process.env.CLOUDINARY_CLOUD_NAME ? "Cargado ✅" : "❌ No definido"
 );
