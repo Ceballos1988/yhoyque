@@ -8,18 +8,22 @@ const CACHE_NAME = "v15";
  * Lista de archivos a cachear.
  */
 const urlsToCache = [
-  "/",
+  "/", 
   "/index.html",
+  "/recipe-wall",
+  "/profile",
+  "/shopping-lists",
   "/manifest.json",
   "/offline.html",
   "/src/styles/index.css",
-  "/img/icons/icon-192x192.png",
-  "/img/icons/icon-512x512.png",
+  "/assets/index.css",
+  "/img/icon-192x192.png",
+  "/img/icon-512x512.png",
   "/img/fondo.svg",
   "/img/fondo-chico.svg",
-  "/assets/index.css",
+  "/img/hero.webp",
+  "/img/recipe-null.png",
 ];
-
 /**
  * Evento de instalación: Se encarga de cachear los archivos esenciales.
  */
