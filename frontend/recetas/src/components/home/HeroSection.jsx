@@ -144,7 +144,7 @@ function HeroSection({ isAuthenticated, logout }) {
         <div className="image-container-hero relative">
           {/* Spinner mientras la imagen carga */}
           {isImageLoading && (
-            <div className="spinner-overlay absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
+            <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
               <LoadingSpinner />
             </div>
           )}
