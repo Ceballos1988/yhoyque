@@ -4,8 +4,10 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.c
 
 // 🔹 Crear una instancia de axios con configuración base
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com",
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,  // Solo si usas cookies
 });
+
 
 // 🔹 Interceptor de respuestas para manejar errores de red
 api.interceptors.response.use(
