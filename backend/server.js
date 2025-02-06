@@ -26,7 +26,16 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      console.log("Solicitud de origen:", origin); // Ver en logs qué origen llega
+      
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.error(`Bloqueado por CORS: ${origin}`);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true, // Necesario si se usan cookies o tokens en las solicitudes
   })
 );
@@ -75,7 +84,7 @@ app.use((err, req, res, next) => {
 
 // Middleware para registrar logs de solicitudes
 app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url}`, req.body);
+  console.log(`[\${req.method}] \${req.url}`, req.body);
   next();
 });
 
@@ -86,10 +95,10 @@ app.get("/", (req, res) => {
 
 // Configuración del puerto
 const PORT = process.env.PORT || 5000;
-console.log(`🚀 Servidor intentará correr en el puerto: ${PORT}`);
+console.log(`🚀 Servidor intentará correr en el puerto: \${PORT}`);
 
 app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en puerto ${PORT}`);
+  console.log(`✅ Servidor corriendo en puerto \${PORT}`);
 });
 
 // Verificación de variables de entorno
