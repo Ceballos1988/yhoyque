@@ -286,10 +286,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     }
   };
 
-  console.log("Receta ID Usuario (verificando existencia):", recipe.userId || "No definido");
-  console.log("Usuario Actual ID:", currentUserId);
-  console.log("Comparación:", String(recipe.userId) === String(currentUserId));
-
+ 
   return (
     <div
       className={`mb-10 recipe-card relative ${isLoaded ? "loaded" : ""} ${
