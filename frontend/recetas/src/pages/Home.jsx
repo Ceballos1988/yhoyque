@@ -18,10 +18,6 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false); // Ocultar spinner después de la carga
-    }, 4000); // Ajusta el tiempo según tus necesidades
-
     AOS.init({
       once: true,
       duration: 1000,
@@ -35,6 +31,11 @@ function Home() {
 
     checkAuthentication();
 
+    // Mostrar el spinner cada vez que se entra a Home
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Ocultar el spinner después de la carga completa
+    }, 4000); // Ajusta el tiempo según tus necesidades
+
     window.addEventListener("authChanged", checkAuthentication);
 
     return () => {
@@ -47,7 +48,6 @@ function Home() {
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
         method: "POST",
-
         credentials: "include",
       });
 
@@ -60,10 +60,12 @@ function Home() {
     }
   };
 
+  // Mostrar Spinner mientras carga
   if (isLoading) {
     return <SpinnerFood />;
   }
 
+  // Mostrar el contenido cuando termine de cargar
   return (
     <ParallaxProvider>
       <div className="home-container flex flex-col bg-azul-bg">
