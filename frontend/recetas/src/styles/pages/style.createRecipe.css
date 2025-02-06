@@ -554,7 +554,6 @@ button[title="Eliminar ingrediente"] img {
     font-size: 0.9rem !important;
   }
 
-
   .create-recipe-container h3 {
     font-size: 0.8rem !important;
   }
@@ -574,7 +573,7 @@ button[title="Eliminar ingrediente"] img {
     font-size: 0.8rem !important;
   }
 
-  .create-recipe-form button{
+  .create-recipe-form button {
     font-size: 0.8rem !important;
   }
 
@@ -582,11 +581,8 @@ button[title="Eliminar ingrediente"] img {
   .create-recipe-select {
     padding: 0.5rem;
     font-size: 0.8rem !important;
-
   }
-  .span-real span{
+  .span-real span {
     font-size: 0.7rem !important;
-
   }
- 
 }

@@ -289,6 +289,14 @@ const CreateRecipe = () => {
       </div>
     );
   }
+  if (isPageLoading) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="create-recipe-container min-h-screen flex flex-col items-center text-white pb-20 pt-10">
       <div className="breadcrumb-container-wall absolute top-10 left-20 flex items-center">
@@ -774,19 +782,22 @@ const CreateRecipe = () => {
 
             {/* Botones de Previsualización y Crear Receta */}
             <div className="button-group mt-6 flex justify-end ">
-              <button
+              <buttonbg-naranja-bg
+                font-bold
+                hover:text-white
+                mt-4
                 type="button"
-                className="create-recipe-add-btn text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] hover:text-white"
+                className="create-recipe-add-btn bg-naranja-bg font-bold hover:text-white mt-4"
                 onClick={handlePreview}
                 disabled={isPreviewLoading} // Deshabilitar mientras está cargando
               >
                 {isPreviewLoading ? <LoadingSpinner /> : "Previsualizar"}
-              </button>
+              </buttonbg-naranja-bg>
 
               <button
                 type="submit"
-                className={`create-recipe-add-btn text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 hover:text-white ${
-                  isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500"
+                className={`create-recipe-add-btn bg-naranja-bg font-bold hover:text-white mt-4 ${
+                  isLoading ? "opacity-50 cursor-not-allowed" : ""
                 } text-white`}
                 disabled={isLoading}
               >

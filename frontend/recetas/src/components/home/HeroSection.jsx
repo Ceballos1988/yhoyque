@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate en lugar de Link
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
@@ -16,7 +16,39 @@ import "../../styles/components/home/style.heroSection.css";
 function HeroSection({ isAuthenticated, logout }) {
   const [isPaused, setIsPaused] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false); // Estado para mostrar el modal de cierre de sesión
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstallable, setIsInstallable] = useState(false);
   const navigate = useNavigate(); // Hook para la navegación
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault(); // Evita que el navegador muestre el banner automáticamente
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Muestra el diálogo de instalación
+      const { outcome } = await deferredPrompt.userChoice;
+
+      if (outcome === "accepted") {
+        console.log("La aplicación ha sido instalada.");
+      } else {
+        console.log("La instalación fue rechazada.");
+      }
+
+      setDeferredPrompt(null); // Limpia el prompt después de usarlo
+      setIsInstallable(false); // Oculta el botón después de la instalación
+    }
+  };
 
   // Manejar el clic en el botón de pausa para alternar la animación
   const handlePauseToggle = () => {
@@ -43,7 +75,7 @@ function HeroSection({ isAuthenticated, logout }) {
     <div className="home-section-hero items-center bg-cover bg-center">
 
       <div className="content-container-hero">
-        
+
         <motion.div
           initial={{ opacity: 0, x: 0 }}
           animate={{ opacity: 1, x: 0 }}
@@ -61,8 +93,8 @@ function HeroSection({ isAuthenticated, logout }) {
             Recetas que se adaptan a tu día.
           </h2>
           <p className="font-raleway text-white mt-10">
-          Descubrí las mejores recetas personalizadas y compartí las tuyas.
-          Nuestra comunidad de amantes de la cocina está acá para inspirarte.
+            Descubrí las mejores recetas personalizadas y compartí las tuyas.
+            Nuestra comunidad de amantes de la cocina está acá para inspirarte.
           </p>
 
           <div className="mt-8 button-content-hero">
@@ -101,12 +133,21 @@ function HeroSection({ isAuthenticated, logout }) {
                 />
               </>
             )}
+            {isInstallable && (
+              <CustomButton
+                text="Instalar la App"
+                bgColor="bg-naranja-bg"
+                textColor="text-white"
+                aria-label="Botón para instalar la app"
+                onClick={handleInstallApp} // Muestra el prompt de instalación
+              />
+            )}
           </div>
         </motion.div>
 
         <div className="image-container-hero">
           <img
-            src="/img/hero.png"
+            src="/img/hero.webp"
             alt="Plato giratorio"
             className={`rotating-image ${isPaused ? "paused" : ""}`}
           />
@@ -116,7 +157,7 @@ function HeroSection({ isAuthenticated, logout }) {
             aria-label={isPaused ? "Reanudar animación" : "Pausar animación"}
           >
             <img
-              src={`/img/${isPaused ? "play" : "pause"}.png`}
+              src={`/img/${isPaused ? "play" : "pause"}.webp`}
               alt={isPaused ? "Icono para reanudar animación" : "Icono para pausar animación"}
               className="pause-icon"
             />
