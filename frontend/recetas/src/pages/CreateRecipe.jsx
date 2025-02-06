@@ -31,8 +31,6 @@ const CreateRecipe = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isImageDeleted, setIsImageDeleted] = useState(false); // Nueva bandera para manejar la eliminación de la imagen
-
-  const [isPreviewLoading, setIsPreviewLoading] = useState(false); // Estado para la carga de previsualización
   const [isImageUploading, setIsImageUploading] = useState(false); // Estado para la carga de imagen
   const [isPageLoading, setIsPageLoading] = useState(true); // Nuevo estado para la carga de la página
 
@@ -269,11 +267,7 @@ const CreateRecipe = () => {
 
   // Previsualización de la receta
   const handlePreview = () => {
-    setIsPreviewLoading(true);
-    setTimeout(() => {
-      setShowPreview(true);
-      setIsPreviewLoading(false);
-    }, 1000); // Ajustar el tiempo según sus necesidades
+    setShowPreview(true); // Abre el modal directamente sin cargar
   };
 
   const closePreview = () => setShowPreview(false);
@@ -782,17 +776,13 @@ const CreateRecipe = () => {
 
             {/* Botones de Previsualización y Crear Receta */}
             <div className="mt-6 flex justify-end ">
-              <buttonbg-naranja-bg
-                font-bold
-                hover:text-white
-                mt-4
+              <button
                 type="button"
-                className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]"
+                className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] text-white"
                 onClick={handlePreview}
-                disabled={isPreviewLoading} // Deshabilitar mientras está cargando
               >
-                {isPreviewLoading ? <LoadingSpinner /> : "Previsualizar"}
-              </buttonbg-naranja-bg>
+                Previsualizar
+              </button>
 
               <button
                 type="submit"
