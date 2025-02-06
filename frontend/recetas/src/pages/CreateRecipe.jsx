@@ -273,7 +273,12 @@ const CreateRecipe = () => {
   const closePreview = () => setShowPreview(false);
 
   if (isPageLoading) {
-    return <div className="loading-screen">Cargando receta...</div>;
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center z-50">
+        <LoadingSpinner />
+        <p className="text-white mt-4">Cargando receta...</p>
+      </div>
+    );
   }
 
   if (!recipe && recipeId) {
@@ -283,14 +288,7 @@ const CreateRecipe = () => {
       </div>
     );
   }
-  if (isPageLoading) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
+  
   return (
     <div className="create-recipe-container min-h-screen flex flex-col items-center text-white pb-20 pt-10">
       <div className="breadcrumb-container-wall absolute top-10 left-20 flex items-center">
