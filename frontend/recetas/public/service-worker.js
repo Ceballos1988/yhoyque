@@ -23,13 +23,7 @@ const urlsToCache = [
   "/img/fondo-chico.svg",
   "/img/hero.webp",
   "/img/recipe-null.png",
-  "/img/abrir.png",         // Imágenes adicionales
-  "/img/volver.png",
-  "/img/delete.png",
-  "/img/pause.png",
-  "/img/play.png",
-  "/img/favorito.png",
-  "/img/no-favorito.png"
+
 ];
 
 /**
@@ -39,12 +33,14 @@ self.addEventListener("install", (event) => {
   console.log("[Service Worker] Instalando el service worker...");
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Archivos cacheados:", urlsToCache);
-      return cache.addAll(urlsToCache);
+      return cache.addAll(urlsToCache).catch((error) => {
+        console.error("[Service Worker] Error al cachear archivos:", error);
+      });
     })
   );
-  self.skipWaiting();  // Forzar la activación inmediata del nuevo SW
+  self.skipWaiting();
 });
+
 
 /**
  * Evento de activación: Elimina cachés antiguas cuando se actualiza el SW.
