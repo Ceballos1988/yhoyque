@@ -364,7 +364,7 @@ const CreateRecipe = () => {
             </div>
           )}
 
-          <div className="relative w-full max-w-4xl">
+          <div className="relative">
             {isPageLoading && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 rounded-lg">
                 <LoadingSpinner />
