@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate en lugar de Link
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import CustomButton from "../CustomButton";
@@ -10,20 +10,19 @@ import "../../styles/components/home/style.heroSection.css";
  *
  * @param {object} props - Las propiedades del componente.
  * @param {boolean} props.isAuthenticated - Indica si el usuario está autenticado.
- * @param {function} props.logout - Funcíón para cerrar sesión.
- * @param {function} props.onImageLoad - Funcíón para notificar cuando la imagen está cargada.
+ * @param {function} props.logout - Función para cerrar sesión.
  * @returns {JSX.Element} Componente de la sección hero.
  */
-function HeroSection({ isAuthenticated, logout, onImageLoad }) {
+function HeroSection({ isAuthenticated, logout }) {
   const [isPaused, setIsPaused] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // Estado para mostrar el modal de cierre de sesión
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook para la navegación
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
+      e.preventDefault(); // Evita que el navegador muestre el banner automáticamente
       setDeferredPrompt(e);
       setIsInstallable(true);
     };
@@ -37,7 +36,7 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
 
   const handleInstallApp = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
+      deferredPrompt.prompt(); // Muestra el diálogo de instalación
       const { outcome } = await deferredPrompt.userChoice;
 
       if (outcome === "accepted") {
@@ -46,38 +45,44 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
         console.log("La instalación fue rechazada.");
       }
 
-      setDeferredPrompt(null);
-      setIsInstallable(false);
+      setDeferredPrompt(null); // Limpia el prompt después de usarlo
+      setIsInstallable(false); // Oculta el botón después de la instalación
     }
   };
 
+  // Manejar el clic en el botón de pausa para alternar la animación
   const handlePauseToggle = () => {
     setIsPaused((prev) => !prev);
   };
 
+  // Función para cerrar sesión tras confirmar
   const handleConfirmLogout = () => {
-    setShowLogoutModal(false);
-    logout();
+    setShowLogoutModal(false); // Cerrar el modal
+    logout(); // Llamar a la función de logout
   };
 
+  // Función para cancelar el cierre de sesión
   const handleCancelLogout = () => {
-    setShowLogoutModal(false);
+    setShowLogoutModal(false); // Solo cerrar el modal sin hacer logout
   };
 
+  // Manejar navegación
   const handleNavigate = (path) => {
     navigate(path);
   };
 
   return (
     <div className="home-section-hero items-center bg-cover bg-center">
+
       <div className="content-container-hero">
+
         <motion.div
           initial={{ opacity: 0, x: 0 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
           className="text-content-hero"
         >
-          <h1 className="font-poppins text-white text-center">
+          <h1 className=" font-poppins text-white text-center">
             Bienvenidos a <br />
             <span className="text-center mt-5 font-poppins font-semibold text-naranja-bg mb-10">
               ¿Y HOY QUÉ?
@@ -100,14 +105,14 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
                   bgColor="bg-naranja-bg"
                   textColor="text-white"
                   aria-label="Botón para iniciar sesión"
-                  onClick={() => handleNavigate("/login")}
+                  onClick={() => handleNavigate("/login")} // Navega al iniciar sesión
                 />
                 <CustomButton
                   text="Registrarse"
                   bgColor="bg-white"
                   textColor="text-naranja-bg"
                   aria-label="Botón para registrarse"
-                  onClick={() => handleNavigate("/register")}
+                  onClick={() => handleNavigate("/register")} // Navega al registro
                 />
               </>
             ) : (
@@ -117,13 +122,13 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
                   bgColor="bg-naranja-bg"
                   textColor="text-white"
                   aria-label="Botón para ir al perfil"
-                  onClick={() => handleNavigate("/profile")}
+                  onClick={() => handleNavigate("/profile")} // Navega al perfil
                 />
                 <CustomButton
                   text="Cerrar Sesión"
                   bgColor="bg-white"
                   textColor="text-naranja-bg"
-                  onClick={() => setShowLogoutModal(true)}
+                  onClick={() => setShowLogoutModal(true)} // Muestra el modal al hacer clic
                   aria-label="Botón para cerrar sesión"
                 />
               </>
@@ -134,7 +139,7 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
                 bgColor="bg-naranja-bg"
                 textColor="text-white"
                 aria-label="Botón para instalar la app"
-                onClick={handleInstallApp}
+                onClick={handleInstallApp} // Muestra el prompt de instalación
               />
             )}
           </div>
@@ -145,7 +150,6 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
             src="/img/hero.webp"
             alt="Plato giratorio"
             className={`rotating-image ${isPaused ? "paused" : ""}`}
-            onLoad={onImageLoad}
           />
           <button
             className="pause-button"
@@ -159,8 +163,10 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
             />
           </button>
         </div>
+
       </div>
 
+      {/* Modal de confirmación para Cerrar Sesión */}
       {showLogoutModal && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="logout-confirm-title">
           <div className="modal-content">
@@ -184,7 +190,6 @@ function HeroSection({ isAuthenticated, logout, onImageLoad }) {
 HeroSection.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired,
-  onImageLoad: PropTypes.func.isRequired,
 };
 
 export default HeroSection;

@@ -15,12 +15,18 @@ import "animate.css";
 function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Estado para el spinner
-  const [imagesLoaded, setImagesLoaded] = useState(0); // Control de imágenes cargadas
-  const [totalImages, setTotalImages] = useState(0); // Total de imágenes en la página
   const navigate = useNavigate();
 
   useEffect(() => {
-    AOS.init({ once: true, duration: 1000, delay: 0 });
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Ocultar spinner después de la carga
+    }, 4000); // Ajusta el tiempo según tus necesidades
+
+    AOS.init({
+      once: true,
+      duration: 1000,
+      delay: 0,
+    });
 
     const checkAuthentication = () => {
       const token = localStorage.getItem("token");
@@ -28,38 +34,20 @@ function Home() {
     };
 
     checkAuthentication();
+
     window.addEventListener("authChanged", checkAuthentication);
 
-    // Contar todas las imágenes en la página cuando se monte
-    const allImages = document.querySelectorAll("img");
-    setTotalImages(allImages.length);
-
-    // Verificar si no hay imágenes para ocultar el spinner rápidamente
-    if (allImages.length === 0) {
-      setIsLoading(false);
-    }
-
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("authChanged", checkAuthentication);
     };
   }, []);
-
-  // Verificar si todas las imágenes están cargadas
-  useEffect(() => {
-    if (totalImages > 0 && imagesLoaded === totalImages) {
-      setIsLoading(false); // Ocultar spinner cuando todas las imágenes estén cargadas
-    }
-  }, [imagesLoaded, totalImages]);
-
-  // Función para manejar la carga de cada imagen
-  const handleImageLoad = () => {
-    setImagesLoaded((prev) => prev + 1);
-  };
 
   const logout = async () => {
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
         method: "POST",
+
         credentials: "include",
       });
 
@@ -79,13 +67,12 @@ function Home() {
   return (
     <ParallaxProvider>
       <div className="home-container flex flex-col bg-azul-bg">
-        {/* Pasar handleImageLoad como prop a los componentes que contienen imágenes */}
-        <HeroSection isAuthenticated={isAuthenticated} logout={logout} onImageLoad={handleImageLoad} />
-        <DescriptionSection onImageLoad={handleImageLoad} />
-        <FeaturesSection onImageLoad={handleImageLoad} />
-        <DownloadSection onImageLoad={handleImageLoad} />
-        <CommunitySection onImageLoad={handleImageLoad} />
-        <TestimonialCarousel onImageLoad={handleImageLoad} />
+        <HeroSection isAuthenticated={isAuthenticated} logout={logout} />
+        <DescriptionSection />
+        <FeaturesSection />
+        <DownloadSection />
+        <CommunitySection />
+        <TestimonialCarousel />
       </div>
     </ParallaxProvider>
   );
