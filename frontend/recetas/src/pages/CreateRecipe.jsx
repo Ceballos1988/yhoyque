@@ -272,23 +272,6 @@ const CreateRecipe = () => {
 
   const closePreview = () => setShowPreview(false);
 
-  if (isPageLoading) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center z-50">
-        <LoadingSpinner />
-        <p className="text-white mt-4">Cargando receta...</p>
-      </div>
-    );
-  }
-
-  if (!recipe && recipeId) {
-    return (
-      <div className="loading-screen">
-        Receta no encontrada o error al cargar.
-      </div>
-    );
-  }
-  
   return (
     <div className="create-recipe-container min-h-screen flex flex-col items-center text-white pb-20 pt-10">
       <div className="breadcrumb-container-wall absolute top-10 left-20 flex items-center">
@@ -381,452 +364,463 @@ const CreateRecipe = () => {
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="create-recipe-form glass-effect p-4 rounded-lg shadow-lg  font-raleway"
-          >
-            {/* Título */}
-            <label
-              htmlFor="title"
-              className="create-recipe-label font-semibold mt-3 mb-3"
+          <div className="relative w-full max-w-4xl">
+            {isPageLoading && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 rounded-lg">
+                <LoadingSpinner />
+              </div>
+            )}
+
+            <form
+              onSubmit={handleSubmit}
+              className={`create-recipe-form glass-effect p-4 rounded-lg shadow-lg font-raleway ${
+                isPageLoading ? "opacity-50 pointer-events-none" : ""
+              }`}
             >
-              Título de la receta
-            </label>
-            <input
-              id="title"
-              type="text"
-              name="title"
-              value={recipe.title || ""}
-              onChange={handleChange}
-              required
-              className="create-recipe-input"
-              placeholder="Ej: Ensalada Rusa"
-            />
-
-            {/* Tiempo y Porciones */}
-            <div className="flex gap-4 ">
-              <div className="w-1/2 ">
-                <label
-                  htmlFor="prepTime"
-                  className="create-recipe-label font-semibold "
-                >
-                  Tiempo de preparación (min) (opcional)
-                </label>
-                <input
-                  id="prepTime"
-                  type="number"
-                  name="prepTime"
-                  value={recipe.prepTime || ""}
-                  onChange={handleChange}
-                  className="create-recipe-input mt-3 mb-3"
-                  placeholder="Ej: 30"
-                />
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="servings"
-                  className="create-recipe-label font-semibold mt-3 mb-3"
-                >
-                  Porciones <br /> (opcional)
-                </label>
-                <input
-                  id="servings"
-                  type="number"
-                  name="servings"
-                  value={recipe.servings || ""}
-                  onChange={handleChange}
-                  className="create-recipe-input mt-3 mb-3"
-                  placeholder="Número de porciones"
-                />
-              </div>
-            </div>
-
-            {/* Dificultad y Categoría */}
-            <div className="flex gap-4">
-              <div className="w-1/2">
-                <label
-                  htmlFor="difficulty"
-                  className="create-recipe-label font-semibold"
-                >
-                  Dificultad
-                </label>
-                <select
-                  id="difficulty"
-                  name="difficulty"
-                  value={recipe.difficulty || ""}
-                  onChange={handleChange}
-                  required
-                  className="create-recipe-select mt-3 mb-3"
-                >
-                  <option value="">Selecciona la dificultad</option>
-                  <option value="Easy">Fácil</option>
-                  <option value="Medium">Media</option>
-                  <option value="Hard">Difícil</option>
-                </select>
-              </div>
-              <div className="w-1/2">
-                <label
-                  htmlFor="courseType"
-                  className="create-recipe-label font-semibold"
-                >
-                  Categoría
-                </label>
-                <select
-                  id="courseType"
-                  name="courseType"
-                  value={recipe.courseType || ""}
-                  onChange={handleChange}
-                  required
-                  className="create-recipe-select mt-3 mb-3"
-                >
-                  <option value="">Selecciona la categoría</option>
-                  <option value="Appetizer">Entrada</option>
-                  <option value="Main Course">Plato principal</option>
-                  <option value="Dessert">Postre</option>
-                  <option value="Side Dish">Guarnición</option>
-                  <option value="Pastry">Pastelería</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Tipo de dieta */}
-            <label className="create-recipe-label font-semibold mt-3 mb-3">
-              Tipo de dieta
-            </label>
-            <div className="flex flex-wrap gap-4 mb-4">
-              {[
-                "Vegetarian",
-                "Vegan",
-                "Gluten-Free",
-                "Dairy-Free",
-                "Keto",
-                "Paleo",
-              ].map((diet) => (
-                <label key={diet} className="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    value={diet}
-                    checked={recipe.dietType.includes(diet)}
-                    onChange={(e) => {
-                      const { checked, value } = e.target;
-                      setRecipe((prevRecipe) => ({
-                        ...prevRecipe,
-                        dietType: checked
-                          ? [...prevRecipe.dietType, value]
-                          : prevRecipe.dietType.filter(
-                              (type) => type !== value
-                            ),
-                      }));
-                    }}
-                  />
-                  {diet}
-                </label>
-              ))}
-            </div>
-
-            {/* Ingredientes */}
-            <label className="create-recipe-label font-semibold mt-3 mb-3">
-              Ingredientes
-            </label>
-            <div className="ingredients-scroll-container">
-              {recipe.ingredients.map((ingredient, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <div className="w-2.5/5">
-                    <label
-                      htmlFor={`ingredient-name-${index}`}
-                      className="block text-sm text-gray-300 mb-1"
-                    >
-                      Nombre
-                    </label>
-                    <input
-                      id={`ingredient-name-${index}`}
-                      type="text"
-                      placeholder="Ej: Papa"
-                      value={ingredient.name || ""}
-                      onChange={(e) =>
-                        handleIngredientChange(index, "name", e.target.value)
-                      }
-                      required
-                      className="create-recipe-input"
-                    />
-                  </div>
-                  <div className="w-1/5">
-                    <label
-                      htmlFor={`ingredient-quantity-${index}`}
-                      className="block text-sm text-gray-300 mb-1"
-                    >
-                      Cantidad
-                    </label>
-                    <input
-                      id={`ingredient-quantity-${index}`}
-                      type="number"
-                      step="0.01"
-                      placeholder="Ej: 2"
-                      value={ingredient.quantity || ""}
-                      onChange={(e) =>
-                        handleIngredientChange(
-                          index,
-                          "quantity",
-                          e.target.value
-                        )
-                      }
-                      className="create-recipe-input"
-                    />
-                  </div>
-                  <div className="w-1.1/5">
-                    <label
-                      htmlFor={`ingredient-unit-${index}`}
-                      className="block text-sm text-gray-300 mb-1"
-                    >
-                      Unidad
-                    </label>
-                    <select
-                      id={`ingredient-unit-${index}`}
-                      value={ingredient.unit || ""}
-                      onChange={(e) =>
-                        handleIngredientChange(index, "unit", e.target.value)
-                      }
-                      className="create-recipe-select"
-                    >
-                      <option value="">Seleccionar</option>
-                      <option value="g">Gramos</option>
-                      <option value="kg">Kilogramos</option>
-                      <option value="ml">Mililitros</option>
-                      <option value="l">Litros</option>
-                      <option value="cucharadita">Cucharadita</option>
-                      <option value="cucharada">Cucharada</option>
-                      <option value="taza">Taza</option>
-                      <option value="pieza">Pieza</option>
-                      <option value="unidad">Unidad</option>
-                    </select>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeIngredient(index)}
-                    title="Eliminar ingrediente"
-                    className="ico-delete flex items-center justify-center p-2 transition duration-300"
-                  >
-                    <img
-                      src="/img/delete.png"
-                      alt="Eliminar"
-                      className="hover:scale-110 transition-transform"
-                    />
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={addIngredient}
-                title="Añadir ingrediente"
-                className="flex items-center justify-center bg-naranja-bg text-white font-bold px-4 py-2 rounded-md hover:bg-azul-bg hover:text-white transition duration-300"
-              >
-                + Añadir
-              </button>
-            </div>
-
-            {/* Pasos */}
-            <label
-              htmlFor="steps"
-              className="create-recipe-label font-semibold mt-3 mb-3"
-            >
-              Pasos
-            </label>
-            <div className="steps-scroll-container">
-              {recipe.steps.map((step, index) => (
-                <div key={index} className="flex items-center gap-2 ">
-                  {/* Textarea para el paso */}
-                  <div className="w-full">
-                    <label
-                      htmlFor={`step-${index}`}
-                      className="block text-sm text-gray-300 mb-2"
-                    >
-                      Paso {index + 1}
-                    </label>
-                    <textarea
-                      id={`step-${index}`}
-                      value={step || ""}
-                      onChange={(e) => handleStepChange(index, e.target.value)}
-                      placeholder={`Paso ${index + 1}`}
-                      className="create-recipe-textarea w-full"
-                      required
-                    ></textarea>
-                  </div>
-
-                  {/* Botón Eliminar Paso */}
-                  <button
-                    type="button"
-                    onClick={() => removeStep(index)}
-                    title="Eliminar paso"
-                    className="ico-delete-1 flex items-center justify-center p-2 transition duration-300"
-                  >
-                    <img
-                      src="/img/delete.png"
-                      alt="Eliminar"
-                      className="hover:scale-110 transition-transform"
-                    />
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* Botón Añadir Paso */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={addStep}
-                title="Añadir paso"
-                className="flex items-center justify-center bg-naranja-bg text-white font-bold px-4 py-2 rounded-md hover:bg-azul-bg hover:text-white transition duration-300"
-              >
-                + Añadir
-              </button>
-            </div>
-
-            {/* Imagen */}
-            <div className="flex flex-col gap-2 mt-4 ">
-              {/* Label principal para la imagen */}
+              {/* Título */}
               <label
-                htmlFor="image"
-                className="create-recipe-label font-semibold mb-2"
+                htmlFor="title"
+                className="create-recipe-label font-semibold mt-3 mb-3"
               >
-                Imagen de receta <br /> (opcional)
+                Título de la receta
               </label>
-              <div className="span-real">
-                {/* Aviso de tamaño de imagen máximo permitido */}
-                <span className="text-left text-red-500 ">
-                  *La imagen debe pesar menos de 10MB.
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                {/* Vista previa de imagen */}
-                <div className="image-indicator flex relative">
-                  {imageFile ? (
-                    <>
-                      <img
-                        src={URL.createObjectURL(imageFile)}
-                        alt="Imagen cargada"
-                        className="preview-thumbnail"
-                      />
-                      <p>Imagen cargada: {imageFile.name}</p>
-                      <button
-                        type="button"
-                        onClick={() => setImageFile(null)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-700"
-                      >
-                        ✕
-                      </button>
-                    </>
-                  ) : recipe.image ? (
-                    <>
-                      <img
-                        src={recipe.image}
-                        alt="Imagen existente"
-                        className="preview-thumbnail"
-                      />
-                      <p className="text-sm mt-2 text-center">
-                        Imagen existente
-                      </p>
+              <input
+                id="title"
+                type="text"
+                name="title"
+                value={recipe.title || ""}
+                onChange={handleChange}
+                required
+                className="create-recipe-input"
+                placeholder="Ej: Ensalada Rusa"
+              />
 
-                      <button
-                        type="button"
-                        onClick={handleDeleteImage}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-700"
-                      >
-                        ✕
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <img
-                        src="/img/recipe-null.png"
-                        alt="Imagen por defecto"
-                        className="preview-thumbnail"
-                      />
-                      <div className="span-real mt-5">
-                        <span className="mt-2 text-left ">
-                          No has cargado ninguna imagen.
-                        </span>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="mt-5">
-                    <label
-                      htmlFor="image"
-                      className="flex justify-center items-center  text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]"
-                    >
-                      <input
-                        id="image"
-                        type="file"
-                        name="image"
-                        onChange={handleImageChange}
-                        disabled={isImageUploading} // Deshabilitar durante la carga
-                        className="hidden" // Ocultar el input original
-                      />
-                      {isImageUploading ? <LoadingSpinner /> : "Subir imagen"}
-                    </label>
-                  </div>
+              {/* Tiempo y Porciones */}
+              <div className="flex gap-4 ">
+                <div className="w-1/2 ">
+                  <label
+                    htmlFor="prepTime"
+                    className="create-recipe-label font-semibold "
+                  >
+                    Tiempo de preparación (min) (opcional)
+                  </label>
+                  <input
+                    id="prepTime"
+                    type="number"
+                    name="prepTime"
+                    value={recipe.prepTime || ""}
+                    onChange={handleChange}
+                    className="create-recipe-input mt-3 mb-3"
+                    placeholder="Ej: 30"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <label
+                    htmlFor="servings"
+                    className="create-recipe-label font-semibold mt-3 mb-3"
+                  >
+                    Porciones <br /> (opcional)
+                  </label>
+                  <input
+                    id="servings"
+                    type="number"
+                    name="servings"
+                    value={recipe.servings || ""}
+                    onChange={handleChange}
+                    className="create-recipe-input mt-3 mb-3"
+                    placeholder="Número de porciones"
+                  />
                 </div>
               </div>
-            </div>
 
-            {/* Botones de Previsualización y Crear Receta */}
-            <div className="mt-6 flex justify-around">
-              <button
-                type="button"
-                className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] text-white"
-                onClick={handlePreview}
-              >
-                Previsualizar
-              </button>
+              {/* Dificultad y Categoría */}
+              <div className="flex gap-4">
+                <div className="w-1/2">
+                  <label
+                    htmlFor="difficulty"
+                    className="create-recipe-label font-semibold"
+                  >
+                    Dificultad
+                  </label>
+                  <select
+                    id="difficulty"
+                    name="difficulty"
+                    value={recipe.difficulty || ""}
+                    onChange={handleChange}
+                    required
+                    className="create-recipe-select mt-3 mb-3"
+                  >
+                    <option value="">Selecciona la dificultad</option>
+                    <option value="Easy">Fácil</option>
+                    <option value="Medium">Media</option>
+                    <option value="Hard">Difícil</option>
+                  </select>
+                </div>
+                <div className="w-1/2">
+                  <label
+                    htmlFor="courseType"
+                    className="create-recipe-label font-semibold"
+                  >
+                    Categoría
+                  </label>
+                  <select
+                    id="courseType"
+                    name="courseType"
+                    value={recipe.courseType || ""}
+                    onChange={handleChange}
+                    required
+                    className="create-recipe-select mt-3 mb-3"
+                  >
+                    <option value="">Selecciona la categoría</option>
+                    <option value="Appetizer">Entrada</option>
+                    <option value="Main Course">Plato principal</option>
+                    <option value="Dessert">Postre</option>
+                    <option value="Side Dish">Guarnición</option>
+                    <option value="Pastry">Pastelería</option>
+                  </select>
+                </div>
+              </div>
 
-              <button
-                type="submit"
-                className={`text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] ${
-                  isLoading ? "opacity-50 cursor-not-allowed" : ""
-                } text-white`}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <LoadingSpinner />
-                ) : recipeId ? (
-                  "Actualizar receta"
-                ) : (
-                  "Crear receta"
-                )}
-              </button>
+              {/* Tipo de dieta */}
+              <label className="create-recipe-label font-semibold mt-3 mb-3">
+                Tipo de dieta
+              </label>
+              <div className="flex flex-wrap gap-4 mb-4">
+                {[
+                  "Vegetarian",
+                  "Vegan",
+                  "Gluten-Free",
+                  "Dairy-Free",
+                  "Keto",
+                  "Paleo",
+                ].map((diet) => (
+                  <label key={diet} className="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      value={diet}
+                      checked={recipe.dietType.includes(diet)}
+                      onChange={(e) => {
+                        const { checked, value } = e.target;
+                        setRecipe((prevRecipe) => ({
+                          ...prevRecipe,
+                          dietType: checked
+                            ? [...prevRecipe.dietType, value]
+                            : prevRecipe.dietType.filter(
+                                (type) => type !== value
+                              ),
+                        }));
+                      }}
+                    />
+                    {diet}
+                  </label>
+                ))}
+              </div>
 
-              {/* Botón de Cancelar */}
-              {recipeId && (
+              {/* Ingredientes */}
+              <label className="create-recipe-label font-semibold mt-3 mb-3">
+                Ingredientes
+              </label>
+              <div className="ingredients-scroll-container">
+                {recipe.ingredients.map((ingredient, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div className="w-2.5/5">
+                      <label
+                        htmlFor={`ingredient-name-${index}`}
+                        className="block text-sm text-gray-300 mb-1"
+                      >
+                        Nombre
+                      </label>
+                      <input
+                        id={`ingredient-name-${index}`}
+                        type="text"
+                        placeholder="Ej: Papa"
+                        value={ingredient.name || ""}
+                        onChange={(e) =>
+                          handleIngredientChange(index, "name", e.target.value)
+                        }
+                        required
+                        className="create-recipe-input"
+                      />
+                    </div>
+                    <div className="w-1/5">
+                      <label
+                        htmlFor={`ingredient-quantity-${index}`}
+                        className="block text-sm text-gray-300 mb-1"
+                      >
+                        Cantidad
+                      </label>
+                      <input
+                        id={`ingredient-quantity-${index}`}
+                        type="number"
+                        step="0.01"
+                        placeholder="Ej: 2"
+                        value={ingredient.quantity || ""}
+                        onChange={(e) =>
+                          handleIngredientChange(
+                            index,
+                            "quantity",
+                            e.target.value
+                          )
+                        }
+                        className="create-recipe-input"
+                      />
+                    </div>
+                    <div className="w-1.1/5">
+                      <label
+                        htmlFor={`ingredient-unit-${index}`}
+                        className="block text-sm text-gray-300 mb-1"
+                      >
+                        Unidad
+                      </label>
+                      <select
+                        id={`ingredient-unit-${index}`}
+                        value={ingredient.unit || ""}
+                        onChange={(e) =>
+                          handleIngredientChange(index, "unit", e.target.value)
+                        }
+                        className="create-recipe-select"
+                      >
+                        <option value="">Seleccionar</option>
+                        <option value="g">Gramos</option>
+                        <option value="kg">Kilogramos</option>
+                        <option value="ml">Mililitros</option>
+                        <option value="l">Litros</option>
+                        <option value="cucharadita">Cucharadita</option>
+                        <option value="cucharada">Cucharada</option>
+                        <option value="taza">Taza</option>
+                        <option value="pieza">Pieza</option>
+                        <option value="unidad">Unidad</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeIngredient(index)}
+                      title="Eliminar ingrediente"
+                      className="ico-delete flex items-center justify-center p-2 transition duration-300"
+                    >
+                      <img
+                        src="/img/delete.png"
+                        alt="Eliminar"
+                        className="hover:scale-110 transition-transform"
+                      />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => navigate(-1)}
-                  className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-red-500 hover:bg-red-700 hover:text-naranja-bg"
+                  onClick={addIngredient}
+                  title="Añadir ingrediente"
+                  className="flex items-center justify-center bg-naranja-bg text-white font-bold px-4 py-2 rounded-md hover:bg-azul-bg hover:text-white transition duration-300"
                 >
-                  Cancelar
+                  + Añadir
                 </button>
-              )}
-            </div>
-            {successMessage && (
-              <div
-                className="success-message-profile text-green-500 font-semibold text-center"
-                role="alert"
-              >
-                {successMessage}
               </div>
-            )}
-            {errorMessage && (
-              <div
-                className="error-message-profile  text-red-500 font-semibold text-center"
-                role="alert"
-              >
-                {errorMessage}
-              </div>
-            )}
-          </form>
 
+              {/* Pasos */}
+              <label
+                htmlFor="steps"
+                className="create-recipe-label font-semibold mt-3 mb-3"
+              >
+                Pasos
+              </label>
+              <div className="steps-scroll-container">
+                {recipe.steps.map((step, index) => (
+                  <div key={index} className="flex items-center gap-2 ">
+                    {/* Textarea para el paso */}
+                    <div className="w-full">
+                      <label
+                        htmlFor={`step-${index}`}
+                        className="block text-sm text-gray-300 mb-2"
+                      >
+                        Paso {index + 1}
+                      </label>
+                      <textarea
+                        id={`step-${index}`}
+                        value={step || ""}
+                        onChange={(e) =>
+                          handleStepChange(index, e.target.value)
+                        }
+                        placeholder={`Paso ${index + 1}`}
+                        className="create-recipe-textarea w-full"
+                        required
+                      ></textarea>
+                    </div>
+
+                    {/* Botón Eliminar Paso */}
+                    <button
+                      type="button"
+                      onClick={() => removeStep(index)}
+                      title="Eliminar paso"
+                      className="ico-delete-1 flex items-center justify-center p-2 transition duration-300"
+                    >
+                      <img
+                        src="/img/delete.png"
+                        alt="Eliminar"
+                        className="hover:scale-110 transition-transform"
+                      />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Botón Añadir Paso */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={addStep}
+                  title="Añadir paso"
+                  className="flex items-center justify-center bg-naranja-bg text-white font-bold px-4 py-2 rounded-md hover:bg-azul-bg hover:text-white transition duration-300"
+                >
+                  + Añadir
+                </button>
+              </div>
+
+              {/* Imagen */}
+              <div className="flex flex-col gap-2 mt-4 ">
+                {/* Label principal para la imagen */}
+                <label
+                  htmlFor="image"
+                  className="create-recipe-label font-semibold mb-2"
+                >
+                  Imagen de receta <br /> (opcional)
+                </label>
+                <div className="span-real">
+                  {/* Aviso de tamaño de imagen máximo permitido */}
+                  <span className="text-left text-red-500 ">
+                    *La imagen debe pesar menos de 10MB.
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  {/* Vista previa de imagen */}
+                  <div className="image-indicator flex relative">
+                    {imageFile ? (
+                      <>
+                        <img
+                          src={URL.createObjectURL(imageFile)}
+                          alt="Imagen cargada"
+                          className="preview-thumbnail"
+                        />
+                        <p>Imagen cargada: {imageFile.name}</p>
+                        <button
+                          type="button"
+                          onClick={() => setImageFile(null)}
+                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-700"
+                        >
+                          ✕
+                        </button>
+                      </>
+                    ) : recipe.image ? (
+                      <>
+                        <img
+                          src={recipe.image}
+                          alt="Imagen existente"
+                          className="preview-thumbnail"
+                        />
+                        <p className="text-sm mt-2 text-center">
+                          Imagen existente
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={handleDeleteImage}
+                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-700"
+                        >
+                          ✕
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src="/img/recipe-null.png"
+                          alt="Imagen por defecto"
+                          className="preview-thumbnail"
+                        />
+                        <div className="span-real mt-5">
+                          <span className="mt-2 text-left ">
+                            No has cargado ninguna imagen.
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    <div className="mt-5">
+                      <label
+                        htmlFor="image"
+                        className="flex justify-center items-center  text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]"
+                      >
+                        <input
+                          id="image"
+                          type="file"
+                          name="image"
+                          onChange={handleImageChange}
+                          disabled={isImageUploading} // Deshabilitar durante la carga
+                          className="hidden" // Ocultar el input original
+                        />
+                        {isImageUploading ? <LoadingSpinner /> : "Subir imagen"}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botones de Previsualización y Crear Receta */}
+              <div className="mt-6 flex justify-around">
+                <button
+                  type="button"
+                  className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] text-white"
+                  onClick={handlePreview}
+                >
+                  Previsualizar
+                </button>
+
+                <button
+                  type="submit"
+                  className={`text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b] ${
+                    isLoading ? "opacity-50 cursor-not-allowed" : ""
+                  } text-white`}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <LoadingSpinner />
+                  ) : recipeId ? (
+                    "Actualizar receta"
+                  ) : (
+                    "Crear receta"
+                  )}
+                </button>
+
+                {/* Botón de Cancelar */}
+                {recipeId && (
+                  <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className="text-base px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-red-500 hover:bg-red-700 hover:text-naranja-bg"
+                  >
+                    Cancelar
+                  </button>
+                )}
+              </div>
+              {successMessage && (
+                <div
+                  className="success-message-profile text-green-500 font-semibold text-center"
+                  role="alert"
+                >
+                  {successMessage}
+                </div>
+              )}
+              {errorMessage && (
+                <div
+                  className="error-message-profile  text-red-500 font-semibold text-center"
+                  role="alert"
+                >
+                  {errorMessage}
+                </div>
+              )}
+            </form>
+          </div>
           {/* Modal de Previsualización */}
           <Modal
             isOpen={showPreview}

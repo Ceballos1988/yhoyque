@@ -588,13 +588,3 @@ button[title="Eliminar ingrediente"] img {
 }
 
 
-.
-.create-recipe-container .loading-spinner {
-  margin-top: 150px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #EE8532;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
