@@ -82,6 +82,11 @@
   color: #ee8532;
 }
 
+/* Botón de compartir */
+.button-download:active {
+  transform: scale(0.95);  /* Efecto al presionar */
+}
+
 /* Verduras Flotantes */
 .floating-vegetables {
   overflow: hidden;

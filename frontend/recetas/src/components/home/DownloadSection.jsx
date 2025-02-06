@@ -4,7 +4,9 @@ import "../../styles/components/home/style.downloadSection.css";
 function DownloadSection() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [canShare, setCanShare] = useState(false);
 
+  // Detectar si la app puede instalarse
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
@@ -19,26 +21,28 @@ function DownloadSection() {
     };
   }, []);
 
+  // Verificar si ya está instalada
   useEffect(() => {
     const checkIfInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {
         setIsInstallable(false);
-        return;
       }
-      setIsInstallable(true);
     };
 
     checkIfInstalled();
+
     window.addEventListener("appinstalled", () => {
       console.log("La aplicación ha sido instalada.");
       setIsInstallable(false);
     });
 
-    return () => {
-      window.removeEventListener("appinstalled", checkIfInstalled);
-    };
+    // Verificar si la API de compartir está disponible
+    if (navigator.share) {
+      setCanShare(true);
+    }
   }, []);
 
+  // Función para instalar la app
   const handleInstallApp = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -51,18 +55,26 @@ function DownloadSection() {
         setDeferredPrompt(null);
       });
     } else {
-      alert(
-        "La instalación no está disponible en este momento. Intenta desde el navegador."
-      );
+      alert("La instalación no está disponible en este momento. Intenta desde el navegador.");
+    }
+  };
+
+  // Función para compartir la app
+  const handleShareApp = async () => {
+    try {
+      await navigator.share({
+        title: "¿Y HOY QUÉ?",
+        text: "¡Descubrí las mejores recetas personalizadas!",
+        url: window.location.href,
+      });
+      console.log("Contenido compartido con éxito.");
+    } catch (error) {
+      console.error("Error al compartir:", error);
     }
   };
 
   return (
-    <section
-      className="download-section bg-naranja-bg text-white py-10 relative"
-      data-aos="fade-up"
-      aria-labelledby="download-title"
-    >
+    <section className="download-section bg-naranja-bg text-white py-10 relative" data-aos="fade-up" aria-labelledby="download-title">
       <div className="floating-vegetables" aria-hidden="true">
         {["07", "09", "10", "11", "12", "13", "14", "15"].map((num, index) => (
           <img
@@ -81,20 +93,16 @@ function DownloadSection() {
           </h2>
 
           <p className="text-white text-left">
-            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está
-            diseñada como una <strong>PWA</strong> (Progressive Web App), lo que
-            significa que podés descargarla directamente desde tu navegador y
-            acceder a todas las recetas sin conexión.
+            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está diseñada como una <strong>PWA</strong>, lo que
+            significa que podés descargarla directamente desde tu navegador y acceder a todas las recetas sin conexión.
           </p>
 
           <p className="text-white text-left mt-4">
-            Disfrutá de la flexibilidad de tener recetas personalizadas y
-            actualizaciones automáticas sin la necesidad de una app store.
-            Compatible con dispositivos Android, iOS, tablets y computadoras de
-            escritorio.
+            Disfrutá de la flexibilidad de tener recetas personalizadas y actualizaciones automáticas sin la necesidad de una app store.
+            Compatible con dispositivos Android, iOS, tablets y computadoras de escritorio.
           </p>
 
-          <div className="mt-5">
+          <div className="mt-5 flex flex-col gap-4">
             {isInstallable && (
               <button
                 className="button-download mt-6 font-raleway font-bold text-white mx-auto text-center"
@@ -102,6 +110,16 @@ function DownloadSection() {
                 aria-label="Instalar la aplicación desde el navegador"
               >
                 Instalar la App
+              </button>
+            )}
+
+            {canShare && (
+              <button
+                className="button-download mt-6 font-raleway font-bold text-white mx-auto text-center"
+                onClick={handleShareApp}
+                aria-label="Compartir la aplicación"
+              >
+                Compartir la App
               </button>
             )}
           </div>
