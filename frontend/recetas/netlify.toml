@@ -12,3 +12,8 @@
   for = "/service-worker.js"
   [headers]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/offline.html"
+  [headers]
+    Cache-Control = "public, max-age=0, must-revalidate"

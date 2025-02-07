@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate,
-} from "react-router-dom"; // Agrega Navigate
+  Route
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -18,19 +17,19 @@ import Privacy from "./pages/Privacy";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import AuthProvider from "./context/AuthContext"; // ✅ Importación correcta para exportación por defecto
+import AuthProvider from "./context/AuthContext";
 import { FilterProvider } from "./context/FilterContext";
 import ShoppingListsPage from "./pages/ShoppingListsPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
-import { OfflineProvider } from "./context/OfflineContext"; // ✅ Importar el Provider
+import { OfflineProvider } from "./context/OfflineContext";
 import "./styles/main.css";
+
 /**
  * Componente principal de la aplicación.
  */
 function App() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
-  const [isOnline, setIsOnline] = useState(navigator.onLine); // Estado de conexión
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,61 +41,28 @@ function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Escucha cambios en la conexión
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
-
   return (
     <AuthProvider>
       <FilterProvider>
         <OfflineProvider>
-          {" "}
-          {/* ✅ Aquí envuelve la App */}
           <Router>
             <div className="App">
               <Navbar />
 
               <Routes>
-                {/* Si está offline y no en la página offline, redirigir */}
-                {!isOnline && (
-                  <Route path="*" element={<Navigate to="/offline" />} />
-                )}
-
                 {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/create-recipe" element={<CreateRecipe />} />
-                <Route
-                  path="/create-recipe/:recipeId"
-                  element={<CreateRecipe />}
-                />
+                <Route path="/create-recipe/:recipeId" element={<CreateRecipe />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route
-                  path="/reset-password/:token"
-                  element={<ResetPassword />}
-                />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/recipe-wall" element={<RecipeWall />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/shopping-lists" element={<ShoppingListsPage />} />
-
-                {/* Ruta para la página Offline */}
-                <Route
-                  path="/offline"
-                  element={<div>Estás sin conexión. Intenta más tarde.</div>}
-                />
 
                 {/* Rutas protegidas para administrador */}
                 <Route path="/admin/*" element={<AdminRoute />}>
