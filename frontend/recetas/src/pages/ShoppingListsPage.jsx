@@ -31,10 +31,12 @@ const ShoppingListsPage = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setShoppingLists(response.data);
+
+      // Guardar siempre en LocalStorage después de recibir la respuesta
       localStorage.setItem(
         "listasComprasGuardadas",
         JSON.stringify(response.data)
-      ); // Guardar listas en LocalStorage
+      );
     } catch (error) {
       console.error("Error al cargar listas de compras:", error);
     } finally {
@@ -43,19 +45,37 @@ const ShoppingListsPage = () => {
   };
 
   useEffect(() => {
-    fetchShoppingLists();
+    const cargarListas = () => {
+      if (navigator.onLine) {
+        fetchShoppingLists(); // Si hay conexión, carga desde la API
+      } else {
+        const listasOffline =
+          JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+        setShoppingLists(listasOffline); // Carga desde el localStorage si no hay conexión
+      }
+    };
+
+    cargarListas(); // Ejecutar la función cuando el componente se monte
+
+    // Escuchar cambios en la conexión para actualizar las listas automáticamente
+    window.addEventListener("online", cargarListas);
+    window.addEventListener("offline", cargarListas);
+
+    return () => {
+      window.removeEventListener("online", fetchShoppingLists);
+      window.removeEventListener("offline", cargarListas);
+    };
   }, []);
-  // Nuevo useEffect para manejar el modo offline
+
   useEffect(() => {
-    if (!navigator.onLine) {
-      // Si no hay conexión
-      const listasOffline =
-        JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
-      setShoppingLists(listasOffline);
+    if (shoppingLists.length > 0) {
+      localStorage.setItem("listasComprasGuardadas", JSON.stringify(shoppingLists));
     } else {
-      fetchShoppingLists(); // Si vuelve la conexión, cargamos desde la API
+      localStorage.removeItem("listasComprasGuardadas");  // Limpia si no hay listas
     }
-  }, []);
+  }, [shoppingLists]);
+  
+
   // Crear nueva lista
   const handleCreateList = async () => {
     if (!newListName.trim()) {
@@ -77,6 +97,11 @@ const ShoppingListsPage = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setShoppingLists([...shoppingLists, response.data]);
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify([...shoppingLists, response.data])
+      ); // Guardar inmediatamente
+
       setNewListName("");
       setErrorMessage("");
     } catch (error) {

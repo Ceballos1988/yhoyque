@@ -18,11 +18,29 @@
         p {
             font-size: 18px;
         }
+        button {
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #e67600;
+        }
+        img {
+            width: 150px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
     <h1>Estás sin conexión</h1>
+    <img src="/img/offline.png" alt="Sin conexión"> <!-- Asegúrate de tener esta imagen en la carpeta img -->
     <p>Parece que no tienes acceso a internet. Algunas funciones pueden no estar disponibles.</p>
     <p>Cuando vuelvas a conectarte, podrás ver nuevas recetas.</p>
+    <button onclick="location.reload()">Reintentar</button>
 </body>
 </html>
