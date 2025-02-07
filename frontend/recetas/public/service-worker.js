@@ -12,16 +12,16 @@ const urlsToCache = [
   "/manifest.json",
   "/offline.html",
   "/styles/main.css",
-  ".//img/icon-192x192.png",
-  ".//img/icon-512x512.png",
+  "./img/icon-192x192.png",
+  "./img/icon-512x512.png",
   "/recipe-wall",
   "/shopping-lists",
-  ".//img/volver.png",
-  ".//img/delete.png",
-  ".//img/recipe-null.png",
-  ".//img/heart-filled.svg",
-  ".//img/heart-outline.svg",
-  ".//img/search.png"
+  "./img/volver.png",
+  "./img/delete.png",
+  "./img/recipe-null.png",
+  "./img/heart-filled.svg",
+  "./img/heart-outline.svg",
+  "./img/search.png"
 ];
 
 /**
