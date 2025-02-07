@@ -221,13 +221,13 @@ const RecipeWall = () => {
   // Cargar recetas favoritas desde localStorage si está offline
   useEffect(() => {
     if (isOffline) {
-      const recetasOffline =
-        JSON.parse(localStorage.getItem("recetasGuardadas")) || [];
-      setRecipes(recetasOffline);
+      const recetasFavoritasOffline = JSON.parse(localStorage.getItem("recetasFavoritasGuardadas")) || [];
+      setRecipes(recetasFavoritasOffline);
     } else {
-      loadAllRecipes(); // Si vuelve la conexión, cargamos desde la API
+      loadAllRecipes();  // Si vuelve la conexión, cargamos desde la API
     }
   }, [isOffline, loadAllRecipes]);
+  
 
   /**
    * Función para manejar la lógica de paginación.

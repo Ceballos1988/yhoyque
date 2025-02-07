@@ -193,38 +193,50 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   const handleFavoriteRecipe = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      setMessage(
-        "No estás autenticado. Inicia sesión para marcar como favorito."
-      );
+      setMessage("No estás autenticado. Inicia sesión para marcar como favorito.");
       return;
     }
-
+  
     try {
       let response;
+      const storedFavorites = JSON.parse(localStorage.getItem("recetasFavoritasGuardadas")) || [];
+  
       if (isFavorited) {
+        // Eliminar de favoritos en el backend
         response = await axios.delete(
           `${import.meta.env.VITE_API_URL}/api/favorites/${recipe._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
+  
+        // Eliminar del localStorage
+        const updatedFavorites = storedFavorites.filter(fav => fav._id !== recipe._id);
+        localStorage.setItem("recetasFavoritasGuardadas", JSON.stringify(updatedFavorites));
+  
         setIsFavorited(false);
       } else {
+        // Agregar a favoritos en el backend
         response = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/favorites`,
           { recipeId: recipe._id },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
+  
+        // Guardar en localStorage
+        storedFavorites.push(recipe);
+        localStorage.setItem("recetasFavoritasGuardadas", JSON.stringify(storedFavorites));
+  
         setIsFavorited(true);
       }
+  
       if (import.meta.env.MODE === "development") {
         console.log(response.data.message);
       }
-      localStorage.setItem(`favorite-${recipe._id}`, isFavorited);
+  
     } catch (error) {
       console.error("Error al manejar favorito:", error);
     }
   };
+  
 
   const handleDeleteRecipe = async () => {
     const token = localStorage.getItem("token");

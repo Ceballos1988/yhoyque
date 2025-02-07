@@ -21,8 +21,16 @@ const urlsToCache = [
   "/img/recipe-null.png",
   "/img/heart-filled.svg",
   "/img/heart-outline.svg",
-  "/img/search.png"
+  "/img/search.png",
+  "/img/edit.png",              // NUEVO
+  "/img/abrir.png",             // NUEVO
+  "/img/cerrar.png",            // NUEVO
+  "/img/user-icon.png",         // NUEVO
+  "/img/clock-icon.png",        // NUEVO
+  "/img/fire-icon.png",         // NUEVO
+  "/img/servings-icon.svg"      // NUEVO
 ];
+
 
 /**
  * Evento de instalación: Se encarga de cachear los archivos esenciales.
