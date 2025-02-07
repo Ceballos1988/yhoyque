@@ -2,11 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+  base: '/',  // Asegura que los recursos se sirvan desde la raíz
   plugins: [react()],
   server: {
     proxy: {
       "/api": {
-        target: "https://yhoyque.onrender.com",  // Cambiar al backend correcto
+        target: "https://yhoyque.onrender.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
@@ -22,4 +23,3 @@ export default defineConfig({
     copyPublicDir: true,
   },
 });
-
