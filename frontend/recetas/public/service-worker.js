@@ -1,4 +1,4 @@
-const CACHE_NAME = "v29";  // Incrementa la versión para forzar la actualización del caché
+const CACHE_NAME = "v30";  // Incrementa la versión para forzar la actualización del caché
 
 const urlsToCache = [
   "/", 
