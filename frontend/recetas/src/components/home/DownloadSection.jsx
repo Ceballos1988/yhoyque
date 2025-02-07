@@ -9,6 +9,7 @@ function DownloadSection() {
   // Detectar si la app puede instalarse
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
+      console.log("Evento beforeinstallprompt disparado");
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);
@@ -17,7 +18,10 @@ function DownloadSection() {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
@@ -25,7 +29,7 @@ function DownloadSection() {
   useEffect(() => {
     const checkIfInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {
-        setIsInstallable(false);  // No mostrar el botón si ya está instalada
+        setIsInstallable(false); // No mostrar el botón si ya está instalada
       }
     };
 
@@ -33,7 +37,7 @@ function DownloadSection() {
 
     window.addEventListener("appinstalled", () => {
       console.log("La aplicación ha sido instalada.");
-      setIsInstallable(false);  // Ocultar el botón después de instalar
+      setIsInstallable(false); // Ocultar el botón después de instalar
     });
 
     // Forzar visibilidad del botón si está en modo navegador (no instalada)
@@ -60,7 +64,9 @@ function DownloadSection() {
         setDeferredPrompt(null);
       });
     } else {
-      alert("La instalación no está disponible en este momento. Intenta desde el navegador.");
+      alert(
+        "La instalación no está disponible en este momento. Intenta desde el navegador."
+      );
     }
   };
 
@@ -79,7 +85,11 @@ function DownloadSection() {
   };
 
   return (
-    <section className="download-section bg-naranja-bg text-white py-10 relative" data-aos="fade-up" aria-labelledby="download-title">
+    <section
+      className="download-section bg-naranja-bg text-white py-10 relative"
+      data-aos="fade-up"
+      aria-labelledby="download-title"
+    >
       <div className="floating-vegetables" aria-hidden="true">
         {["07", "09", "10", "11", "12", "13", "14", "15"].map((num, index) => (
           <img
@@ -93,22 +103,29 @@ function DownloadSection() {
 
       <div className="download-content container mx-auto flex flex-col lg:flex-row justify-center items-center gap-10">
         <div className="download-text lg:w-1/2 text-left mt-10 mb-10 ml-10">
-          <h2 id="download-title" className="section-title text-left pb-10 text-azul-bg">
+          <h2
+            id="download-title"
+            className="section-title text-left pb-10 text-azul-bg"
+          >
             ¡DESCARGÁ NUESTRA APP!
           </h2>
 
           <p className="text-white text-left">
-            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está diseñada como una <strong>PWA</strong>, lo que
-            significa que podés descargarla directamente desde tu navegador y acceder a todas las recetas sin conexión.
+            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está
+            diseñada como una <strong>PWA</strong>, lo que significa que podés
+            descargarla directamente desde tu navegador y acceder a todas las
+            recetas sin conexión.
           </p>
 
           <p className="text-white text-left mt-4">
-            Disfrutá de la flexibilidad de tener recetas personalizadas y actualizaciones automáticas sin la necesidad de una app store.
-            Compatible con dispositivos Android, iOS, tablets y computadoras de escritorio.
+            Disfrutá de la flexibilidad de tener recetas personalizadas y
+            actualizaciones automáticas sin la necesidad de una app store.
+            Compatible con dispositivos Android, iOS, tablets y computadoras de
+            escritorio.
           </p>
 
           <div className="mt-5 flex flex-col gap-4">
-            {isInstallable && (
+            {deferredPrompt && isInstallable && (
               <button
                 className="button-download mt-6 font-raleway font-bold text-white mx-auto text-center"
                 onClick={handleInstallApp}
