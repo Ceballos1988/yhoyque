@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')).render(
 // 🔹 Registrar el Service Worker en desarrollo y producción
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })  // Asegurar el alcance completo
       .then((registration) => {
         console.log("✅ Service Worker registrado correctamente:", registration);
 
@@ -32,11 +32,9 @@ if ('serviceWorker' in navigator) {
           installingWorker.onstatechange = () => {
             if (installingWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
-                // Hay una nueva versión lista para ser usada
                 console.log("🆕 Nueva versión instalada y lista.");
                 showUpdatePrompt();
               } else {
-                // El Service Worker está instalado por primera vez
                 console.log("🚀 Service Worker instalado por primera vez.");
               }
             }
@@ -46,6 +44,13 @@ if ('serviceWorker' in navigator) {
       .catch((error) => {
         console.error("❌ Error al registrar el Service Worker:", error);
       });
+
+    // 🔹 Manejar el evento de instalación de la PWA
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();  // Prevenir el prompt automático
+      window.deferredPrompt = e;  // Guardar el evento para usarlo después
+      console.log("📲 La app está lista para ser instalada.");
+    });
   });
 }
 

@@ -21,11 +21,11 @@ function DownloadSection() {
     };
   }, []);
 
-  // Verificar si ya está instalada
+  // Verificar si ya está instalada o si está en modo navegador
   useEffect(() => {
     const checkIfInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {
-        setIsInstallable(false);
+        setIsInstallable(false);  // No mostrar el botón si ya está instalada
       }
     };
 
@@ -33,8 +33,13 @@ function DownloadSection() {
 
     window.addEventListener("appinstalled", () => {
       console.log("La aplicación ha sido instalada.");
-      setIsInstallable(false);
+      setIsInstallable(false);  // Ocultar el botón después de instalar
     });
+
+    // Forzar visibilidad del botón si está en modo navegador (no instalada)
+    if (window.matchMedia("(display-mode: browser)").matches) {
+      setIsInstallable(true);
+    }
 
     // Verificar si la API de compartir está disponible
     if (navigator.share) {

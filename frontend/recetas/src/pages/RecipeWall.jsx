@@ -23,6 +23,8 @@ const RecipeWall = () => {
   const location = useLocation();
   const [recipes, setRecipes] = useState([]);
   const [favorites, setFavorites] = useState([]); // Nuevo estado para favoritos
+  const [isOffline, setIsOffline] = useState(!navigator.onLine); // Detectar si está offline
+
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 8;
 
@@ -135,52 +137,58 @@ const RecipeWall = () => {
     const token = localStorage.getItem("token");
 
     try {
-        let endpoint = `${import.meta.env.VITE_API_URL}/api/recipes`;
-        let method = "get";
-        let requestData = {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                ...buildParams.filters, // Asegura que los filtros se incluyan
-                page: currentPage,
-                limit: recipesPerPage,
-                sortOption: filters.sortOption || null,
-            },
+      let endpoint = `${import.meta.env.VITE_API_URL}/api/recipes`;
+      let method = "get";
+      let requestData = {
+        headers: { Authorization: `Bearer ${token}` },
+        params: {
+          ...buildParams.filters, // Asegura que los filtros se incluyan
+          page: currentPage,
+          limit: recipesPerPage,
+          sortOption: filters.sortOption || null,
+        },
+      };
+
+      if (filters.savedRecipesOnly && user) {
+        endpoint = `${import.meta.env.VITE_API_URL}/api/favorites`;
+      } else if (filters.userRecipesOnly && user) {
+        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/user/${
+          user.id
+        }`;
+      } else if (searchIngredients.length > 0) {
+        endpoint = `${
+          import.meta.env.VITE_API_URL
+        }/api/recipes/searchByIngredients`;
+        method = "post";
+        requestData = {
+          ...requestData,
+          data: {
+            ingredients: searchIngredients,
+            filters: buildParams.filters,
+          },
         };
+      } else if (searchTerm) {
+        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/search`;
+        requestData.params = { ...requestData.params, name: searchTerm };
+      }
 
-        if (filters.savedRecipesOnly && user) {
-            endpoint = `${import.meta.env.VITE_API_URL}/api/favorites`;
-        } else if (filters.userRecipesOnly && user) {
-            endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/user/${user.id}`;
-        } else if (searchIngredients.length > 0) {
-            endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/searchByIngredients`;
-            method = "post";
-            requestData = {
-                ...requestData,
-                data: {
-                    ingredients: searchIngredients,
-                    filters: buildParams.filters,
-                },
-            };
-        } else if (searchTerm) {
-            endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/search`;
-            requestData.params = { ...requestData.params, name: searchTerm };
-        }
+      const res = await axios({ method, url: endpoint, ...requestData });
 
-        const res = await axios({ method, url: endpoint, ...requestData });
+      setRecipes(res.data.recipes || res.data);
+      setTotalRecipes(
+        Number.isInteger(res.data.totalCount) ? res.data.totalCount : 0
+      );
 
-        setRecipes(res.data.recipes || res.data);
-        setTotalRecipes(Number.isInteger(res.data.totalCount) ? res.data.totalCount : 0);
-        
-        if (filters.savedRecipesOnly && res.data.favorites) {
-            setFavorites(res.data.favorites);
-        }
+      if (filters.savedRecipesOnly && res.data.favorites) {
+        setFavorites(res.data.favorites);
+      }
     } catch (error) {
-        console.error("Error al cargar las recetas:", error);
-        setRecipes([]);
+      console.error("Error al cargar las recetas:", error);
+      setRecipes([]);
     } finally {
-        setIsLoading(false); // Desactivar el spinner
+      setIsLoading(false); // Desactivar el spinner
     }
-}, [
+  }, [
     searchTerm,
     searchIngredients,
     buildParams, // Ahora sí se está utilizando correctamente
@@ -189,11 +197,37 @@ const RecipeWall = () => {
     filters.savedRecipesOnly,
     filters.sortOption,
     user,
-]);
+  ]);
 
   useEffect(() => {
     loadAllRecipes();
   }, [loadAllRecipes, currentPage, searchTriggered]);
+
+  // Detectar cambios en la conexión
+  useEffect(() => {
+    const handleConnectionChange = () => {
+      setIsOffline(!navigator.onLine);
+    };
+
+    window.addEventListener("online", handleConnectionChange);
+    window.addEventListener("offline", handleConnectionChange);
+
+    return () => {
+      window.removeEventListener("online", handleConnectionChange);
+      window.removeEventListener("offline", handleConnectionChange);
+    };
+  }, []);
+
+  // Cargar recetas favoritas desde localStorage si está offline
+  useEffect(() => {
+    if (isOffline) {
+      const storedFavorites =
+        JSON.parse(localStorage.getItem("favoriteRecipes")) || [];
+      setRecipes(storedFavorites); // Mostrar recetas guardadas
+    } else {
+      loadAllRecipes(); // Si vuelve la conexión, cargar normalmente
+    }
+  }, [isOffline, loadAllRecipes]);
 
   /**
    * Función para manejar la lógica de paginación.
@@ -240,6 +274,19 @@ const RecipeWall = () => {
       className="recipe-wall-container min-h-screen flex text-azul-bg pb-20 pt-10 relative"
       role="main"
     >
+      {/* Mostrar mensaje si está sin conexión */}
+      {isOffline && (
+        <div className="offline-message text-center text-white bg-azul-bg p-4 rounded-md shadow-md mb-4">
+          <h2 className="text-naranja-bg text-2xl font-bold">
+            Recetas guardadas como favoritos
+          </h2>
+          <p className="mt-2">
+            Estás viendo tus recetas guardadas como favoritos. Si querés acceder
+            a más recetas sin conexión, asegurate de guardarlas cuando tengas
+            internet.
+          </p>
+        </div>
+      )}
       {/* Sidebar con expansión */}
       <div
         className={` rounded-md shadow-md sidebar-container ${
@@ -418,7 +465,7 @@ const RecipeWall = () => {
               </p>
 
               {isLoading ? (
-                <LoadingSpinner /> // Mostrar el spinner mientras carga
+                <LoadingSpinner />
               ) : recipes.length > 0 ? (
                 <div className="recipes-flex animate__animated animate__fadeIn">
                   {recipes.map((recipe) => (
@@ -426,7 +473,7 @@ const RecipeWall = () => {
                       key={recipe._id}
                       recipe={recipe}
                       currentUserId={user?._id || null}
-                      userIngredients={searchIngredients} // Pasar los ingredientes buscados
+                      userIngredients={searchIngredients}
                       onDelete={(recipeId) =>
                         setRecipes((prev) =>
                           prev.filter((r) => r._id !== recipeId)
@@ -445,23 +492,14 @@ const RecipeWall = () => {
                               `${import.meta.env.VITE_API_URL}/api/favorites/${
                                 recipe._id
                               }`,
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              }
+                              { headers: { Authorization: `Bearer ${token}` } }
                             );
                             setFavorites(response.data.favorites);
                           } else {
                             const response = await axios.post(
                               `${import.meta.env.VITE_API_URL}/api/favorites`,
                               { recipeId: recipe._id },
-
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              }
+                              { headers: { Authorization: `Bearer ${token}` } }
                             );
                             setFavorites(response.data.favorites);
                           }
@@ -472,8 +510,20 @@ const RecipeWall = () => {
                     />
                   ))}
                 </div>
+              ) : isOffline ? (
+                <p
+                  className="no-recipes-message-wall text-center text-white"
+                  role="alert"
+                >
+                  No tenés recetas guardadas para ver sin conexión. Cuando
+                  vuelvas a tener internet, guardá tus recetas favoritas para
+                  poder acceder a ellas sin conexión.
+                </p>
               ) : (
-                <p className="no-recipes-message-wall" role="alert">
+                <p
+                  className="no-recipes-message-wall text-center text-white"
+                  role="alert"
+                >
                   No hay recetas disponibles en este momento.
                 </p>
               )}

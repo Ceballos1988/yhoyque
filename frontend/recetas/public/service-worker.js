@@ -2,28 +2,20 @@
  * Nombre de la caché utilizada en la aplicación.
  * Asegúrate de cambiar la versión cada vez que hagas cambios importantes.
  */
-const CACHE_NAME = "v17";  // Incrementa la versión para asegurarte de que se actualice el caché
+const CACHE_NAME = "v19";  // Incrementa la versión para asegurarte de que se actualice el caché
 
 /**
  * Lista de archivos a cachear.
  */
 const urlsToCache = [
   "/", 
-  "/index.html",
-  "/recipe-wall",
-  "/profile",
-  "/shopping-lists",
   "/manifest.json",
   "/offline.html",
-  "/src/styles/index.css",
-  "/assets/index.css",
+  "/styles/main.css",
   "/img/icon-192x192.png",
   "/img/icon-512x512.png",
-  "/img/fondo.svg",
-  "/img/fondo-chico.svg",
-  "/img/hero.webp",
-  "/img/recipe-null.png",
-
+  "/recipe-wall",           // Vista del muro de recetas
+  "/shopping-lists"         // Lista de compras
 ];
 
 /**
@@ -33,14 +25,17 @@ self.addEventListener("install", (event) => {
   console.log("[Service Worker] Instalando el service worker...");
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache).catch((error) => {
-        console.error("[Service Worker] Error al cachear archivos:", error);
-      });
+      return Promise.all(
+        urlsToCache.map((url) => {
+          return cache.add(url).catch((err) => {
+            console.error(`[Service Worker] Error al cachear ${url}:`, err);
+          });
+        })
+      );
     })
   );
   self.skipWaiting();
 });
-
 
 /**
  * Evento de activación: Elimina cachés antiguas cuando se actualiza el SW.
@@ -75,8 +70,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Manejar todas las APIs de tu backend para que funcionen offline
-  if (url.origin === "https://yhoyque.onrender.com") {
+  // Cachear las listas de compras y recetas guardadas para acceso offline
+  if (url.pathname.startsWith("/api/shopping-lists") || url.pathname.startsWith("/api/favorites")) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) => {
         return fetch(event.request)
