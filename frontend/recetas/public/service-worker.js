@@ -1,51 +1,42 @@
-/**
- * Nombre de la caché utilizada en la aplicación.
- * Asegúrate de cambiar la versión cada vez que hagas cambios importantes.
- */
-const CACHE_NAME = "v24";  // Incrementa la versión para asegurarte de que se actualice el caché
+const CACHE_NAME = "v26";  // Incrementa la versión para asegurar actualización del caché
 
-/**
- * Lista de archivos a cachear.
- */
 const urlsToCache = [
   "/", 
   "/manifest.json",
   "/offline.html",
+  "/index.html",  
   "/styles/main.css",
   "/img/icon-192x192.png",
   "/img/icon-512x512.png",
-  "/recipe-wall",
-  "/shopping-lists",
   "/img/volver.png",
+  "/img/abrir.png",
   "/img/delete.png",
+  "/img/search.png",
+  "/img/filtro.png",
+  "/img/orden.png",
   "/img/recipe-null.png",
   "/img/heart-filled.svg",
   "/img/heart-outline.svg",
-  "/img/search.png"
+  "/img/edit.png"
 ];
 
-
 /**
- * Evento de instalación: Se encarga de cachear los archivos esenciales.
+ * Evento de instalación: Cachea los archivos esenciales.
  */
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Instalando el service worker...");
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return Promise.all(
-        urlsToCache.map((url) => {
-          return cache.add(url).catch((err) => {
-            console.error(`[Service Worker] Error al cachear ${url}:`, err);
-          });
-        })
-      );
+      return cache.addAll(urlsToCache);
+    }).catch(err => {
+      console.error("[Service Worker] Error al cachear archivos:", err);
     })
   );
   self.skipWaiting();
 });
 
 /**
- * Evento de activación: Elimina cachés antiguas cuando se actualiza el SW.
+ * Activación del Service Worker: Limpia cachés antiguas.
  */
 self.addEventListener("activate", (event) => {
   console.log("[Service Worker] Activando el service worker...");
@@ -61,53 +52,56 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
-  self.clients.claim();  // Tomar el control de todas las páginas inmediatamente
+  self.clients.claim();
 });
 
 /**
- * Manejo de peticiones:
+ * Manejo de peticiones: 
  * - Cache First para recursos estáticos.
- * - Stale-While-Revalidate para APIs (intenta mostrar datos cacheados mientras actualiza en segundo plano).
+ * - Stale-While-Revalidate para datos de la API.
  */
 self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
+  const { request } = event;
 
-  // Evitar cachear solicitudes que no sean GET
-  if (event.request.method !== "GET") {
-    return;
-  }
+  if (request.method !== "GET") return;  // Ignora solicitudes que no sean GET
 
-  // Cachear todas las solicitudes a la API para que estén disponibles sin conexión
-  if (url.pathname.startsWith("/api/")) {
+  const requestURL = new URL(request.url);
+
+  // Cachear solicitudes a la API (recetas y listas de compras)
+  if (requestURL.pathname.startsWith("/api/recipes") || requestURL.pathname.startsWith("/api/shopping-lists")) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
         try {
-          const response = await fetch(event.request);
-          cache.put(event.request, response.clone()); // Guarda la respuesta actualizada
+          const response = await fetch(request);
+          cache.put(request, response.clone());  // Guarda la respuesta en caché para uso offline
           return response;
-        } catch  {
-          console.warn("[Service Worker] Sin conexión, usando datos cacheados:", event.request.url);
-          return caches.match(event.request) || caches.match("/offline.html");  // Usa datos cacheados si no hay conexión
+        } catch {
+          console.warn("[Service Worker] Sin conexión, usando datos cacheados:", request.url);
+          return caches.match(request) || caches.match("/offline.html");
         }
       })
     );
     return;
   }
 
-  // Cacheo estándar para archivos estáticos
+  // Cacheo estándar para archivos estáticos y recursos de la app
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return (
-        cachedResponse ||  // Devuelve desde el caché si está disponible
-        fetch(event.request)
-          .then((response) => {
-            return caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, response.clone());  // Almacena en caché la nueva respuesta
-              return response;
-            });
-          })
-          .catch(() => caches.match("/offline.html"))  // Si no hay caché ni conexión, muestra la página offline
-      );
+    caches.match(request).then((cachedResponse) => {
+      if (cachedResponse) return cachedResponse;
+
+      return fetch(request).then((response) => {
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(request, response.clone());
+          return response;
+        });
+      }).catch(() => {
+        // Si es una navegación (ruta de React), mostrar index.html
+        if (request.mode === "navigate") {
+          return caches.match("/index.html");
+        }
+        // Mostrar página offline si no hay nada en caché
+        return caches.match("/offline.html");
+      });
     })
   );
 });
@@ -117,6 +111,6 @@ self.addEventListener("fetch", (event) => {
  */
 self.addEventListener("message", (event) => {
   if (event.data.action === "skipWaiting") {
-    self.skipWaiting();  // Forzar la activación del nuevo Service Worker
+    self.skipWaiting();
   }
 });
