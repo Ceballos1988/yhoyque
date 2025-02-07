@@ -1,4 +1,4 @@
-const CACHE_NAME = "v30";  // Incrementa la versión para forzar la actualización del caché
+const CACHE_NAME = "v31";  // Incrementa la versión para forzar la actualización del caché
 
 const urlsToCache = [
   "/", 
@@ -25,6 +25,7 @@ self.addEventListener("install", (event) => {
   console.log("[Service Worker] Instalando el service worker...");
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      console.log("[Service Worker] Cacheando archivos...");
       return cache.addAll(urlsToCache);
     }).catch(err => {
       console.error("[Service Worker] Error al cachear archivos:", err);
@@ -51,42 +52,47 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();  // Controla todas las páginas abiertas
 });
 
-// Manejo de peticiones: Cache First, luego red para recursos externos
+// Manejo de peticiones
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
   // Solo manejar peticiones GET
   if (request.method !== "GET") return;
 
-  event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;  // Devuelve desde el caché si está disponible
-      }
+  // Diferenciar entre navegación y otros recursos
+  if (request.mode === "navigate") {
+    event.respondWith(
+      caches.match(request).then((cachedResponse) => {
+        return cachedResponse || fetch(request).catch(() => caches.match("/offline.html"));
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;  // Devuelve desde el caché si está disponible
+        }
 
-      return fetch(request)
-        .then((networkResponse) => {
-          // Solo cachea las respuestas que son del mismo origen
-          if (request.url.startsWith(self.location.origin)) {
-            return caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, networkResponse.clone());
-              return networkResponse;
-            });
-          }
-          return networkResponse;  // Para recursos externos, solo devuelve la respuesta
-        })
-        .catch(() => {
-          // Si no hay conexión y no hay en caché, muestra la página offline
-          if (request.mode === "navigate") {
-            return caches.match("/offline.html");
-          }
-          // Para imágenes o recursos que no están cacheados, muestra un placeholder
-          if (request.destination === "image") {
-            return caches.match("/img/recipe-null.png");
-          }
-        });
-    })
-  );
+        return fetch(request)
+          .then((networkResponse) => {
+            // Cachea solo recursos del mismo origen
+            if (request.url.startsWith(self.location.origin)) {
+              return caches.open(CACHE_NAME).then((cache) => {
+                cache.put(request, networkResponse.clone());
+                return networkResponse;
+              });
+            }
+            return networkResponse;
+          })
+          .catch(() => {
+            // Para imágenes que no están en caché, muestra un placeholder
+            if (request.destination === "image") {
+              return caches.match("/img/recipe-null.png");
+            }
+          });
+      })
+    );
+  }
 });
 
 // Permite forzar la actualización del Service Worker manualmente
