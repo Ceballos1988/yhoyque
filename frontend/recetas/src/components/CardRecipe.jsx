@@ -59,28 +59,28 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   };
 
   useEffect(() => {
+    if (!navigator.onLine) {
+      const storedFavoriteStatus = localStorage.getItem(
+        `favorite-${recipe._id}`
+      );
+      if (storedFavoriteStatus !== null) {
+        setIsFavorited(JSON.parse(storedFavoriteStatus));
+      }
+      return; // Salimos si está offline
+    }
+
     const checkFavoriteStatus = async () => {
       const token = localStorage.getItem("token");
-      if (import.meta.env.MODE === "development") {
-        console.log("Token encontrado:", token);
-      }
+      if (!token) return;
 
-      if (!token) {
-        console.warn("No hay token, se configurará como 'guest'.");
-        return;
-      }
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/favorites`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        const isInFavorites = response.data.recipes.some((favorite) => {
-          return favorite._id.toString() === recipe._id.toString();
-        });
-
+        const isInFavorites = response.data.recipes.some(
+          (fav) => fav._id === recipe._id
+        );
         setIsFavorited(isInFavorites);
         localStorage.setItem(`favorite-${recipe._id}`, isInFavorites);
       } catch (error) {
@@ -88,12 +88,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       }
     };
 
-    const storedFavoriteStatus = localStorage.getItem(`favorite-${recipe._id}`);
-    if (storedFavoriteStatus !== null) {
-      setIsFavorited(JSON.parse(storedFavoriteStatus));
-    } else {
-      checkFavoriteStatus();
-    }
+    checkFavoriteStatus();
   }, [recipe._id]);
 
   useEffect(() => {
@@ -193,25 +188,33 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   const handleFavoriteRecipe = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      setMessage("No estás autenticado. Inicia sesión para marcar como favorito.");
+      setMessage(
+        "No estás autenticado. Inicia sesión para marcar como favorito."
+      );
       return;
     }
-  
+
     try {
       let response;
-      const storedFavorites = JSON.parse(localStorage.getItem("recetasFavoritasGuardadas")) || [];
-  
+      const storedFavorites =
+        JSON.parse(localStorage.getItem("recetasFavoritasGuardadas")) || [];
+
       if (isFavorited) {
         // Eliminar de favoritos en el backend
         response = await axios.delete(
           `${import.meta.env.VITE_API_URL}/api/favorites/${recipe._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
+
         // Eliminar del localStorage
-        const updatedFavorites = storedFavorites.filter(fav => fav._id !== recipe._id);
-        localStorage.setItem("recetasFavoritasGuardadas", JSON.stringify(updatedFavorites));
-  
+        const updatedFavorites = storedFavorites.filter(
+          (fav) => fav._id !== recipe._id
+        );
+        localStorage.setItem(
+          "recetasFavoritasGuardadas",
+          JSON.stringify(updatedFavorites)
+        );
+
         setIsFavorited(false);
       } else {
         // Agregar a favoritos en el backend
@@ -220,23 +223,24 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           { recipeId: recipe._id },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
+
         // Guardar en localStorage
         storedFavorites.push(recipe);
-        localStorage.setItem("recetasFavoritasGuardadas", JSON.stringify(storedFavorites));
-  
+        localStorage.setItem(
+          "recetasFavoritasGuardadas",
+          JSON.stringify(storedFavorites)
+        );
+
         setIsFavorited(true);
       }
-  
+
       if (import.meta.env.MODE === "development") {
         console.log(response.data.message);
       }
-  
     } catch (error) {
       console.error("Error al manejar favorito:", error);
     }
   };
-  
 
   const handleDeleteRecipe = async () => {
     const token = localStorage.getItem("token");
@@ -272,33 +276,46 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   }
 
   const handleUserClick = async () => {
-    try {
-      if (import.meta.env.MODE === "development") {
-        console.log("Fetching user details for:", recipe.userId);
+    if (!navigator.onLine) {
+      const cachedUserDetails = JSON.parse(localStorage.getItem(`user-${recipe.userId}`));
+      if (cachedUserDetails) {
+        setUserDetails(cachedUserDetails);
+        setShowUserModal(true);
+        return;
+      } else {
+        setMessage("Sin conexión y sin datos guardados del usuario.");
+        return;
       }
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
-      );
-
+    }
+  
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`);
       setUserDetails(res.data);
+      localStorage.setItem(`user-${recipe.userId}`, JSON.stringify(res.data));
       setShowUserModal(true);
     } catch (error) {
       console.error("Error al obtener los detalles del usuario:", error);
     }
   };
+  
 
   const handleCommentsClick = (recipeId) => {
+    if (!navigator.onLine) {
+      setMessage("No puedes cargar los comentarios sin conexión.");
+      return;
+    }
+  
     setShowComments((prev) => ({
       ...prev,
       [recipeId]: !prev[recipeId],
     }));
-
+  
     if (!showComments[recipeId]) {
       fetchComments(recipeId);
     }
   };
+  
 
- 
   return (
     <div
       className={`mb-10 recipe-card relative ${isLoaded ? "loaded" : ""} ${

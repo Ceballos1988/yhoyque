@@ -221,13 +221,19 @@ const RecipeWall = () => {
   // Cargar recetas favoritas desde localStorage si está offline
   useEffect(() => {
     if (isOffline) {
-      const recetasFavoritasOffline = JSON.parse(localStorage.getItem("recetasFavoritasGuardadas")) || [];
-      setRecipes(recetasFavoritasOffline);
+      const recetasOffline =
+        JSON.parse(localStorage.getItem("recetasVistas")) || [];
+      setRecipes(recetasOffline);
     } else {
-      loadAllRecipes();  // Si vuelve la conexión, cargamos desde la API
+      loadAllRecipes(); // Carga desde la API si hay conexión
     }
   }, [isOffline, loadAllRecipes]);
-  
+
+  useEffect(() => {
+    if (recipes.length > 0 && !isOffline) {
+      localStorage.setItem("recetasVistas", JSON.stringify(recipes));
+    }
+  }, [recipes, isOffline]);
 
   /**
    * Función para manejar la lógica de paginación.
@@ -366,9 +372,12 @@ const RecipeWall = () => {
             className="back-button"
             aria-label="Volver"
           >
-            <img src="/img/volver.png" alt="Volver" className="arrow-icon" />
+            <img
+              src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
+              alt="Volver"
+              className="arrow-icon"
+            />
           </button>
-
           <nav className="breadcrumb-wall" aria-label="breadcrumb">
             <span
               className={`mx-2 cursor-pointer ${
