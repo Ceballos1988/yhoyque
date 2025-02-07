@@ -1,0 +1,11 @@
+/img/*
+ Content-Type: image/png
+
+/img/*.svg
+ Content-Type: image/svg+xml
+
+/img/*.jpg
+ Content-Type: image/jpeg
+
+/img/*.jpeg
+ Content-Type: image/jpeg

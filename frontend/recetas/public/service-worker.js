@@ -1,4 +1,4 @@
-const CACHE_NAME = "v26";  // Incrementa la versión para asegurar actualización del caché
+const CACHE_NAME = "v27";  // Incrementa la versión para asegurar actualización del caché
 
 const urlsToCache = [
   "/", 
@@ -14,7 +14,7 @@ const urlsToCache = [
   "/img/search.png",
   "/img/filtro.png",
   "/img/orden.png",
-  "/img/recipe-null.png",
+  "/img/recipe-null.png",  // Imagen por defecto para errores
   "/img/heart-filled.svg",
   "/img/heart-outline.svg",
   "/img/edit.png"
@@ -56,9 +56,7 @@ self.addEventListener("activate", (event) => {
 });
 
 /**
- * Manejo de peticiones: 
- * - Cache First para recursos estáticos.
- * - Stale-While-Revalidate para datos de la API.
+ * Manejo de peticiones:
  */
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -66,6 +64,25 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;  // Ignora solicitudes que no sean GET
 
   const requestURL = new URL(request.url);
+
+  // Manejo específico para imágenes
+  if (request.destination === "image") {
+    event.respondWith(
+      caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) {
+          console.log(`[Service Worker] Imagen servida desde caché: ${request.url}`);
+          return cachedResponse;
+        }
+        return fetch(request).then((networkResponse) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, networkResponse.clone());
+            return networkResponse;
+          });
+        }).catch(() => caches.match("/img/recipe-null.png"));  // Imagen por defecto si no hay conexión
+      })
+    );
+    return;
+  }
 
   // Cachear solicitudes a la API (recetas y listas de compras)
   if (requestURL.pathname.startsWith("/api/recipes") || requestURL.pathname.startsWith("/api/shopping-lists")) {
