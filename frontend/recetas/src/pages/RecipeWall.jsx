@@ -221,13 +221,13 @@ const RecipeWall = () => {
   // Cargar recetas favoritas desde localStorage si está offline
   useEffect(() => {
     if (isOffline) {
-      const recetasOffline = JSON.parse(localStorage.getItem("recetasGuardadas")) || [];
+      const recetasOffline =
+        JSON.parse(localStorage.getItem("recetasGuardadas")) || [];
       setRecipes(recetasOffline);
     } else {
-      loadAllRecipes();  // Si vuelve la conexión, cargamos desde la API
+      loadAllRecipes(); // Si vuelve la conexión, cargamos desde la API
     }
   }, [isOffline, loadAllRecipes]);
-  
 
   /**
    * Función para manejar la lógica de paginación.
@@ -274,19 +274,6 @@ const RecipeWall = () => {
       className="recipe-wall-container min-h-screen flex text-azul-bg pb-20 pt-10 relative"
       role="main"
     >
-      {/* Mostrar mensaje si está sin conexión */}
-      {isOffline && (
-        <div className="offline-message text-center text-white bg-azul-bg p-4 rounded-md shadow-md mb-4">
-          <h2 className="text-naranja-bg text-2xl font-bold">
-            Recetas guardadas como favoritos
-          </h2>
-          <p className="mt-2">
-            Estás viendo tus recetas guardadas como favoritos. Si querés acceder
-            a más recetas sin conexión, asegurate de guardarlas cuando tengas
-            internet.
-          </p>
-        </div>
-      )}
       {/* Sidebar con expansión */}
       <div
         className={` rounded-md shadow-md sidebar-container ${
@@ -463,7 +450,19 @@ const RecipeWall = () => {
               <p className="mt-10 mb-10 text-white text-center font-josefin">
                 Resultados:
               </p>
-
+              {/* Mostrar mensaje si está sin conexión */}
+              {isOffline && (
+                <div className="offline-message text-center text-white bg-azul-bg p-4 rounded-md shadow-md mb-4">
+                  <h2 className="text-naranja-bg text-2xl font-bold">
+                    Recetas guardadas como favoritos
+                  </h2>
+                  <p className="mt-2">
+                    Estás viendo tus recetas guardadas como favoritos. Si querés
+                    acceder a más recetas sin conexión, asegurate de guardarlas
+                    cuando tengas internet.
+                  </p>
+                </div>
+              )}
               {isLoading ? (
                 <LoadingSpinner />
               ) : recipes.length > 0 ? (
