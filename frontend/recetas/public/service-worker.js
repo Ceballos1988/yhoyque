@@ -1,4 +1,4 @@
-const CACHE_NAME = "v31";  // Incrementa la versión para forzar la actualización del caché
+const CACHE_NAME = "v32";  // Nueva versión para forzar actualización
 
 const urlsToCache = [
   "/", 
@@ -8,13 +8,11 @@ const urlsToCache = [
   "/styles/main.css",
   "/img/icon-192x192.png",
   "/img/icon-512x512.png",
-  "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png",
   "/img/abrir.png",
   "/img/delete.png",
   "/img/search.png",
   "/img/filtro.png",
   "/img/orden.png",
-  "/img/recipe-null.png",
   "/img/heart-filled.svg",
   "/img/heart-outline.svg",
   "/img/edit.png"
@@ -22,21 +20,19 @@ const urlsToCache = [
 
 // Evento de instalación: Cachea los archivos esenciales
 self.addEventListener("install", (event) => {
-  console.log("[Service Worker] Instalando el service worker...");
+  console.log("[Service Worker] Instalando...");
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Cacheando archivos...");
+      console.log("[Service Worker] Cacheando archivos esenciales...");
       return cache.addAll(urlsToCache);
-    }).catch(err => {
-      console.error("[Service Worker] Error al cachear archivos:", err);
-    })
+    }).catch(err => console.error("[Service Worker] Error al cachear:", err))
   );
-  self.skipWaiting();  // Activa el SW inmediatamente
+  self.skipWaiting();
 });
 
 // Activación del Service Worker: Limpia cachés antiguas
 self.addEventListener("activate", (event) => {
-  console.log("[Service Worker] Activando el service worker...");
+  console.log("[Service Worker] Activando...");
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -49,7 +45,7 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
-  self.clients.claim();  // Controla todas las páginas abiertas
+  self.clients.claim();
 });
 
 // Manejo de peticiones
@@ -62,30 +58,31 @@ self.addEventListener("fetch", (event) => {
   // Diferenciar entre navegación y otros recursos
   if (request.mode === "navigate") {
     event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        return cachedResponse || fetch(request).catch(() => caches.match("/offline.html"));
+      caches.match("/offline.html").then((cachedOffline) => {
+        return fetch(request).catch(() => cachedOffline);
       })
     );
   } else {
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
         if (cachedResponse) {
-          return cachedResponse;  // Devuelve desde el caché si está disponible
+          return cachedResponse;
         }
 
         return fetch(request)
           .then((networkResponse) => {
-            // Cachea solo recursos del mismo origen
-            if (request.url.startsWith(self.location.origin)) {
-              return caches.open(CACHE_NAME).then((cache) => {
+            return caches.open(CACHE_NAME).then((cache) => {
+              // Cachea solo recursos del mismo dominio y Cloudinary
+              if (
+                request.url.startsWith(self.location.origin) ||
+                request.url.includes("res.cloudinary.com")
+              ) {
                 cache.put(request, networkResponse.clone());
-                return networkResponse;
-              });
-            }
-            return networkResponse;
+              }
+              return networkResponse;
+            });
           })
           .catch(() => {
-            // Para imágenes que no están en caché, muestra un placeholder
             if (request.destination === "image") {
               return caches.match("/img/recipe-null.png");
             }
