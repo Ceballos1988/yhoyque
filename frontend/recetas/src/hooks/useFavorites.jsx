@@ -30,6 +30,7 @@ const useFavorites = () => {
       );
       if (response.status === 200) {
         setFavorites(response.data.recipes);
+        localStorage.setItem("recetasGuardadas", JSON.stringify(response.data.recipes));  // Guardar en LocalStorage
       } else {
         console.error("No se pudieron obtener los favoritos correctamente");
       }
@@ -37,6 +38,7 @@ const useFavorites = () => {
       console.error("Error al obtener favoritos", error);
     }
   };
+  
 
   /**
    * Agregar una receta a la lista de favoritos.

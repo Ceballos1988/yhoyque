@@ -2,7 +2,7 @@
  * Nombre de la caché utilizada en la aplicación.
  * Asegúrate de cambiar la versión cada vez que hagas cambios importantes.
  */
-const CACHE_NAME = "v19";  // Incrementa la versión para asegurarte de que se actualice el caché
+const CACHE_NAME = "v20";  // Incrementa la versión para asegurarte de que se actualice el caché
 
 /**
  * Lista de archivos a cachear.
@@ -14,8 +14,14 @@ const urlsToCache = [
   "/styles/main.css",
   "/img/icon-192x192.png",
   "/img/icon-512x512.png",
-  "/recipe-wall",           // Vista del muro de recetas
-  "/shopping-lists"         // Lista de compras
+  "/recipe-wall",
+  "/shopping-lists",
+  "/img/volver.png",
+  "/img/delete.png",
+  "/img/recipe-null.png",
+  "/img/heart-filled.svg",
+  "/img/heart-outline.svg",
+  "/img/search.png"
 ];
 
 /**
@@ -70,16 +76,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Cachear las listas de compras y recetas guardadas para acceso offline
-  if (url.pathname.startsWith("/api/shopping-lists") || url.pathname.startsWith("/api/favorites")) {
+  // Cachear todas las solicitudes a la API para que estén disponibles sin conexión
+  if (url.pathname.startsWith("/api/")) {
     event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        return fetch(event.request)
-          .then((response) => {
-            cache.put(event.request, response.clone());  // Actualiza el caché con la nueva respuesta
-            return response;
-          })
-          .catch(() => caches.match(event.request) || caches.match("/offline.html"));  // Muestra datos cacheados si no hay conexión
+      caches.open(CACHE_NAME).then(async (cache) => {
+        try {
+          const response = await fetch(event.request);
+          cache.put(event.request, response.clone()); // Guarda la respuesta actualizada
+          return response;
+        } catch  {
+          console.warn("[Service Worker] Sin conexión, usando datos cacheados:", event.request.url);
+          return caches.match(event.request) || caches.match("/offline.html");  // Usa datos cacheados si no hay conexión
+        }
       })
     );
     return;

@@ -28,10 +28,13 @@ const ShoppingListsPage = () => {
       const token = localStorage.getItem("token");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
-    
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setShoppingLists(response.data);
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(response.data)
+      ); // Guardar listas en LocalStorage
     } catch (error) {
       console.error("Error al cargar listas de compras:", error);
     } finally {
@@ -42,7 +45,17 @@ const ShoppingListsPage = () => {
   useEffect(() => {
     fetchShoppingLists();
   }, []);
-
+  // Nuevo useEffect para manejar el modo offline
+  useEffect(() => {
+    if (!navigator.onLine) {
+      // Si no hay conexión
+      const listasOffline =
+        JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+      setShoppingLists(listasOffline);
+    } else {
+      fetchShoppingLists(); // Si vuelve la conexión, cargamos desde la API
+    }
+  }, []);
   // Crear nueva lista
   const handleCreateList = async () => {
     if (!newListName.trim()) {
@@ -59,7 +72,7 @@ const ShoppingListsPage = () => {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
-    
+
         { name: newListName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -75,10 +88,12 @@ const ShoppingListsPage = () => {
   const handleDeleteList = async (listId) => {
     try {
       const token = localStorage.getItem("token");
-await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}`, {
-
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setShoppingLists(shoppingLists.filter((list) => list._id !== listId));
     } catch (error) {
       console.error("Error al eliminar la lista:", error);
@@ -92,8 +107,10 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}/categories`,
-    
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shopping-lists/${listId}/categories`,
+
         { title },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -114,9 +131,11 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}/categories/${categoryId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shopping-lists/${listId}/categories/${categoryId}`,
         { title: newTitle.trim() },
-    
+
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setShoppingLists((prevLists) =>
@@ -143,10 +162,12 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}/categories/${categoryId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shopping-lists/${listId}/categories/${categoryId}`,
         { headers: { Authorization: `Bearer ${token}` } }
-    );
-    
+      );
+
       setShoppingLists((prevLists) =>
         prevLists.map((list) =>
           list._id === listId
@@ -178,7 +199,9 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
 
     try {
       const token = localStorage.getItem("token");
-      const url = `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}/categories/${categoryId}/items`;
+      const url = `${
+        import.meta.env.VITE_API_URL
+      }/api/shopping-lists/${listId}/categories/${categoryId}/items`;
 
       const response = await axios.post(url, itemData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -209,7 +232,9 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}/categories/${categoryId}/items/${itemId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shopping-lists/${listId}/categories/${categoryId}/items/${itemId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -240,7 +265,9 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}/categories/${categoryId}/items/${itemId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shopping-lists/${listId}/categories/${categoryId}/items/${itemId}`,
         {},
 
         { headers: { Authorization: `Bearer ${token}` } }
@@ -303,21 +330,21 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
     }
   };
 
-
-
   // Agregar ingredientes faltantes a una lista de compras
   const handleAddMissingIngredientsToList = async (selectedIngredients) => {
     if (!selectedIngredients.length) return;
-  
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${shoppingLists[0]._id}/ingredients`,
+        `${import.meta.env.VITE_API_URL}/api/shopping-lists/${
+          shoppingLists[0]._id
+        }/ingredients`,
         { ingredients: selectedIngredients },
 
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
       setShoppingLists((prevLists) =>
         prevLists.map((list) =>
           list._id === shoppingLists[0]._id
@@ -331,7 +358,6 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
       console.error("Error al agregar ingredientes a la lista:", error);
     }
   };
-  
 
   return (
     <div className="shopping-lists-page min-h-screen flex text-azul-bg pb-20 pt-10 relative ">
@@ -470,14 +496,10 @@ await axios.delete(`${import.meta.env.VITE_API_URL}/api/shopping-lists/${listId}
                 onDelete={() => handleDeleteList(list._id)}
                 onEditName={handleEditName} // Aquí se pasa la función como prop
               />
-        
             ))
           ) : (
-            
             <p className="text-center">No tienes listas de compras aún.</p>
           )}
-
-    
         </div>
         {/* Agregar el componente BrandCarousel */}
         <BrandCarousel />
