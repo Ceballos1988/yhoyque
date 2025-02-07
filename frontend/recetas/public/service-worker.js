@@ -2,7 +2,7 @@
  * Nombre de la caché utilizada en la aplicación.
  * Asegúrate de cambiar la versión cada vez que hagas cambios importantes.
  */
-const CACHE_NAME = "v22";  // Incrementa la versión para asegurarte de que se actualice el caché
+const CACHE_NAME = "v23";  // Incrementa la versión para asegurarte de que se actualice el caché
 
 /**
  * Lista de archivos a cachear.
@@ -12,17 +12,18 @@ const urlsToCache = [
   "/manifest.json",
   "/offline.html",
   "/styles/main.css",
-  "./img/icon-192x192.png",
-  "./img/icon-512x512.png",
+  "/img/icon-192x192.png",
+  "/img/icon-512x512.png",
   "/recipe-wall",
   "/shopping-lists",
-  "./img/volver.png",
-  "./img/delete.png",
-  "./img/recipe-null.png",
-  "./img/heart-filled.svg",
-  "./img/heart-outline.svg",
-  "./img/search.png"
+  "/img/volver.png",
+  "/img/delete.png",
+  "/img/recipe-null.png",
+  "/img/heart-filled.svg",
+  "/img/heart-outline.svg",
+  "/img/search.png"
 ];
+
 
 /**
  * Evento de instalación: Se encarga de cachear los archivos esenciales.
