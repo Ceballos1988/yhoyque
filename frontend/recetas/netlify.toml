@@ -1,19 +1,13 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[build]
+  command = "npm run build"
+  publish = "dist"
 
 [[headers]]
   for = "/service-worker.js"
-  [headers]
+  [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/*.html"
-  [headers]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/img/*"
-  [headers]
+  for = "/*"
+  [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
