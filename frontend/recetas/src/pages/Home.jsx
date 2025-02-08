@@ -6,7 +6,6 @@ import "aos/dist/aos.css";
 import HeroSection from "../components/home/HeroSection";
 import DescriptionSection from "../components/home/DescriptionSection";
 import FeaturesSection from "../components/home/FeaturesSection";
-import DownloadSection from "../components/home/DownloadSection";
 import CommunitySection from "../components/home/CommunitySection";
 import TestimonialCarousel from "../components/home/TestimonialCarousel";
 import SpinnerFood from "../components/SpinnerFood";
@@ -72,7 +71,6 @@ function Home() {
         <HeroSection isAuthenticated={isAuthenticated} logout={logout} />
         <DescriptionSection />
         <FeaturesSection />
-        <DownloadSection />
         <CommunitySection />
         <TestimonialCarousel />
       </div>

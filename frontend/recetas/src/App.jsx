@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -29,6 +29,7 @@ function App() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const location = useLocation();  // Para detectar la ruta actual
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,10 +57,7 @@ function App() {
     });
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
@@ -71,20 +69,19 @@ function App() {
             <div className="App">
               <Navbar />
 
+              {/* Sección de descarga solo visible en Home */}
+              {location.pathname === "/" && (
+                <DownloadSection deferredPrompt={deferredPrompt} isInstallable={isInstallable} />
+              )}
+
               <Routes>
                 {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/create-recipe" element={<CreateRecipe />} />
-                <Route
-                  path="/create-recipe/:recipeId"
-                  element={<CreateRecipe />}
-                />
+                <Route path="/create-recipe/:recipeId" element={<CreateRecipe />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route
-                  path="/reset-password/:token"
-                  element={<ResetPassword />}
-                />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/recipe-wall" element={<RecipeWall />} />
@@ -98,19 +95,12 @@ function App() {
                 </Route>
               </Routes>
 
-              {/* Sección de descarga de la aplicación */}
-              <DownloadSection
-                deferredPrompt={deferredPrompt}
-                isInstallable={isInstallable}
-              />
-
               <Footer />
 
+              {/* Botón para volver al inicio de la página */}
               {showScrollTopButton && (
                 <button
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   aria-label="Volver al inicio de la página"
                   style={{
                     position: "fixed",
@@ -126,12 +116,8 @@ function App() {
                     zIndex: 1000,
                     transition: "background-color 0.3s ease",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.backgroundColor = "#0f172b")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.backgroundColor = "#EE8532")
-                  }
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#0f172b")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
                 >
                   ↑
                 </button>
