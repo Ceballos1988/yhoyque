@@ -20,16 +20,13 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { OfflineProvider } from "./context/OfflineContext";
 import "./styles/main.css";
-import DownloadSection from "./components/home/DownloadSection"; // Importar DownloadSection
+import DownloadSection from "./components/home/DownloadSection";
 
-/**
- * Componente principal de la aplicación.
- */
 function App() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
-  const location = useLocation();  // Para detectar la ruta actual
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,20 +43,35 @@ function App() {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsInstallable(true); // Habilitar botón de instalación
+      setIsInstallable(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     window.addEventListener("appinstalled", () => {
       console.log("✅ La aplicación ha sido instalada.");
-      setIsInstallable(false); // Ocultar el botón tras la instalación
+      setIsInstallable(false);
     });
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
+
+  const handleInstallApp = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(({ outcome }) => {
+        if (outcome === "accepted") {
+          console.log("👍 Instalación aceptada.");
+        } else {
+          console.log("👎 Instalación rechazada.");
+        }
+        setDeferredPrompt(null);
+        setIsInstallable(false);
+      });
+    }
+  };
 
   return (
     <AuthProvider>
@@ -71,11 +83,10 @@ function App() {
 
               {/* Sección de descarga solo visible en Home */}
               {location.pathname === "/" && (
-                <DownloadSection deferredPrompt={deferredPrompt} isInstallable={isInstallable} />
+                <DownloadSection />
               )}
 
               <Routes>
-                {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/create-recipe" element={<CreateRecipe />} />
                 <Route path="/create-recipe/:recipeId" element={<CreateRecipe />} />
@@ -88,8 +99,6 @@ function App() {
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/shopping-lists" element={<ShoppingListsPage />} />
-
-                {/* Rutas protegidas para administrador */}
                 <Route path="/admin/*" element={<AdminRoute />}>
                   <Route path="dashboard" element={<AdminDashboard />} />
                 </Route>
@@ -97,7 +106,7 @@ function App() {
 
               <Footer />
 
-              {/* Botón para volver al inicio de la página */}
+              {/* Botón de volver arriba */}
               {showScrollTopButton && (
                 <button
                   onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -120,6 +129,32 @@ function App() {
                   onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
                 >
                   ↑
+                </button>
+              )}
+
+              {/* Botón de instalación en el lado izquierdo */}
+              {isInstallable && (
+                <button
+                  onClick={handleInstallApp}
+                  aria-label="Instalar la aplicación"
+                  style={{
+                    position: "fixed",
+                    bottom: "20px",
+                    left: "20px",
+                    backgroundColor: "#0f172b",
+                    color: "#fff",
+                    border: "none",
+                    width: window.innerWidth < 550 ? "40px" : "50px",
+                    height: window.innerWidth < 550 ? "40px" : "50px",
+                    fontSize: window.innerWidth < 550 ? "16px" : "18px",
+                    cursor: "pointer",
+                    zIndex: 1000,
+                    transition: "background-color 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
+                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#0f172b")}
+                >
+                  ⬇
                 </button>
               )}
             </div>
