@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/components/home/style.downloadSection.css";
 
 function DownloadSection() {
@@ -10,9 +10,9 @@ function DownloadSection() {
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
       console.log("📲 La app está lista para ser instalada.");
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);  // Mostrar el botón
+      e.preventDefault();  // Prevenir el comportamiento por defecto
+      setDeferredPrompt(e);  // Guardar el evento para usar más tarde
+      setIsInstallable(true);  // Mostrar el botón de instalación
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -22,11 +22,14 @@ function DownloadSection() {
     };
   }, []);
 
-  // Verificar si la app ya está instalada
+  // Verificar si la app ya está instalada y si la API de compartir está disponible
   useEffect(() => {
     const checkIfInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {
-        setIsInstallable(false); // Ocultar el botón si ya está instalada
+        console.log("✅ La app ya está instalada.");
+        setIsInstallable(false);  // Ocultar el botón si ya está instalada
+      } else {
+        console.log("🌐 La app no está instalada, mostrando el botón.");
       }
     };
 
@@ -34,33 +37,43 @@ function DownloadSection() {
 
     window.addEventListener("appinstalled", () => {
       console.log("✅ La aplicación ha sido instalada.");
-      setIsInstallable(false); // Ocultar el botón después de la instalación
+      setIsInstallable(false);  // Ocultar el botón después de la instalación
     });
 
     // Mostrar el botón si está en modo navegador
     if (window.matchMedia("(display-mode: browser)").matches) {
+      console.log("🌐 La app está en modo navegador.");
       setIsInstallable(true);
     }
 
     // Verificar si la API de compartir está disponible
     if (navigator.share) {
+      console.log("📤 API de compartir disponible.");
       setCanShare(true);
+    } else {
+      console.log("🚫 API de compartir no soportada en este navegador.");
     }
   }, []);
 
   // Función para instalar la app
   const handleInstallApp = () => {
     if (deferredPrompt) {
+      console.log("🛠️ Lanzando el prompt de instalación...");
       deferredPrompt.prompt();
+
       deferredPrompt.userChoice.then(({ outcome }) => {
         if (outcome === "accepted") {
           console.log("👍 Instalación aceptada.");
         } else {
           console.log("👎 Instalación rechazada.");
         }
-        setDeferredPrompt(null); // Resetear el prompt
-        setIsInstallable(false); // Ocultar el botón después de intentar instalar
+        setDeferredPrompt(null);  // Resetear el prompt después de usarlo
+        setIsInstallable(false);  // Ocultar el botón después de intentar instalar
+      }).catch((error) => {
+        console.error("❌ Error durante la instalación:", error);
       });
+    } else {
+      console.warn("⚠️ No hay prompt de instalación disponible.");
     }
   };
 
@@ -79,7 +92,11 @@ function DownloadSection() {
   };
 
   return (
-    <section className="download-section bg-naranja-bg text-white py-10 relative" data-aos="fade-up" aria-labelledby="download-title">
+    <section 
+      className="download-section bg-naranja-bg text-white py-10 relative" 
+      data-aos="fade-up" 
+      aria-labelledby="download-title"
+    >
       <div className="download-content container mx-auto flex flex-col lg:flex-row justify-center items-center gap-10">
         <div className="download-text lg:w-1/2 text-left mt-10 mb-10 ml-10">
           <h2 id="download-title" className="section-title text-left pb-10 text-azul-bg">
@@ -95,7 +112,7 @@ function DownloadSection() {
           </p>
 
           <div className="mt-5 flex flex-col gap-4">
-            {isInstallable && (
+            {isInstallable ? (
               <button
                 className="button-download mt-6 font-raleway font-bold text-white mx-auto text-center"
                 onClick={handleInstallApp}
@@ -103,6 +120,13 @@ function DownloadSection() {
               >
                 Instalar la App
               </button>
+            ) : (
+              <p className="text-center text-sm mt-4">
+                {deferredPrompt === null 
+                  ? "La app ya está instalada o no está disponible para instalar."
+                  : "La app está lista para instalar."
+                }
+              </p>
             )}
 
             {canShare && (

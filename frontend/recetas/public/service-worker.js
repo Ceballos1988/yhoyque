@@ -1,4 +1,4 @@
-const CACHE_NAME = "v36";
+const CACHE_NAME = "v38";
 
 const urlsToCache = [
   "/", 
@@ -6,21 +6,22 @@ const urlsToCache = [
   "/offline.html",
   "/index.html",
   "/styles/main.css",
-  "public/img/icon-192x192.png",
-  "public/img/icon-512x512.png",
-  "public/img/abrir.png",
-  "/img/delete.png",
-  "public/img/search.png",
-  "public/img/filtro.png",
-  "public/img/orden.png",
-  "public/img/heart-filled.svg",
-  "public/img/heart-outline.svg",
-  "public/img/edit.png",
-  "public/img/recipe-null.png",
-  "public/img/offline.png",
+  "img/icon-192x192.png",
+  "img/icon-512x512.png",
+  "img/abrir.png",
+  "img/delete.png",
+  "img/search.png",
+  "img/filtro.png",
+  "img/orden.png",
+  "img/heart-filled.svg",
+  "img/heart-outline.svg",
+  "img/edit.png",
+  "img/recipe-null.png",
+  "img/offline.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
 ];
 
+// Cachear recursos iniciales durante la instalación
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
@@ -28,43 +29,55 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
+// Limpiar cachés antiguos durante la activación
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) =>
-      Promise.all(cacheNames.map((cacheName) => {
-        if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
-      }))
+      Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
+        })
+      )
     )
   );
   self.clients.claim();
 });
 
+// Manejar las solicitudes
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
 
+  // Manejar la navegación
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(() => caches.match("/offline.html")));
+    event.respondWith(
+      fetch(request).catch(() => caches.match("/offline.html"))
+    );
   } else {
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
         if (cachedResponse) return cachedResponse;
-        return fetch(request).then((networkResponse) => {
-          return caches.open(CACHE_NAME).then((cache) => {
-            if (
-              request.url.startsWith(self.location.origin) ||
-              request.url.includes("res.cloudinary.com") ||
-              request.url.includes("yhoyque.onrender.com/api")
-            ) {
-              cache.put(request, networkResponse.clone());
+
+        return fetch(request)
+          .then((networkResponse) => {
+            return caches.open(CACHE_NAME).then((cache) => {
+              // Cachear solo si es un recurso estático o una API importante
+              if (
+                request.url.startsWith(self.location.origin) ||
+                request.url.includes("res.cloudinary.com") ||
+                request.url.includes("yhoyque.onrender.com/api/shopping-lists")
+              ) {
+                cache.put(request, networkResponse.clone());
+              }
+              return networkResponse;
+            });
+          })
+          .catch(() => {
+            // Fallback para imágenes
+            if (request.destination === "image") {
+              return caches.match("/img/recipe-null.png");
             }
-            return networkResponse;
           });
-        }).catch(() => {
-          if (request.destination === "image") {
-            return caches.match("/img/recipe-null.png");
-          }
-        });
       })
     );
   }

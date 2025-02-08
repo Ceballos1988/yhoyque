@@ -434,47 +434,44 @@ const ShoppingListsPage = () => {
     }
   };
   const sincronizarListas = async () => {
-    const listasOffline =
-      JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
-    const listasNoSincronizadas = listasOffline.filter((list) =>
-      list._id.startsWith("local-")
-    );
-
+    const listasOffline = JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+    const listasNoSincronizadas = listasOffline.filter((list) => list._id.startsWith("local-"));
+  
     if (listasNoSincronizadas.length === 0) return;
-
+  
     try {
       const token = localStorage.getItem("token");
       const listasSincronizadas = [];
-
+  
       for (const lista of listasNoSincronizadas) {
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
           { name: lista.name },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        // Reemplaza el ID temporal con el del servidor
-        listasSincronizadas.push({
-          ...lista,
-          _id: response.data._id,
-        });
+  
+        listasSincronizadas.push({ ...lista, _id: response.data._id });
       }
-
-      // Combina listas sincronizadas con las que ya estaban online
+  
       const listasActualizadas = [
         ...listasOffline.filter((list) => !list._id.startsWith("local-")),
         ...listasSincronizadas,
       ];
-
-      localStorage.setItem(
-        "listasComprasGuardadas",
-        JSON.stringify(listasActualizadas)
-      );
-      setShoppingLists(listasActualizadas); // Actualiza la UI
+  
+      localStorage.setItem("listasComprasGuardadas", JSON.stringify(listasActualizadas));
+      setShoppingLists(listasActualizadas);
     } catch (error) {
       console.error("Error al sincronizar listas:", error);
     }
   };
+  
+  useEffect(() => {
+    window.addEventListener("online", sincronizarListas);
+    return () => {
+      window.removeEventListener("online", sincronizarListas);
+    };
+  }, []);
+  
 
   useEffect(() => {
     window.addEventListener("online", sincronizarListas);

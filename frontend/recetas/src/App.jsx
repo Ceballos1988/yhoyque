@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -24,12 +20,15 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { OfflineProvider } from "./context/OfflineContext";
 import "./styles/main.css";
+import DownloadSection from "./components/home/DownloadSection"; // Importar DownloadSection
 
 /**
  * Componente principal de la aplicación.
  */
 function App() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +38,29 @@ function App() {
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Manejar el evento de instalación de PWA
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true); // Habilitar botón de instalación
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    window.addEventListener("appinstalled", () => {
+      console.log("✅ La aplicación ha sido instalada.");
+      setIsInstallable(false); // Ocultar el botón tras la instalación
+    });
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+    };
   }, []);
 
   return (
@@ -53,10 +75,16 @@ function App() {
                 {/* Rutas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/create-recipe" element={<CreateRecipe />} />
-                <Route path="/create-recipe/:recipeId" element={<CreateRecipe />} />
+                <Route
+                  path="/create-recipe/:recipeId"
+                  element={<CreateRecipe />}
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route
+                  path="/reset-password/:token"
+                  element={<ResetPassword />}
+                />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/recipe-wall" element={<RecipeWall />} />
@@ -69,6 +97,12 @@ function App() {
                   <Route path="dashboard" element={<AdminDashboard />} />
                 </Route>
               </Routes>
+
+              {/* Sección de descarga de la aplicación */}
+              <DownloadSection
+                deferredPrompt={deferredPrompt}
+                isInstallable={isInstallable}
+              />
 
               <Footer />
 
