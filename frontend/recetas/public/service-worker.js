@@ -1,4 +1,4 @@
-const CACHE_NAME = "v35";
+const CACHE_NAME = "v36";
 
 const urlsToCache = [
   "/", 
@@ -6,18 +6,19 @@ const urlsToCache = [
   "/offline.html",
   "/index.html",
   "/styles/main.css",
-  "/img/icon-192x192.png",
-  "/img/icon-512x512.png",
-  "/img/abrir.png",
+  "public/img/icon-192x192.png",
+  "public/img/icon-512x512.png",
+  "public/img/abrir.png",
   "/img/delete.png",
-  "/img/search.png",
-  "/img/filtro.png",
-  "/img/orden.png",
-  "/img/heart-filled.svg",
-  "/img/heart-outline.svg",
-  "/img/edit.png",
-  "/img/recipe-null.png",
-  "/img/offline.png"
+  "public/img/search.png",
+  "public/img/filtro.png",
+  "public/img/orden.png",
+  "public/img/heart-filled.svg",
+  "public/img/heart-outline.svg",
+  "public/img/edit.png",
+  "public/img/recipe-null.png",
+  "public/img/offline.png",
+  "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
 ];
 
 self.addEventListener("install", (event) => {

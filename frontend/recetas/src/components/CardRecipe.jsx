@@ -12,6 +12,21 @@ import UserProfileModal from "./UserProfileModal"; // Importar el nuevo componen
 import MissingIngredientsModal from "./MissingIngredientsModal"; // Importar el modal de ingredientes faltantes
 import ReportButton from "./ReportButton";
 
+const safeAxiosGet = async (url, config = {}) => {
+  if (!navigator.onLine) {
+    console.warn("Estás offline, no se puede hacer la solicitud:", url);
+    return null;
+  }
+
+  try {
+    const response = await axios.get(url, config);
+    return response;
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    return null;
+  }
+};
+
 const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   const { user: currentUser } = useAuth();
   const currentUserId = currentUser?.id || "guest"; // Cambia `._id` por `.id` si esa es la estructura del objeto
@@ -93,13 +108,12 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
 
   useEffect(() => {
     const updateUserName = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
-        );
+      const res = await safeAxiosGet(
+        `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
+      );
+
+      if (res) {
         setUserName(res.data.username);
-      } catch (error) {
-        console.error("Error al obtener el nombre de usuario:", error);
       }
     };
 
@@ -108,13 +122,12 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
 
   useEffect(() => {
     const fetchCommentsCount = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/comments/recipe/${recipe._id}`
-        );
+      const res = await safeAxiosGet(
+        `${import.meta.env.VITE_API_URL}/api/comments/recipe/${recipe._id}`
+      );
+
+      if (res) {
         setCommentsCount(res.data.comments.length);
-      } catch (error) {
-        console.error("Error al cargar el conteo de comentarios:", error);
       }
     };
 
@@ -122,22 +135,17 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   }, [recipe._id]);
 
   const fetchComments = async (recipeId) => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/comments/recipe/${recipeId}`
-      );
+    const res = await safeAxiosGet(
+      `${import.meta.env.VITE_API_URL}/api/comments/recipe/${recipeId}`
+    );
 
+    if (res) {
       setComments((prevComments) => ({
         ...prevComments,
         [recipeId]: res.data.comments || [],
       }));
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setMessage("No se encontraron comentarios para esta receta.");
-      } else {
-        setMessage("Error al cargar los comentarios.");
-      }
-      console.error("Error al cargar comentarios:", error);
+    } else {
+      setMessage("No se encontraron comentarios o estás sin conexión.");
     }
   };
 
@@ -281,15 +289,14 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       }
     }
 
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
-      );
+    const res = await safeAxiosGet(
+      `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
+    );
+
+    if (res) {
       setUserDetails(res.data);
       localStorage.setItem(`user-${recipe.userId}`, JSON.stringify(res.data));
       setShowUserModal(true);
-    } catch (error) {
-      console.error("Error al obtener los detalles del usuario:", error);
     }
   };
 
@@ -309,6 +316,77 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     }
   };
 
+  useEffect(() => {
+    const cacheRecipeData = () => {
+      const cachedRecipes =
+        JSON.parse(localStorage.getItem("cachedRecipes")) || [];
+
+      // Verificamos si ya está guardada la receta
+      const isAlreadyCached = cachedRecipes.some((r) => r._id === recipe._id);
+
+      if (!isAlreadyCached) {
+        cachedRecipes.push({
+          _id: recipe._id,
+          title: recipe.title,
+          image: recipe.image,
+          ingredients: recipe.ingredients,
+          steps: recipe.steps,
+          likes: recipe.likes,
+          isFavorited,
+        });
+
+        localStorage.setItem("cachedRecipes", JSON.stringify(cachedRecipes));
+      }
+    };
+
+    cacheRecipeData();
+  }, [recipe, isFavorited]);
+  useEffect(() => {
+    if (!navigator.onLine) {
+      const cachedRecipes =
+        JSON.parse(localStorage.getItem("cachedRecipes")) || [];
+      const cachedRecipe = cachedRecipes.find((r) => r._id === recipe._id);
+
+      if (cachedRecipe) {
+        setIsFavorited(cachedRecipe.isFavorited);
+        setLikes(cachedRecipe.likes || []);
+      } else {
+        console.warn("Receta no encontrada en caché.");
+      }
+    }
+  }, [recipe._id]);
+
+  useEffect(() => {
+    const cacheImage = async () => {
+      if (!navigator.onLine) return;
+
+      const cachedImages =
+        JSON.parse(localStorage.getItem("cachedImages")) || {};
+
+      if (!cachedImages[recipe._id] && recipe.image) {
+        try {
+          const response = await fetch(recipe.image);
+          const blob = await response.blob();
+          const reader = new FileReader();
+
+          reader.onloadend = () => {
+            cachedImages[recipe._id] = reader.result;
+            localStorage.setItem("cachedImages", JSON.stringify(cachedImages));
+          };
+
+          reader.readAsDataURL(blob);
+        } catch (error) {
+          console.error("Error al cachear la imagen:", error);
+        }
+      }
+    };
+
+    cacheImage();
+  }, [recipe.image, recipe._id]);
+
+  const cachedImages = JSON.parse(localStorage.getItem("cachedImages")) || {};
+  const recipeImage =
+    cachedImages[recipe._id] || recipe.image || "/img/recipe-null.png";
   return (
     <div
       className={`mb-10 recipe-card relative ${isLoaded ? "loaded" : ""} ${
@@ -329,7 +407,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
 
       <div className="relative">
         <img
-          src={recipe.image || "/img/recipe-null.png"}
+          src={recipeImage}
           alt={recipe.title || "Receta"}
           className="w-full h-48 object-cover rounded-md mb-4"
         />

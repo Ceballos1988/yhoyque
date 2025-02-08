@@ -49,24 +49,25 @@ const ShoppingList = ({
       alert("El nombre del ítem es obligatorio.");
       return;
     }
-  
+
     const newItem = {
+      _id: `local-item-${Date.now()}`, // ID temporal para ítem
       name: itemName.trim(),
       quantity: itemQuantity.trim() ? Number(itemQuantity) : null,
       unit: itemUnit.trim() || null,
+      isPurchased: false,
     };
-  
-    // Si no hay categoría seleccionada, evitar la acción
-    if (!modalCategoryId) {
-      alert("Primero debes crear una categoría.");
+
+    if (!navigator.onLine) {
+      onAddItem(modalCategoryId, newItem); // Enviar ítem al padre
+      closeModal();
       return;
     }
-  
+
+    // Si hay conexión, usar el comportamiento original
     onAddItem(modalCategoryId, newItem);
-  
     closeModal();
   };
-  
 
   // Guardar el nombre editado de la lista
   const handleNameEdit = () => {
@@ -110,9 +111,25 @@ const ShoppingList = ({
       alert("El nombre de la categoría no puede estar vacío.");
       return;
     }
+  
+    if (!navigator.onLine) {
+      // Crear categoría localmente con ID temporal
+      const nuevaCategoria = {
+        _id: `local-cat-${Date.now()}`, // ID temporal
+        title: newCategoryTitle.trim(),
+        items: [],
+      };
+  
+      onAddCategory(list._id, nuevaCategoria);  // Enviar al callback del padre para actualizar el estado
+      closeCategoryModal();
+      return;
+    }
+  
+    // Si hay conexión, usar el comportamiento original
     onAddCategory(list._id, newCategoryTitle.trim());
     closeCategoryModal();
   };
+  
 
   return (
     <div className="shopping-list-card  p-4   rounded-lg shadow-md">
@@ -192,8 +209,7 @@ const ShoppingList = ({
         </button>
       </div>
 
-      <p
-       className="text-gray-500 create">
+      <p className="text-gray-500 create">
         Creado: {new Date(list.createdAt).toLocaleDateString()}
       </p>
 
@@ -445,20 +461,20 @@ const ShoppingList = ({
 
 ShoppingList.propTypes = {
   list: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
+    _id: PropTypes.string, // Ya no es requerido para listas locales
     name: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
+    createdAt: PropTypes.string,
     categories: PropTypes.arrayOf(
       PropTypes.shape({
-        _id: PropTypes.string.isRequired,
+        _id: PropTypes.string, // Ya no es requerido para categorías locales
         title: PropTypes.string.isRequired,
         items: PropTypes.arrayOf(
           PropTypes.shape({
-            _id: PropTypes.string.isRequired,
+            _id: PropTypes.string, // Ya no es requerido para ítems locales
             name: PropTypes.string.isRequired,
             quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             unit: PropTypes.string,
-            isPurchased: PropTypes.bool.isRequired,
+            isPurchased: PropTypes.bool,
           })
         ),
       })

@@ -9,38 +9,35 @@ function DownloadSection() {
   // Detectar si la app puede instalarse
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      console.log("Evento beforeinstallprompt disparado");
+      console.log("📲 La app está lista para ser instalada.");
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsInstallable(true);
+      setIsInstallable(true);  // Mostrar el botón
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
-  // Verificar si ya está instalada o si está en modo navegador
+  // Verificar si la app ya está instalada
   useEffect(() => {
     const checkIfInstalled = () => {
       if (window.matchMedia("(display-mode: standalone)").matches) {
-        setIsInstallable(false); // No mostrar el botón si ya está instalada
+        setIsInstallable(false); // Ocultar el botón si ya está instalada
       }
     };
 
     checkIfInstalled();
 
     window.addEventListener("appinstalled", () => {
-      console.log("La aplicación ha sido instalada.");
-      setIsInstallable(false); // Ocultar el botón después de instalar
+      console.log("✅ La aplicación ha sido instalada.");
+      setIsInstallable(false); // Ocultar el botón después de la instalación
     });
 
-    // Forzar visibilidad del botón si está en modo navegador (no instalada)
+    // Mostrar el botón si está en modo navegador
     if (window.matchMedia("(display-mode: browser)").matches) {
       setIsInstallable(true);
     }
@@ -57,16 +54,13 @@ function DownloadSection() {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then(({ outcome }) => {
         if (outcome === "accepted") {
-          console.log("La instalación fue aceptada.");
+          console.log("👍 Instalación aceptada.");
         } else {
-          console.log("La instalación fue rechazada.");
+          console.log("👎 Instalación rechazada.");
         }
-        setDeferredPrompt(null);
+        setDeferredPrompt(null); // Resetear el prompt
+        setIsInstallable(false); // Ocultar el botón después de intentar instalar
       });
-    } else {
-      alert(
-        "La instalación no está disponible en este momento. Intenta desde el navegador."
-      );
     }
   };
 
@@ -78,54 +72,30 @@ function DownloadSection() {
         text: "¡Descubrí las mejores recetas personalizadas!",
         url: window.location.href,
       });
-      console.log("Contenido compartido con éxito.");
+      console.log("📤 Contenido compartido con éxito.");
     } catch (error) {
-      console.error("Error al compartir:", error);
+      console.error("❌ Error al compartir:", error);
     }
   };
 
   return (
-    <section
-      className="download-section bg-naranja-bg text-white py-10 relative"
-      data-aos="fade-up"
-      aria-labelledby="download-title"
-    >
-      <div className="floating-vegetables" aria-hidden="true">
-        {["07", "09", "10", "11", "12", "13", "14", "15"].map((num, index) => (
-          <img
-            key={index}
-            src={`/img/verduras-${num}.png`}
-            alt={`Verdura decorativa número ${num}`}
-            className={`floating-vegetable vegetable-${index + 1}`}
-          />
-        ))}
-      </div>
-
+    <section className="download-section bg-naranja-bg text-white py-10 relative" data-aos="fade-up" aria-labelledby="download-title">
       <div className="download-content container mx-auto flex flex-col lg:flex-row justify-center items-center gap-10">
         <div className="download-text lg:w-1/2 text-left mt-10 mb-10 ml-10">
-          <h2
-            id="download-title"
-            className="section-title text-left pb-10 text-azul-bg"
-          >
+          <h2 id="download-title" className="section-title text-left pb-10 text-azul-bg">
             ¡DESCARGÁ NUESTRA APP!
           </h2>
 
           <p className="text-white text-left">
-            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está
-            diseñada como una <strong>PWA</strong>, lo que significa que podés
-            descargarla directamente desde tu navegador y acceder a todas las
-            recetas sin conexión.
+            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está diseñada como una <strong>PWA</strong>, lo que significa que podés descargarla directamente desde tu navegador y acceder a todas las recetas sin conexión.
           </p>
 
           <p className="text-white text-left mt-4">
-            Disfrutá de la flexibilidad de tener recetas personalizadas y
-            actualizaciones automáticas sin la necesidad de una app store.
-            Compatible con dispositivos Android, iOS, tablets y computadoras de
-            escritorio.
+            Disfrutá de la flexibilidad de tener recetas personalizadas y actualizaciones automáticas sin la necesidad de una app store. Compatible con dispositivos Android, iOS, tablets y computadoras de escritorio.
           </p>
 
           <div className="mt-5 flex flex-col gap-4">
-            {deferredPrompt && isInstallable && (
+            {isInstallable && (
               <button
                 className="button-download mt-6 font-raleway font-bold text-white mx-auto text-center"
                 onClick={handleInstallApp}

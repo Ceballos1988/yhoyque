@@ -135,88 +135,98 @@ const RecipeWall = () => {
   const loadAllRecipes = useCallback(async () => {
     setIsLoading(true); // Activar el spinner
     const token = localStorage.getItem("token");
-
+  
     try {
       let endpoint = `${import.meta.env.VITE_API_URL}/api/recipes`;
       let method = "get";
       let requestData = {
         headers: { Authorization: `Bearer ${token}` },
         params: {
-          ...buildParams.filters, // Asegura que los filtros se incluyan
+          ...buildParams.filters,
           page: currentPage,
           limit: recipesPerPage,
           sortOption: filters.sortOption || null,
         },
       };
-
+  
       if (filters.savedRecipesOnly && user) {
         endpoint = `${import.meta.env.VITE_API_URL}/api/favorites`;
       } else if (filters.userRecipesOnly && user) {
-        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/user/${
-          user.id
-        }`;
+        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/user/${user.id}`;
       } else if (searchIngredients.length > 0) {
-        endpoint = `${
-          import.meta.env.VITE_API_URL
-        }/api/recipes/searchByIngredients`;
+        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/searchByIngredients`;
         method = "post";
         requestData = {
           ...requestData,
-          data: {
-            ingredients: searchIngredients,
-            filters: buildParams.filters,
-          },
+          data: { ingredients: searchIngredients, filters: buildParams.filters },
         };
       } else if (searchTerm) {
         endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/search`;
         requestData.params = { ...requestData.params, name: searchTerm };
       }
-
+  
       const res = await axios({ method, url: endpoint, ...requestData });
-
+  
       setRecipes(res.data.recipes || res.data);
-      setTotalRecipes(
-        Number.isInteger(res.data.totalCount) ? res.data.totalCount : 0
-      );
-
+      setTotalRecipes(Number.isInteger(res.data.totalCount) ? res.data.totalCount : 0);
+  
+      // Guardar en localStorage para el acceso offline
+      localStorage.setItem("recetasVistas", JSON.stringify(res.data.recipes || res.data));
+  
       if (filters.savedRecipesOnly && res.data.favorites) {
         setFavorites(res.data.favorites);
       }
     } catch (error) {
       console.error("Error al cargar las recetas:", error);
-      setRecipes([]);
+  
+      // En caso de error, intenta cargar las recetas desde localStorage
+      const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+      if (recetasOffline.length > 0) {
+        setRecipes(recetasOffline);
+      } else {
+        setRecipes([]); // Si no hay nada guardado, muestra vacío
+      }
     } finally {
       setIsLoading(false); // Desactivar el spinner
     }
   }, [
     searchTerm,
     searchIngredients,
-    buildParams, // Ahora sí se está utilizando correctamente
+    buildParams,
     currentPage,
     filters.userRecipesOnly,
     filters.savedRecipesOnly,
     filters.sortOption,
     user,
   ]);
+  
 
   useEffect(() => {
     loadAllRecipes();
   }, [loadAllRecipes, currentPage, searchTriggered]);
 
   // Detectar cambios en la conexión
-  useEffect(() => {
-    const handleConnectionChange = () => {
-      setIsOffline(!navigator.onLine);
-    };
+  // Detectar cambios en la conexión y cargar recetas desde el caché si está offline
+useEffect(() => {
+  const handleConnectionChange = () => {
+    setIsOffline(!navigator.onLine);
+    if (!navigator.onLine) {
+      const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+      setRecipes(recetasOffline);
+    } else {
+      loadAllRecipes(); // Vuelve a cargar desde la API si hay conexión
+    }
+  };
 
-    window.addEventListener("online", handleConnectionChange);
-    window.addEventListener("offline", handleConnectionChange);
+  window.addEventListener("online", handleConnectionChange);
+  window.addEventListener("offline", handleConnectionChange);
 
-    return () => {
-      window.removeEventListener("online", handleConnectionChange);
-      window.removeEventListener("offline", handleConnectionChange);
-    };
-  }, []);
+  return () => {
+    window.removeEventListener("online", handleConnectionChange);
+    window.removeEventListener("offline", handleConnectionChange);
+  };
+}, [loadAllRecipes]);
+
 
   // Cargar recetas favoritas desde localStorage si está offline
   useEffect(() => {

@@ -9,6 +9,21 @@ import { useAuth } from "../hooks/useAuth";
 import BrandCarousel from "../components/BrandCarousel";
 import MissingIngredientsModal from "../components/MissingIngredientsModal";
 
+const safeAxiosGet = async (url, config = {}) => {
+  if (!navigator.onLine) {
+    console.warn("Estás offline, no se puede hacer la solicitud:", url);
+    return null;
+  }
+
+  try {
+    const response = await axios.get(url, config);
+    return response;
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    return null;
+  }
+};
+
 const ShoppingListsPage = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [newListName, setNewListName] = useState("");
@@ -26,17 +41,18 @@ const ShoppingListsPage = () => {
     try {
       setIsLoadingLists(true);
       const token = localStorage.getItem("token");
-      const response = await axios.get(
+      const response = await safeAxiosGet(
         `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setShoppingLists(response.data);
 
-      // Guardar siempre en LocalStorage después de recibir la respuesta
-      localStorage.setItem(
-        "listasComprasGuardadas",
-        JSON.stringify(response.data)
-      );
+      if (response) {
+        setShoppingLists(response.data);
+        localStorage.setItem(
+          "listasComprasGuardadas",
+          JSON.stringify(response.data)
+        );
+      }
     } catch (error) {
       console.error("Error al cargar listas de compras:", error);
     } finally {
@@ -47,34 +63,33 @@ const ShoppingListsPage = () => {
   useEffect(() => {
     const cargarListas = () => {
       if (navigator.onLine) {
-        fetchShoppingLists(); // Si hay conexión, carga desde la API
+        fetchShoppingLists(); // Carga desde la API si hay conexión
       } else {
         const listasOffline =
           JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
-        setShoppingLists(listasOffline); // Carga desde el localStorage si no hay conexión
+        setShoppingLists(listasOffline); // Carga desde localStorage sin conexión
       }
     };
 
-    cargarListas(); // Ejecutar la función cuando el componente se monte
+    cargarListas();
 
-    // Escuchar cambios en la conexión para actualizar las listas automáticamente
     window.addEventListener("online", cargarListas);
     window.addEventListener("offline", cargarListas);
 
     return () => {
-      window.removeEventListener("online", fetchShoppingLists);
+      window.removeEventListener("online", cargarListas);
       window.removeEventListener("offline", cargarListas);
     };
   }, []);
 
   useEffect(() => {
     if (shoppingLists.length > 0) {
-      localStorage.setItem("listasComprasGuardadas", JSON.stringify(shoppingLists));
-    } else {
-      localStorage.removeItem("listasComprasGuardadas");  // Limpia si no hay listas
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(shoppingLists)
+      );
     }
   }, [shoppingLists]);
-  
 
   // Crear nueva lista
   const handleCreateList = async () => {
@@ -88,19 +103,38 @@ const ShoppingListsPage = () => {
       return;
     }
 
+    const nuevaLista = {
+      _id: `local-${Date.now()}`, // ID temporal para listas sin conexión
+      name: newListName,
+      categories: [],
+    };
+
+    if (!navigator.onLine) {
+      // Guardar lista localmente si no hay conexión
+      const listasOffline = [...shoppingLists, nuevaLista];
+      setShoppingLists(listasOffline);
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(listasOffline)
+      );
+      setNewListName("");
+      setErrorMessage("");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
-
         { name: newListName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       setShoppingLists([...shoppingLists, response.data]);
       localStorage.setItem(
         "listasComprasGuardadas",
         JSON.stringify([...shoppingLists, response.data])
-      ); // Guardar inmediatamente
+      );
 
       setNewListName("");
       setErrorMessage("");
@@ -111,6 +145,17 @@ const ShoppingListsPage = () => {
 
   // Eliminar lista
   const handleDeleteList = async (listId) => {
+    if (!navigator.onLine) {
+      // Eliminar lista localmente si no hay conexión
+      const updatedLists = shoppingLists.filter((list) => list._id !== listId);
+      setShoppingLists(updatedLists);
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(updatedLists)
+      );
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
@@ -119,7 +164,12 @@ const ShoppingListsPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setShoppingLists(shoppingLists.filter((list) => list._id !== listId));
+      const updatedLists = shoppingLists.filter((list) => list._id !== listId);
+      setShoppingLists(updatedLists);
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(updatedLists)
+      );
     } catch (error) {
       console.error("Error al eliminar la lista:", error);
     }
@@ -383,6 +433,56 @@ const ShoppingListsPage = () => {
       console.error("Error al agregar ingredientes a la lista:", error);
     }
   };
+  const sincronizarListas = async () => {
+    const listasOffline =
+      JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+    const listasNoSincronizadas = listasOffline.filter((list) =>
+      list._id.startsWith("local-")
+    );
+
+    if (listasNoSincronizadas.length === 0) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const listasSincronizadas = [];
+
+      for (const lista of listasNoSincronizadas) {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
+          { name: lista.name },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        // Reemplaza el ID temporal con el del servidor
+        listasSincronizadas.push({
+          ...lista,
+          _id: response.data._id,
+        });
+      }
+
+      // Combina listas sincronizadas con las que ya estaban online
+      const listasActualizadas = [
+        ...listasOffline.filter((list) => !list._id.startsWith("local-")),
+        ...listasSincronizadas,
+      ];
+
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(listasActualizadas)
+      );
+      setShoppingLists(listasActualizadas); // Actualiza la UI
+    } catch (error) {
+      console.error("Error al sincronizar listas:", error);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("online", sincronizarListas);
+
+    return () => {
+      window.removeEventListener("online", sincronizarListas);
+    };
+  }, []);
 
   return (
     <div className="shopping-lists-page min-h-screen flex text-azul-bg pb-20 pt-10 relative ">

@@ -3,17 +3,17 @@
   to = "/index.html"
   status = 200
 
-[[redirects]]
-  from = "/offline"
-  to = "/offline.html"
-  status = 200
-
 [[headers]]
   for = "/service-worker.js"
-  [headers.values]
+  [headers]
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/offline.html"
-  [headers.values]
+  for = "/*.html"
+  [headers]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/img/*"
+  [headers]
+    Cache-Control = "public, max-age=31536000, immutable"
