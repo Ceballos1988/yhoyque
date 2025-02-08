@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -20,7 +20,6 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import { OfflineProvider } from "./context/OfflineContext";
 import "./styles/main.css";
-import DownloadSection from "./components/home/DownloadSection";
 
 function App() {
   return (
@@ -38,7 +37,6 @@ function AppContent() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,8 +87,7 @@ function AppContent() {
     <div className="App">
       <Navbar />
 
-      {/* Mostrar la sección de descarga solo en Home */}
-      {location.pathname === "/" && <DownloadSection />}
+   
 
       <Routes>
         <Route path="/" element={<Home />} />

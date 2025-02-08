@@ -11,18 +11,19 @@ import MissingIngredientsModal from "../components/MissingIngredientsModal";
 
 const safeAxiosGet = async (url, config = {}) => {
   if (!navigator.onLine) {
-    console.warn("Estás offline, no se puede hacer la solicitud:", url);
-    return null;
+    console.warn(`Estás offline, no se puede hacer la solicitud: ${url}`);
+    return { offline: true };
   }
 
   try {
     const response = await axios.get(url, config);
     return response;
   } catch (error) {
-    console.error("Error en la solicitud:", error);
-    return null;
+    console.error(`Error en la solicitud a ${url}:`, error);
+    return { error: true, message: error.message };
   }
 };
+
 
 const ShoppingListsPage = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
@@ -38,27 +39,27 @@ const ShoppingListsPage = () => {
 
   // Obtener listas de compras
   const fetchShoppingLists = async () => {
-    try {
-      setIsLoadingLists(true);
-      const token = localStorage.getItem("token");
-      const response = await safeAxiosGet(
-        `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response) {
-        setShoppingLists(response.data);
-        localStorage.setItem(
-          "listasComprasGuardadas",
-          JSON.stringify(response.data)
-        );
-      }
-    } catch (error) {
-      console.error("Error al cargar listas de compras:", error);
-    } finally {
-      setIsLoadingLists(false);
+    setIsLoadingLists(true);
+    const token = localStorage.getItem("token");
+  
+    const response = await safeAxiosGet(
+      `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  
+    if (response && response.data) {
+      setShoppingLists(response.data);
+      localStorage.setItem("listasComprasGuardadas", JSON.stringify(response.data));
+    } else if (response.offline) {
+      const listasOffline = JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+      setShoppingLists(listasOffline);
+    } else {
+      console.error("Error al cargar listas de compras:", response.message);
     }
+  
+    setIsLoadingLists(false);
   };
+  
 
   useEffect(() => {
     const cargarListas = () => {
