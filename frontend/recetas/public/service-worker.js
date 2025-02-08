@@ -1,4 +1,4 @@
-const CACHE_NAME = "v39";
+const CACHE_NAME = "v40";
 
 const urlsToCache = [
   "/", 
@@ -6,18 +6,18 @@ const urlsToCache = [
   "/offline.html",
   "/index.html",
   "/styles/main.css",
-  "/app-recetas/frontend/recetas/public/img/icon-192x192.png",
-  "/app-recetas/frontend/recetas/public/img/icon-512x512.png",
-  "/app-recetas/frontend/recetas/public/img/abrir.png",
-  "/app-recetas/frontend/recetas/public/img/delete.png",
-  "/app-recetas/frontend/recetas/public/img/search.png",
-  "/app-recetas/frontend/recetas/public/img/filtro.png",
-  "/app-recetas/frontend/recetas/public/img/orden.png",
-  "/app-recetas/frontend/recetas/public/img/heart-filled.svg",
-  "/app-recetas/frontend/recetas/public/img/heart-outline.svg",
-  "/app-recetas/frontend/recetas/public/img/edit.png",
-  "/app-recetas/frontend/recetas/public/img/recipe-null.png",
-  "/app-recetas/frontend/recetas/public/img/offline.png",
+  "img/icon-192x192.png",
+  "img/icon-512x512.png",
+  "img/abrir.png",
+  "img/delete.png",
+  "img/search.png",
+  "img/filtro.png",
+  "img/orden.png",
+  "img/heart-filled.svg",
+  "img/heart-outline.svg",
+  "img/edit.png",
+  "img/recipe-null.png",
+  "img/offline.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
 ];
 
