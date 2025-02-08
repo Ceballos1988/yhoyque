@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -23,6 +23,18 @@ import "./styles/main.css";
 import DownloadSection from "./components/home/DownloadSection";
 
 function App() {
+  return (
+    <AuthProvider>
+      <FilterProvider>
+        <OfflineProvider>
+          <AppContent />
+        </OfflineProvider>
+      </FilterProvider>
+    </AuthProvider>
+  );
+}
+
+function AppContent() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
@@ -74,94 +86,84 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <FilterProvider>
-        <OfflineProvider>
-          <Router>
-            <div className="App">
-              <Navbar />
+    <div className="App">
+      <Navbar />
 
-              {/* Sección de descarga solo visible en Home */}
-              {location.pathname === "/" && (
-                <DownloadSection />
-              )}
+      {/* Mostrar la sección de descarga solo en Home */}
+      {location.pathname === "/" && <DownloadSection />}
 
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/create-recipe" element={<CreateRecipe />} />
-                <Route path="/create-recipe/:recipeId" element={<CreateRecipe />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/recipe-wall" element={<RecipeWall />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/shopping-lists" element={<ShoppingListsPage />} />
-                <Route path="/admin/*" element={<AdminRoute />}>
-                  <Route path="dashboard" element={<AdminDashboard />} />
-                </Route>
-              </Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create-recipe" element={<CreateRecipe />} />
+        <Route path="/create-recipe/:recipeId" element={<CreateRecipe />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/recipe-wall" element={<RecipeWall />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/shopping-lists" element={<ShoppingListsPage />} />
+        <Route path="/admin/*" element={<AdminRoute />}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+        </Route>
+      </Routes>
 
-              <Footer />
+      <Footer />
 
-              {/* Botón de volver arriba */}
-              {showScrollTopButton && (
-                <button
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                  aria-label="Volver al inicio de la página"
-                  style={{
-                    position: "fixed",
-                    bottom: "20px",
-                    right: "20px",
-                    backgroundColor: "#EE8532",
-                    color: "#fff",
-                    border: "none",
-                    width: window.innerWidth < 550 ? "40px" : "50px",
-                    height: window.innerWidth < 550 ? "40px" : "50px",
-                    fontSize: window.innerWidth < 550 ? "20px" : "24px",
-                    cursor: "pointer",
-                    zIndex: 1000,
-                    transition: "background-color 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#0f172b")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
-                >
-                  ↑
-                </button>
-              )}
+      {/* Botón para volver arriba */}
+      {showScrollTopButton && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Volver al inicio de la página"
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            backgroundColor: "#EE8532",
+            color: "#fff",
+            border: "none",
+            width: window.innerWidth < 550 ? "40px" : "50px",
+            height: window.innerWidth < 550 ? "40px" : "50px",
+            fontSize: window.innerWidth < 550 ? "20px" : "24px",
+            cursor: "pointer",
+            zIndex: 1000,
+            transition: "background-color 0.3s ease",
+          }}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#0f172b")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
+        >
+          ↑
+        </button>
+      )}
 
-              {/* Botón de instalación en el lado izquierdo */}
-              {isInstallable && (
-                <button
-                  onClick={handleInstallApp}
-                  aria-label="Instalar la aplicación"
-                  style={{
-                    position: "fixed",
-                    bottom: "20px",
-                    left: "20px",
-                    backgroundColor: "#0f172b",
-                    color: "#fff",
-                    border: "none",
-                    width: window.innerWidth < 550 ? "40px" : "50px",
-                    height: window.innerWidth < 550 ? "40px" : "50px",
-                    fontSize: window.innerWidth < 550 ? "16px" : "18px",
-                    cursor: "pointer",
-                    zIndex: 1000,
-                    transition: "background-color 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = "#0f172b")}
-                >
-                  ⬇
-                </button>
-              )}
-            </div>
-          </Router>
-        </OfflineProvider>
-      </FilterProvider>
-    </AuthProvider>
+      {/* Botón de instalación en el lado izquierdo */}
+      {isInstallable && (
+        <button
+          onClick={handleInstallApp}
+          aria-label="Instalar la aplicación"
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            left: "20px",
+            backgroundColor: "#0f172b",
+            color: "#fff",
+            border: "none",
+            width: window.innerWidth < 550 ? "40px" : "50px",
+            height: window.innerWidth < 550 ? "40px" : "50px",
+            fontSize: window.innerWidth < 550 ? "16px" : "18px",
+            cursor: "pointer",
+            zIndex: 1000,
+            transition: "background-color 0.3s ease",
+          }}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#0f172b")}
+        >
+          ⬇
+        </button>
+      )}
+    </div>
   );
 }
 

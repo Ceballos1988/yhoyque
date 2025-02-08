@@ -6,18 +6,19 @@ const urlsToCache = [
   "/offline.html",
   "/index.html",
   "/styles/main.css",
-  "img/icon-192x192.png",
-  "img/icon-512x512.png",
-  "img/abrir.png",
-  "img/delete.png",
-  "img/search.png",
-  "img/filtro.png",
-  "img/orden.png",
-  "img/heart-filled.svg",
-  "img/heart-outline.svg",
-  "img/edit.png",
-  "img/recipe-null.png",
-  "img/offline.png",
+  "/app-recetas/frontend/recetas/public/img/icon-192x192.png",
+  "/app-recetas/frontend/recetas/public/img/volver.png",
+  "/app-recetas/frontend/recetas/public/img/icon-512x512.png",
+  "/app-recetas/frontend/recetas/public/img/abrir.png",
+  "/app-recetas/frontend/recetas/public/img/delete.png",
+  "/app-recetas/frontend/recetas/public/img/search.png",
+  "/app-recetas/frontend/recetas/public/img/filtro.png",
+  "/app-recetas/frontend/recetas/public/img/orden.png",
+  "/app-recetas/frontend/recetas/public/img/heart-filled.svg",
+  "/app-recetas/frontend/recetas/public/img/heart-outline.svg",
+  "/app-recetas/frontend/recetas/public/img/edit.png",
+  "/app-recetas/frontend/recetas/public/img/recipe-null.png",
+  "/app-recetas/frontend/recetas/public/img/offline.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
 ];
 
@@ -48,7 +49,6 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
 
-  // Manejar la navegación
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(() => caches.match("/offline.html"))
@@ -61,7 +61,6 @@ self.addEventListener("fetch", (event) => {
         return fetch(request)
           .then((networkResponse) => {
             return caches.open(CACHE_NAME).then((cache) => {
-              // Cachear solo si es un recurso estático o una API importante
               if (
                 request.url.startsWith(self.location.origin) ||
                 request.url.includes("res.cloudinary.com") ||
@@ -73,9 +72,10 @@ self.addEventListener("fetch", (event) => {
             });
           })
           .catch(() => {
-            // Fallback para imágenes
             if (request.destination === "image") {
-              return caches.match("/img/recipe-null.png");
+              // Verificar si es una de las imágenes con ruta absoluta que falló
+              const fallbackImage = urlsToCache.find(url => request.url.endsWith(url.split('/').pop()));
+              return caches.match(fallbackImage || "/app-recetas/frontend/recetas/public/img/recipe-null.png");
             }
           });
       })

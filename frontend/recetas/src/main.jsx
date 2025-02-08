@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";  // Importar BrowserRouter
 import App from "./App.jsx";
 import "./styles/main.css";
 
@@ -8,7 +9,9 @@ import "./styles/main.css";
  */
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <Router>  {/* Envolver App con Router */}
+      <App />
+    </Router>
   </StrictMode>
 );
 
