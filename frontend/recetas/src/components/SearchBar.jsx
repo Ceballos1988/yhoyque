@@ -120,7 +120,7 @@ const SearchBar = ({
       <div className="search-bar-container">
         {/* Icono de filtro solo decorativo */}
         <div className="search-icon flex">
-          <img src="/img/search.png" alt="Icono de filtros" />
+          <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png" alt="Icono de filtros" />
           <span className="text-naranja-bg">Búsquedas:</span>
         </div>
 
@@ -156,7 +156,7 @@ const SearchBar = ({
                   title="Buscar"
                   aria-label="Buscar por título o @usuario"
                 >
-                  <img src="/img/search.png" alt="Icono de búsqueda" />
+                  <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png" alt="Icono de búsqueda" />
                 </button>
                 <button
                   type="button"
@@ -206,7 +206,7 @@ const SearchBar = ({
                   aria-label="Buscar por ingredientes"
                   title="Buscar"
                 >
-                  <img src="/img/search.png" alt="Icono de búsqueda" />
+                  <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png" alt="Icono de búsqueda" />
                 </button>
                 <button
                   type="button"
@@ -249,7 +249,7 @@ const SearchBar = ({
                     aria-label="Buscar por ID"
                     title="Buscar por ID"
                   >
-                    <img src="/img/search.png" alt="Icono de búsqueda" />
+                    <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png" alt="Icono de búsqueda" />
                   </button>
                   <button
                     type="button"

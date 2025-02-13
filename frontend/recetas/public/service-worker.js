@@ -24,9 +24,11 @@ const urlsToCache = [
   "/img/edit.png",
   "/img/offline.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png",
+  "https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png",
   "/dist/index.html", // Asegurar que se cachea correctamente
   "/dist/offline.html",
   "/dist/manifest.json"
+  
 ];
 
 // 🔹 Instalación: Almacena los archivos en la caché

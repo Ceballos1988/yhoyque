@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: '/',
+  base: "/", // Si despliegas en un subdirectorio, cambia esto
   plugins: [react()],
   server: {
     port: 5173,
@@ -14,18 +14,19 @@ export default defineConfig({
       },
     },
     hmr: {
-      protocol: 'ws',
-      host: 'localhost',
+      protocol: "ws",
+      host: "localhost",
       port: 5173,
     },
   },
   build: {
     outDir: "dist",
-    manifest: true,
     assetsDir: "assets",
+    manifest: true,
     rollupOptions: {
-      input: "/index.html",
+      input: "index.html", // Asegura que index.html esté en dist
     },
-    copyPublicDir: true,
+    copyPublicDir: true, // Copia automáticamente archivos de public/
+    emptyOutDir: true, // Borra dist/ antes de generar nuevos archivos
   },
 });
