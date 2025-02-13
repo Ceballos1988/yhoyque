@@ -72,11 +72,7 @@ function AppContent() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then(({ outcome }) => {
-        if (outcome === "accepted") {
-          console.log("👍 Instalación aceptada.");
-        } else {
-          console.log("👎 Instalación rechazada.");
-        }
+        console.log(outcome === "accepted" ? "👍 Instalación aceptada." : "👎 Instalación rechazada.");
         setDeferredPrompt(null);
         setIsInstallable(false);
       });
@@ -86,8 +82,6 @@ function AppContent() {
   return (
     <div className="App">
       <Navbar />
-
-   
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -105,6 +99,7 @@ function AppContent() {
         <Route path="/admin/*" element={<AdminRoute />}>
           <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
+        <Route path="*" element={<Home />} />  {/* Redirigir rutas desconocidas a Home */}
       </Routes>
 
       <Footer />
@@ -147,7 +142,7 @@ function AppContent() {
             backgroundColor: "#0f172b",
             color: "#fff",
             border: "none",
-            borderRadius: "10px",  // Esto redondea los bordes (ajusta el valor según lo que prefieras)
+            borderRadius: "10px",
             width: window.innerWidth < 550 ? "80px" : "90px",
             height: window.innerWidth < 550 ? "80px" : "90px",
             fontSize: window.innerWidth < 550 ? "16px" : "18px",

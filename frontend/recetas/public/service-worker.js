@@ -1,4 +1,4 @@
-const CACHE_NAME = "v43"; // Incrementa el número de versión para forzar una actualización
+const CACHE_NAME = "v44"; // Incrementa el número de versión para forzar una actualización
 
 const urlsToCache = [
   "/",
@@ -61,16 +61,17 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
-      // 🔹 Si hay una versión en caché y NO es una imagen de Cloudinary, usarla
-      if (cachedResponse && !request.url.includes("res.cloudinary.com")) {
+      if (cachedResponse) {
         return cachedResponse;
       }
 
-      // 🔹 Intentar obtener el recurso desde la red
       return fetch(request)
         .then((networkResponse) => {
-          // Guardar en caché solo si es un recurso del sitio
-          if (request.url.startsWith(self.location.origin)) {
+          // Guardar en caché las páginas de recetas navegadas dinámicamente
+          if (
+            request.url.includes("/api/recipes") || // API de recetas
+            request.url.includes("/recipe-wall") // Página de RecipeWall
+          ) {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, networkResponse.clone());
             });
@@ -78,18 +79,19 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // 🔹 Si falla la red, manejar diferentes tipos de recursos:
+          // Si falla la red, devolver contenido alternativo
           if (request.mode === "navigate") {
-            return caches.match("/offline.html"); // Página de modo offline
+            return caches.match("/index.html"); // Mantener la SPA funcionando
           } else if (request.destination === "image") {
             return caches.match("/img/recipe-null.png"); // Imagen por defecto
           } else {
-            return caches.match("/offline.html"); // Para cualquier otro recurso
+            return caches.match("/offline.html");
           }
         });
     })
   );
 });
+
 
 // 🔹 Permitir que el nuevo Service Worker se active inmediatamente
 self.addEventListener("message", (event) => {
