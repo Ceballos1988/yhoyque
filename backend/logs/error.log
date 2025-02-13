@@ -1,5 +1,0 @@
-[2025-02-11T15:17:19.420Z] ERROR: Error al verificar el token: jwt expired
-[2025-02-11T15:52:42.486Z] ERROR: Error al verificar el token: jwt malformed
-[2025-02-11T22:06:01.688Z] ERROR: Error al verificar el token: jwt malformed
-[2025-02-12T23:25:56.178Z] ERROR: Error al obtener recetas: read ECONNRESET
-[2025-02-12T23:31:52.133Z] ERROR: Error al verificar el token: jwt expired
