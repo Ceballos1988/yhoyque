@@ -1,4 +1,4 @@
-const CACHE_NAME = "v44"; // Incrementa el número de versión para forzar una actualización
+const CACHE_NAME = "v45"; // Incrementa el número de versión para forzar una actualización
 
 const urlsToCache = [
   "/",
@@ -23,7 +23,7 @@ const urlsToCache = [
   "/img/heart-outline.svg",
   "/img/edit.png",
   "/img/offline.png",
-  "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
+  "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png",
 ];
 
 // 🔹 Instalación: Almacena los archivos en la caché
@@ -67,11 +67,7 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(request)
         .then((networkResponse) => {
-          // Guardar en caché las páginas de recetas navegadas dinámicamente
-          if (
-            request.url.includes("/api/recipes") || // API de recetas
-            request.url.includes("/recipe-wall") // Página de RecipeWall
-          ) {
+          if (request.url.startsWith(self.location.origin)) {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, networkResponse.clone());
             });
@@ -91,7 +87,6 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
-
 
 // 🔹 Permitir que el nuevo Service Worker se active inmediatamente
 self.addEventListener("message", (event) => {

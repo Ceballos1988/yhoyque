@@ -34,6 +34,11 @@
             width: 150px;
             margin: 20px 0;
         }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #ff8c00;
+        }
     </style>
 </head>
 <body>
@@ -41,6 +46,20 @@
     <img src="/img/offline.png" alt="Sin conexión"> <!-- Asegúrate de tener esta imagen en la carpeta img -->
     <p>Parece que no tienes acceso a internet. Algunas funciones pueden no estar disponibles.</p>
     <p>Cuando vuelvas a conectarte, podrás ver nuevas recetas.</p>
+    
     <button onclick="location.reload()">Reintentar</button>
+    <button onclick="window.location.href='/'">Ir a inicio</button>
+
+    <p id="status">Esperando reconexión...</p>
+
+    <script>
+        function checkOnlineStatus() {
+            if (navigator.onLine) {
+                document.getElementById("status").innerText = "✅ Conexión restaurada. Recargando...";
+                setTimeout(() => location.reload(), 1500);
+            }
+        }
+        window.addEventListener("online", checkOnlineStatus);
+    </script>
 </body>
 </html>
