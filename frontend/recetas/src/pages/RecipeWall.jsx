@@ -320,7 +320,7 @@ const RecipeWall = () => {
           onClick={toggleSidebar}
         >
           <img
-            src={isSidebarExpanded ? "/img/cerrar.png" : "/img/abrir.png"}
+            src={isSidebarExpanded ? "https://res.cloudinary.com/dnlyti3zm/image/upload/v1739477335/cerrar_ngfyef.png" : "/img/abrir.png"}
             alt={isSidebarExpanded ? "Cerrar Sidebar" : "Abrir Sidebar"}
             className="w-8 h-8 mr-3"
             title={isSidebarExpanded ? "Cerrar" : "Abrir"}
