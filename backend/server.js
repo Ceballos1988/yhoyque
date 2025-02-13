@@ -20,25 +20,29 @@ const app = express();
 
 // Middleware para habilitar CORS de forma correcta
 const allowedOrigins = [
-  process.env.FRONTEND_URL,    // Netlify
-  "http://localhost:5173",     // Desarrollo local
+  process.env.FRONTEND_URL,    // URL en producción (Netlify/Vercel)
+  "http://localhost:5173",     // Modo desarrollo (Vite)
+  "http://localhost:4173",     // Modo preview (Vite)
+  "http://127.0.0.1:5173",     // IP alternativa en local
+  "http://127.0.0.1:4173"      // IP alternativa en local
 ];
+
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      console.log("Solicitud de origen:", origin); // Ver en logs qué origen llega
-      
+    origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.error(`Bloqueado por CORS: ${origin}`);
+        console.warn(`❌ Bloqueado por CORS: ${origin}`);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Necesario si se usan cookies o tokens en las solicitudes
+    credentials: true, // Permitir cookies y autenticación con tokens
+    optionsSuccessStatus: 200, // Algunas configuraciones CORS requieren este código
   })
 );
+
 
 // Middleware para analizar cookies y procesar solicitudes JSON
 app.use(cookieParser());
@@ -95,10 +99,10 @@ app.get("/", (req, res) => {
 
 // Configuración del puerto
 const PORT = process.env.PORT || 5000;
-console.log(`🚀 Servidor intentará correr en el puerto: \${PORT}`);
+console.log(`🚀 Servidor intentará correr en el puerto: ${PORT}`);
 
 app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en puerto \${PORT}`);
+  console.log(`✅ Servidor corriendo en puerto: ${PORT}`);
 });
 
 // Verificación de variables de entorno
