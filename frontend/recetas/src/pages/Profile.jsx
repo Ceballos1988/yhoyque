@@ -231,7 +231,7 @@ function Profile() {
           className="back-button"
           aria-label="Volver"
         >
-          <img src="/img/volver.png" alt="Volver" className="arrow-icon" />
+          <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png" alt="Volver" className="arrow-icon" />
         </button>
 
         <nav className="breadcrumb-wall" aria-label="breadcrumb">
