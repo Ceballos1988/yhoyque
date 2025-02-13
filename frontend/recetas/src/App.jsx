@@ -147,17 +147,18 @@ function AppContent() {
             backgroundColor: "#0f172b",
             color: "#fff",
             border: "none",
-            width: window.innerWidth < 550 ? "40px" : "50px",
-            height: window.innerWidth < 550 ? "40px" : "50px",
+            borderRadius: "10px",  // Esto redondea los bordes (ajusta el valor según lo que prefieras)
+            width: window.innerWidth < 550 ? "80px" : "90px",
+            height: window.innerWidth < 550 ? "80px" : "90px",
             fontSize: window.innerWidth < 550 ? "16px" : "18px",
             cursor: "pointer",
-            zIndex: 1000,
+            zIndex: 800,
             transition: "background-color 0.3s ease",
           }}
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#0f172b")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
         >
-          ⬇
+          Instalar App
         </button>
       )}
     </div>

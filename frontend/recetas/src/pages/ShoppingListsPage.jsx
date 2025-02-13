@@ -24,7 +24,6 @@ const safeAxiosGet = async (url, config = {}) => {
   }
 };
 
-
 const ShoppingListsPage = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [newListName, setNewListName] = useState("");
@@ -37,29 +36,35 @@ const ShoppingListsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
   // Obtener listas de compras
   const fetchShoppingLists = async () => {
     setIsLoadingLists(true);
     const token = localStorage.getItem("token");
-  
+
     const response = await safeAxiosGet(
       `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
-  
+
     if (response && response.data) {
       setShoppingLists(response.data);
-      localStorage.setItem("listasComprasGuardadas", JSON.stringify(response.data));
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(response.data)
+      );
     } else if (response.offline) {
-      const listasOffline = JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+      const listasOffline =
+        JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
       setShoppingLists(listasOffline);
     } else {
+      setErrorMessage("No se pudieron cargar las listas de compras.");
       console.error("Error al cargar listas de compras:", response.message);
     }
-  
+
     setIsLoadingLists(false);
   };
-  
 
   useEffect(() => {
     const cargarListas = () => {
@@ -70,6 +75,7 @@ const ShoppingListsPage = () => {
           JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
         setShoppingLists(listasOffline); // Carga desde localStorage sin conexión
       }
+      setIsLoadingLists(false); // Asegúrate de desactivar el spinner después de cargar datos
     };
 
     cargarListas();
@@ -118,6 +124,16 @@ const ShoppingListsPage = () => {
         "listasComprasGuardadas",
         JSON.stringify(listasOffline)
       );
+
+      // Marca la lista como pendiente de sincronización
+      const listasPendientes =
+        JSON.parse(localStorage.getItem("listasPendientes")) || [];
+      listasPendientes.push(nuevaLista);
+      localStorage.setItem(
+        "listasPendientes",
+        JSON.stringify(listasPendientes)
+      );
+
       setNewListName("");
       setErrorMessage("");
       return;
@@ -434,51 +450,69 @@ const ShoppingListsPage = () => {
       console.error("Error al agregar ingredientes a la lista:", error);
     }
   };
+
   const sincronizarListas = async () => {
-    const listasOffline = JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
-    const listasNoSincronizadas = listasOffline.filter((list) => list._id.startsWith("local-"));
-  
-    if (listasNoSincronizadas.length === 0) return;
-  
+    const listasPendientes =
+      JSON.parse(localStorage.getItem("listasPendientes")) || [];
+
+    if (listasPendientes.length === 0) return; // No hay listas pendientes
+
     try {
       const token = localStorage.getItem("token");
       const listasSincronizadas = [];
-  
-      for (const lista of listasNoSincronizadas) {
+
+      for (const lista of listasPendientes) {
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/shopping-lists`,
           { name: lista.name },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
+
         listasSincronizadas.push({ ...lista, _id: response.data._id });
       }
-  
-      const listasActualizadas = [
-        ...listasOffline.filter((list) => !list._id.startsWith("local-")),
-        ...listasSincronizadas,
-      ];
-  
-      localStorage.setItem("listasComprasGuardadas", JSON.stringify(listasActualizadas));
+
+      // Actualiza las listas en localStorage y elimina las pendientes
+      const listasActuales =
+        JSON.parse(localStorage.getItem("listasComprasGuardadas")) || [];
+      const listasActualizadas = [...listasActuales, ...listasSincronizadas];
+
+      localStorage.setItem(
+        "listasComprasGuardadas",
+        JSON.stringify(listasActualizadas)
+      );
+      localStorage.removeItem("listasPendientes");
+
       setShoppingLists(listasActualizadas);
     } catch (error) {
       console.error("Error al sincronizar listas:", error);
     }
   };
-  
+
   useEffect(() => {
     window.addEventListener("online", sincronizarListas);
     return () => {
       window.removeEventListener("online", sincronizarListas);
     };
   }, []);
-  
 
   useEffect(() => {
     window.addEventListener("online", sincronizarListas);
 
     return () => {
       window.removeEventListener("online", sincronizarListas);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -543,7 +577,7 @@ const ShoppingListsPage = () => {
 
         {user && (
           <div className="welcome-message-wall animate__animated animate__fadeIn">
-            <div className=" text-center">
+            <div className="text-center">
               <h1 className="font-bold mb-10 mt-10 text-center text-white">
                 ¡Bienvenido a tu gestor de listas de compras!
               </h1>
@@ -567,6 +601,15 @@ const ShoppingListsPage = () => {
           </div>
         )}
 
+        {/* Mensaje de advertencia si está sin conexión */}
+        {isOffline && (
+          <div className="bg-red-500 text-white p-4 rounded mb-4">
+            Estás sin conexión. Las listas de compras pueden estar
+            desactualizadas si no se guardaron correctamente. Conéctate a
+            Internet para sincronizar las listas.
+          </div>
+        )}
+
         <div className="new-list-container mb-10 text-center animate__animated animate__fadeIn">
           <input
             type="text"
@@ -579,6 +622,7 @@ const ShoppingListsPage = () => {
             }}
             placeholder="Nombre de la nueva lista"
             className="new-list-input"
+            disabled={isOffline} // Deshabilitar si está offline
           />
 
           <CustomButton
@@ -586,6 +630,7 @@ const ShoppingListsPage = () => {
             bgColor="bg-naranja-bg"
             textColor="text-white"
             onClick={handleCreateList}
+            disabled={isOffline} // Deshabilitar si está offline
           />
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         </div>
@@ -618,12 +663,14 @@ const ShoppingListsPage = () => {
                 }
                 onDelete={() => handleDeleteList(list._id)}
                 onEditName={handleEditName} // Aquí se pasa la función como prop
+                isOffline={isOffline} // Pasar estado de offline al componente
               />
             ))
           ) : (
             <p className="text-center">No tienes listas de compras aún.</p>
           )}
         </div>
+
         {/* Agregar el componente BrandCarousel */}
         <BrandCarousel />
 

@@ -3,15 +3,6 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { AuthContext } from "../context/AuthContext"; // Importar el contexto de autenticación
 
-/**
- * Componente FavoriteButton que permite a los usuarios agregar o eliminar una receta de sus favoritos.
- * Muestra un botón que cambia según el estado del favorito (guardado o no).
- *
- * @component
- * @param {Object} props - Las propiedades del componente.
- * @param {string} props.recipeId - El ID de la receta que se desea agregar o quitar de favoritos.
- * @returns {JSX.Element} - El componente de botón de favoritos.
- */
 const FavoriteButton = ({ recipeId }) => {
   const [isFavorite, setIsFavorite] = useState(false); // Estado que indica si la receta está en favoritos
   const [isLoading, setIsLoading] = useState(false); // Estado de carga
@@ -20,8 +11,16 @@ const FavoriteButton = ({ recipeId }) => {
   // Comprobar si la receta está en favoritos al cargar el componente
   useEffect(() => {
     const checkFavoriteStatus = async () => {
-      if (!currentUser) return; // Si no hay usuario, no hacer la solicitud
+      const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
+      if (!navigator.onLine) {
+        // Si está offline, carga desde el localStorage
+        const isInFavorites = storedFavorites.includes(recipeId);
+        setIsFavorite(isInFavorites);
+        return;
+      }
+
+      if (!currentUser) return; // Si no hay usuario, no hacer la solicitud
       const token = localStorage.getItem("token");
       if (!token) return; // Si no hay token, no hacer la solicitud
 
@@ -29,13 +28,19 @@ const FavoriteButton = ({ recipeId }) => {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/favorites`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-      
 
         if (Array.isArray(response.data.recipes)) {
-          const isInFavorites = response.data.recipes.some((favorite) => {
-            return favorite._id && favorite._id.toString() === recipeId.toString();
-          });
-          setIsFavorite(isInFavorites); // Actualiza el estado
+          const isInFavorites = response.data.recipes.some(
+            (favorite) => favorite._id && favorite._id.toString() === recipeId.toString()
+          );
+          setIsFavorite(isInFavorites);
+
+          // Actualiza el localStorage para modo offline
+          const updatedFavorites = isInFavorites
+            ? [...new Set([...storedFavorites, recipeId])]
+            : storedFavorites.filter((id) => id !== recipeId);
+
+          localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
         } else {
           console.error("La respuesta no contiene un arreglo de recetas válidas.");
         }
@@ -45,14 +50,16 @@ const FavoriteButton = ({ recipeId }) => {
     };
 
     checkFavoriteStatus();
-  }, [recipeId, currentUser]); // Añadir currentUser como dependencia
+  }, [recipeId, currentUser]);
 
   // Manejar la acción de agregar o eliminar de favoritos
   const handleFavorite = async () => {
     if (isLoading) return;
     setIsLoading(true);
 
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     const token = localStorage.getItem("token");
+
     if (!token || !currentUser) {
       console.error("No estás autenticado.");
       setIsLoading(false);
@@ -62,25 +69,29 @@ const FavoriteButton = ({ recipeId }) => {
     try {
       if (isFavorite) {
         // Eliminar de favoritos
-        const response = await axios.delete(
+        await axios.delete(
           `${import.meta.env.VITE_API_URL}/api/favorites/${recipeId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
-        if (response.status === 200) {
-          setIsFavorite(false); // Cambiar el estado a "no favorito"
-        }
+
+        setIsFavorite(false);
+
+        // Actualiza localStorage para modo offline
+        const updatedFavorites = storedFavorites.filter((id) => id !== recipeId);
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       } else {
         // Agregar a favoritos
-        const response = await axios.post(
+        await axios.post(
           `${import.meta.env.VITE_API_URL}/api/favorites`,
           { recipeId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
-        if (response.status === 200) {
-          setIsFavorite(true); // Cambiar el estado a "favorito"
-        }
+
+        setIsFavorite(true);
+
+        // Actualiza localStorage para modo offline
+        const updatedFavorites = [...new Set([...storedFavorites, recipeId])];
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       }
     } catch (error) {
       console.error("Error al manejar favorito:", error);

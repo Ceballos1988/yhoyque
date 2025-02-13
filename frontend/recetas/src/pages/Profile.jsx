@@ -31,22 +31,42 @@ function Profile() {
   const [isSaving, setIsSaving] = useState(false); // Estado para controlar la carga al guardar cambios
   const [showPasswordField, setShowPasswordField] = useState(false); // Estado para mostrar/ocultar el campo de contraseña
   const navigate = useNavigate();
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   /**
    * Obtiene los datos del perfil de usuario desde la API.
    */
   const fetchUserData = async () => {
+    if (!navigator.onLine) {
+      const cachedData = JSON.parse(localStorage.getItem("cachedUserProfile"));
+      if (cachedData) {
+        setUser(cachedData);
+        setFirstName(cachedData.firstName || "");
+        setLastName(cachedData.lastName || "");
+        setEmail(cachedData.email || "");
+        setUsername(cachedData.username || "");
+        setBio(cachedData.bio || "");
+        setInstagram(cachedData.instagram || "");
+        setProfileImage(cachedData.profileImage);
+        setIsLoading(false);
+      } else {
+        setErrorMessage("No hay datos disponibles para mostrar sin conexión.");
+        setIsLoading(false);
+      }
+      return;
+    }
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/user/profile`,
         {
           method: "GET",
-
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+
       const data = await response.json();
       if (response.ok) {
         setUser(data);
@@ -55,8 +75,11 @@ function Profile() {
         setEmail(data.email || "");
         setUsername(data.username || "");
         setBio(data.bio || "");
-        setInstagram(data.instagram || ""); // Cargar el valor de Instagram
+        setInstagram(data.instagram || "");
         setProfileImage(data.profileImage);
+
+        // Guardar datos en localStorage para el modo offline
+        localStorage.setItem("cachedUserProfile", JSON.stringify(data));
       } else {
         setErrorMessage(data.message);
       }
@@ -69,6 +92,19 @@ function Profile() {
 
   useEffect(() => {
     fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
   }, []);
 
   /**
@@ -277,226 +313,260 @@ function Profile() {
         {isLoading ? (
           <LoadingSpinner />
         ) : user ? (
-          <form
-            className="profile-form glass-effect p-8 rounded-lg text-white w-full"
-            onSubmit={handleProfileUpdate}
-            aria-label="Formulario de perfil"
-          >
-            {/* Imagen de perfil */}
-            <div className="profile-image flex justify-center items-center flex-col mb-8">
-              {isImageLoading && <LoadingSpinner />}
-              <img
-                src={
-                  profileImage instanceof File
-                    ? URL.createObjectURL(profileImage)
-                    : user?.profileImage || "/img/user-icon.png" // Usa la imagen predeterminada si no hay una en el perfil
-                }
-                alt="Imagen de perfil"
-                className="profile-img-circle"
-                onLoad={() => setIsImageLoading(false)} // Detiene el spinner al cargar la imagen
-                onError={(e) => {
-                  e.target.src = "/img/user-icon.png"; // Asegura que siempre se use la imagen predeterminada en caso de error
-                  setIsImageLoading(false);
-                }}
-                style={{ display: isImageLoading ? "none" : "block" }}
-              />
-              <label className="exception px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] mt-5 hover:bg-[#0f172b] hover:text-white">
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  aria-label="Seleccionar archivo de imagen de perfil"
-                  accept="image/*"
-                />
-                Seleccionar archivo
-              </label>
-              <div className="mt-5 span-real">
-                <span className="text-sx text-left text-red-500 hover:text-red-500 mt-2">
-                  *La imagen de perfil debe pesar menos de 10MB.
-                </span>
+          <>
+            {isOffline && (
+              <div className="bg-red-500 text-white p-4 rounded mb-4">
+                Estás sin conexión. Solo puedes ver la información de tu perfil.
+                Conéctate a Internet para hacer cambios.
               </div>
-            </div>
+            )}
 
-            {/* Fila: Nombre y Apellido */}
-            <div className="flex gap-4 mb-4">
-              <div className="w-1/2">
-                <label htmlFor="firstName" className="block font-semibold mb-2">
-                  Nombre:
+            <form
+              className="profile-form glass-effect p-8 rounded-lg text-white w-full"
+              onSubmit={handleProfileUpdate}
+              aria-label="Formulario de perfil"
+            >
+              {/* Imagen de perfil */}
+              <div className="profile-image flex justify-center items-center flex-col mb-8">
+                {isImageLoading && <LoadingSpinner />}
+                <img
+                  src={
+                    profileImage instanceof File
+                      ? URL.createObjectURL(profileImage)
+                      : user?.profileImage || "/img/user-icon.png"
+                  }
+                  alt="Imagen de perfil"
+                  className="profile-img-circle"
+                  onLoad={() => setIsImageLoading(false)}
+                  onError={(e) => {
+                    e.target.src = "/img/user-icon.png";
+                    setIsImageLoading(false);
+                  }}
+                  style={{ display: isImageLoading ? "none" : "block" }}
+                />
+                <label className="exception px-4 py-2 rounded-md font-raleway font-bold transition-all duration-300 bg-[#EE8532] mt-5 hover:bg-[#0f172b] hover:text-white">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    aria-label="Seleccionar archivo de imagen de perfil"
+                    accept="image/*"
+                    disabled={isOffline}
+                  />
+                  Seleccionar archivo
                 </label>
-                <input
-                  id="firstName"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="input-field text-black"
-                  placeholder="Nombre registrado"
-                />
+                <div className="mt-5 span-real">
+                  <span className="text-sx text-left text-red-500 hover:text-red-500 mt-2">
+                    *La imagen de perfil debe pesar menos de 10MB.
+                  </span>
+                </div>
               </div>
-              <div className="w-1/2">
-                <label htmlFor="lastName" className="block font-semibold mb-2">
-                  Apellido:
+
+              {/* Fila: Nombre y Apellido */}
+              <div className="flex gap-4 mb-4">
+                <div className="w-1/2">
+                  <label
+                    htmlFor="firstName"
+                    className="block font-semibold mb-2"
+                  >
+                    Nombre:
+                  </label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="input-field text-black"
+                    placeholder="Nombre registrado"
+                    disabled={isOffline}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <label
+                    htmlFor="lastName"
+                    className="block font-semibold mb-2"
+                  >
+                    Apellido:
+                  </label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="input-field text-black"
+                    placeholder="Apellido registrado"
+                    disabled={isOffline}
+                  />
+                </div>
+              </div>
+
+              {/* Fila: Nombre de usuario e Instagram */}
+              <div className="flex gap-4 mb-4">
+                <div className="w-1/2">
+                  <label
+                    htmlFor="username"
+                    className="block font-semibold mb-2"
+                  >
+                    Usuario:
+                  </label>
+                  <input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="input-field text-black"
+                    placeholder="Nombre de usuario"
+                    disabled={isOffline}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <label
+                    htmlFor="instagram"
+                    className="block font-semibold mb-2"
+                  >
+                    Instagram:
+                  </label>
+                  <input
+                    id="instagram"
+                    type="text"
+                    value={instagram}
+                    onChange={(e) => setInstagram(e.target.value)}
+                    className="input-field text-black"
+                    placeholder="Tu cuenta de Instagram"
+                    disabled={isOffline}
+                  />
+                </div>
+              </div>
+
+              {/* Biografía */}
+              <div className="mb-4">
+                <label htmlFor="bio" className="block font-semibold mb-2">
+                  Biografía:
                 </label>
-                <input
-                  id="lastName"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                <textarea
+                  id="bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
                   className="input-field text-black"
-                  placeholder="Apellido registrado"
+                  placeholder="Escribe algo sobre ti"
+                  disabled={isOffline}
                 />
               </div>
-            </div>
 
-            {/* Fila: Nombre de usuario e Instagram */}
-            <div className="flex gap-4 mb-4">
-              <div className="w-1/2">
-                <label htmlFor="username" className="block font-semibold mb-2">
-                  Uusuario:
+              {/* E-mail */}
+              <div className="mb-4">
+                <label htmlFor="email" className="block font-semibold mb-2">
+                  E-mail:
                 </label>
+                <div className="span-real">
+                  <span className="text-xs text-red-500 hover:text-red-500 ">
+                    *No se pueden hacer cambios al e-mail
+                  </span>
+                </div>
                 <input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="input-field text-black"
-                  placeholder="Nombre de usuario"
+                  id="email"
+                  type="email"
+                  value={email}
+                  disabled
+                  className="input-field text-black mt-2"
                 />
               </div>
-              <div className="w-1/2">
-                <label htmlFor="instagram" className="block font-semibold mb-2">
-                  Instagram:   
-                </label>
+
+              {/* Checkbox para cambiar contraseña */}
+              <div className="mt-4 custom-checkbox">
                 <input
-                  id="instagram"
-                  type="text"
-                  value={instagram}
-                  onChange={(e) => setInstagram(e.target.value)}
-                  className="input-field text-black"
-                  placeholder="Tu cuenta de Instagram"
+                  type="checkbox"
+                  id="changePasswordCheckbox"
+                  checked={showPasswordField}
+                  onChange={() => setShowPasswordField((prev) => !prev)}
+                  disabled={isOffline}
                 />
-              </div>
-            </div>
-
-            {/* Biografía */}
-            <div className="mb-4">
-              <label htmlFor="bio" className="block font-semibold mb-2">
-                Biografía:
-              </label>
-              <textarea
-                id="bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                className="input-field text-black"
-                placeholder="Escribe algo sobre ti"
-              />
-            </div>
-
-            {/* E-mail */}
-            <div className="mb-4">
-              <label htmlFor="email" className="block font-semibold mb-2">
-                E-mail:
-              </label>
-              <div className="span-real">
-                <span className="text-xs text-red-500 hover:text-red-500 ">
-                  *No se pueden hacer cambios al e-mail
-                </span>
-              </div>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                disabled
-                className="input-field text-black mt-2"
-              />
-            </div>
-
-            {/* Checkbox para cambiar contraseña */}
-            <div className="mt-4 custom-checkbox">
-              <input
-                type="checkbox"
-                id="changePasswordCheckbox"
-                checked={showPasswordField}
-                onChange={() => setShowPasswordField((prev) => !prev)}
-              />
-              <label
-                htmlFor="changePasswordCheckbox"
-                className="font-semibold cursor-pointer"
-              >
-                Quiero cambiar mi contraseña
-              </label>
-            </div>
-
-            {/* Campos de contraseña */}
-            {showPasswordField && (
-              <div className="mt-4">
                 <label
-                  htmlFor="currentPassword"
-                  className="block font-semibold mb-2"
+                  htmlFor="changePasswordCheckbox"
+                  className="font-semibold cursor-pointer"
                 >
-                  Contraseña Actual:
+                  Quiero cambiar mi contraseña
                 </label>
-                <input
-                  id="currentPassword"
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="input-field text-black"
-                  placeholder="Contraseña actual"
-                />
-
-                <label
-                  htmlFor="password"
-                  className="block font-semibold mb-2 mt-4"
-                >
-                  Nueva Contraseña:
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input-field text-black"
-                  placeholder="Nueva contraseña"
-                />
               </div>
-            )}
 
-            {/* Botones de acción */}
-            <div className="flex flex-col items-center mt-8">
-              <CustomButton
-                text={isSaving ? <LoadingSpinner /> : "Guardar Cambios"}
-                bgColor="bg-naranja-bg hover:text-white"
-                textColor="text-white"
-                disabled={isSaving}
-              />
-              <button
-                type="button"
-                className="text-red-500 mt-4 font-bold"
-                onClick={openDeleteModal}
-                aria-label="Eliminar cuenta"
-              >
-                Eliminar Cuenta
-              </button>
-            </div>
-            {/* Mensaje de éxito */}
-            {successMessage && (
-              <p
-                className="success-message-profile font-semibold text-center"
-                role="alert"
-              >
-                {successMessage}
-              </p>
-            )}
+              {/* Campos de contraseña */}
+              {showPasswordField && (
+                <div className="mt-4">
+                  <label
+                    htmlFor="currentPassword"
+                    className="block font-semibold mb-2"
+                  >
+                    Contraseña Actual:
+                  </label>
+                  <input
+                    id="currentPassword"
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="input-field text-black"
+                    placeholder="Contraseña actual"
+                    disabled={isOffline}
+                  />
 
-            {/* Mensaje de error */}
-            {errorMessage && (
-              <p
-                className="error-message-profile font-semibold text-center"
-                role="alert"
-              >
-                {errorMessage}
-              </p>
-            )}
-          </form>
+                  <label
+                    htmlFor="password"
+                    className="block font-semibold mb-2 mt-4"
+                  >
+                    Nueva Contraseña:
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="input-field text-black"
+                    placeholder="Nueva contraseña"
+                    disabled={isOffline}
+                  />
+                </div>
+              )}
+
+              {/* Botones de acción */}
+              <div className="flex flex-col items-center mt-8">
+                <CustomButton
+                  text={isSaving ? <LoadingSpinner /> : "Guardar Cambios"}
+                  bgColor="bg-naranja-bg hover:text-white"
+                  textColor="text-white"
+                  disabled={isSaving || isOffline}
+                />
+                <button
+                  type="button"
+                  className={`text-red-500 mt-4 font-bold ${
+                    isOffline ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  onClick={openDeleteModal}
+                  aria-label="Eliminar cuenta"
+                  disabled={isOffline}
+                >
+                  Eliminar Cuenta
+                </button>
+              </div>
+
+              {/* Mensaje de éxito */}
+              {successMessage && (
+                <p
+                  className="success-message-profile font-semibold text-center"
+                  role="alert"
+                >
+                  {successMessage}
+                </p>
+              )}
+
+              {/* Mensaje de error */}
+              {errorMessage && (
+                <p
+                  className="error-message-profile font-semibold text-center"
+                  role="alert"
+                >
+                  {errorMessage}
+                </p>
+              )}
+            </form>
+          </>
         ) : (
           <p className="text-red-500">Error al cargar el perfil.</p>
         )}

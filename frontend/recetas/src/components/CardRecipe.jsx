@@ -81,7 +81,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       if (storedFavoriteStatus !== null) {
         setIsFavorited(JSON.parse(storedFavoriteStatus));
       }
-      return; // Salimos si está offline
+      return;
     }
 
     const checkFavoriteStatus = async () => {
@@ -91,8 +91,11 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/favorites`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
+
         const isInFavorites = response.data.recipes.some(
           (fav) => fav._id === recipe._id
         );
@@ -108,12 +111,25 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
 
   useEffect(() => {
     const updateUserName = async () => {
+      if (!navigator.onLine) {
+        // Si estás offline, recupera el nombre de usuario desde localStorage
+        const cachedUser = JSON.parse(
+          localStorage.getItem(`user-${recipe.userId}`)
+        );
+        if (cachedUser) {
+          setUserName(cachedUser.username);
+        }
+        return;
+      }
+
       const res = await safeAxiosGet(
         `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
       );
 
       if (res) {
         setUserName(res.data.username);
+        // Guarda el nombre de usuario en localStorage
+        localStorage.setItem(`user-${recipe.userId}`, JSON.stringify(res.data));
       }
     };
 
@@ -135,6 +151,16 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   }, [recipe._id]);
 
   const fetchComments = async (recipeId) => {
+    if (!navigator.onLine) {
+      const cachedComments =
+        JSON.parse(localStorage.getItem(`comments-${recipeId}`)) || [];
+      setComments((prevComments) => ({
+        ...prevComments,
+        [recipeId]: cachedComments,
+      }));
+      return;
+    }
+
     const res = await safeAxiosGet(
       `${import.meta.env.VITE_API_URL}/api/comments/recipe/${recipeId}`
     );
@@ -144,8 +170,11 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         ...prevComments,
         [recipeId]: res.data.comments || [],
       }));
-    } else {
-      setMessage("No se encontraron comentarios o estás sin conexión.");
+      // Guarda los comentarios en localStorage para el modo offline
+      localStorage.setItem(
+        `comments-${recipeId}`,
+        JSON.stringify(res.data.comments)
+      );
     }
   };
 
@@ -321,11 +350,19 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       const cachedRecipes =
         JSON.parse(localStorage.getItem("cachedRecipes")) || [];
 
-      // Verificamos si ya está guardada la receta
-      const isAlreadyCached = cachedRecipes.some((r) => r._id === recipe._id);
+      // Verificamos si la receta ya está cacheada y si su versión es la misma
+      const isAlreadyCached = cachedRecipes.some(
+        (r) => r._id === recipe._id && r.updatedAt === recipe.updatedAt
+      );
 
       if (!isAlreadyCached) {
-        cachedRecipes.push({
+        // Filtramos la receta antigua en caso de que exista para reemplazarla
+        const updatedRecipes = cachedRecipes.filter(
+          (r) => r._id !== recipe._id
+        );
+
+        // Agregamos la receta actualizada
+        updatedRecipes.push({
           _id: recipe._id,
           title: recipe.title,
           image: recipe.image,
@@ -333,14 +370,17 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           steps: recipe.steps,
           likes: recipe.likes,
           isFavorited,
+          updatedAt: recipe.updatedAt, // Asegura que se detecten cambios futuros
         });
 
-        localStorage.setItem("cachedRecipes", JSON.stringify(cachedRecipes));
+        // Guardamos en localStorage
+        localStorage.setItem("cachedRecipes", JSON.stringify(updatedRecipes));
       }
     };
 
     cacheRecipeData();
   }, [recipe, isFavorited]);
+
   useEffect(() => {
     if (!navigator.onLine) {
       const cachedRecipes =
@@ -351,26 +391,38 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         setIsFavorited(cachedRecipe.isFavorited);
         setLikes(cachedRecipe.likes || []);
       } else {
-        console.warn("Receta no encontrada en caché.");
+        console.warn(`Receta ${recipe._id} no encontrada en caché.`);
       }
     }
   }, [recipe._id]);
 
   useEffect(() => {
     const cacheImage = async () => {
-      if (!navigator.onLine) return;
+      if (!navigator.onLine || !recipe.image) return;
 
       const cachedImages =
         JSON.parse(localStorage.getItem("cachedImages")) || {};
 
-      if (!cachedImages[recipe._id] && recipe.image) {
+      // Verificar si la imagen ya está cacheada o si la URL ha cambiado
+      if (
+        !cachedImages[recipe._id] ||
+        cachedImages[recipe._id].url !== recipe.image
+      ) {
         try {
-          const response = await fetch(recipe.image);
+          const response = await fetch(recipe.image, { mode: "cors" });
+
+          if (!response.ok && response.type !== "opaque") {
+            throw new Error(`Failed to fetch image: ${response.status}`);
+          }
+
           const blob = await response.blob();
           const reader = new FileReader();
 
           reader.onloadend = () => {
-            cachedImages[recipe._id] = reader.result;
+            cachedImages[recipe._id] = {
+              url: recipe.image, // Guardamos la URL para verificar cambios
+              data: reader.result, // Guardamos la imagen en base64
+            };
             localStorage.setItem("cachedImages", JSON.stringify(cachedImages));
           };
 
@@ -386,7 +438,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
 
   const cachedImages = JSON.parse(localStorage.getItem("cachedImages")) || {};
   const recipeImage =
-    cachedImages[recipe._id] || recipe.image || "/img/recipe-null.png";
+    cachedImages[recipe._id]?.data || recipe.image || "/img/recipe-null.png";
   return (
     <div
       className={`mb-10 recipe-card relative ${isLoaded ? "loaded" : ""} ${
@@ -674,6 +726,7 @@ CardRecipe.propTypes = {
       })
     ),
     createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string, // <-- Agrega esta línea
     userName: PropTypes.string,
     userId: PropTypes.string.isRequired,
   }).isRequired,

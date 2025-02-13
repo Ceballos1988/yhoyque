@@ -5,32 +5,36 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
 
 const BrandCarousel = () => {
-  const [brands, setBrands] = useState([]); // Estado dinámico para marcas
-  const [isLoading, setIsLoading] = useState(true); // Estado para mostrar un spinner
-  const [error, setError] = useState(null); // Estado para errores
+  const [brands, setBrands] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Obtener marcas del backend
   useEffect(() => {
     const fetchBrands = async () => {
+      if (!navigator.onLine) {
+        setError("Estás sin conexión. No se pueden cargar las marcas en este momento.");
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token"); // Obtener el token del local storage
+        const token = localStorage.getItem("token");
         const response = await axios.get(`${API_BASE_URL}/api/brands`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Incluir el token en el encabezado
+            Authorization: `Bearer ${token}`,
           },
         });
-        setBrands(response.data); // Actualiza las marcas con la respuesta
-        setIsLoading(false);
+        setBrands(response.data);
       } catch (err) {
         console.error("Error al cargar las marcas:", err);
-        setError("Hubo un problema al cargar las marcas.");
+        setError("Hubo un problema al cargar las marcas. Inténtalo más tarde.");
+      } finally {
         setIsLoading(false);
       }
     };
-  
+
     fetchBrands();
   }, []);
-  
 
   if (isLoading) {
     return <p className="text-center text-white">Cargando marcas...</p>;
@@ -47,28 +51,13 @@ const BrandCarousel = () => {
       </h2>
       <div className="brand-carousel-track flex animate-marquee">
         {brands.map((brand) => (
-          <div
-            key={brand._id}
-            className="brand-carousel-item mx-4 flex-shrink-0"
-          >
-            <img
-              src={brand.imageUrl}
-              alt={brand.name}
-              className="w-32 h-32 object-contain"
-            />
+          <div key={brand._id} className="brand-carousel-item mx-4 flex-shrink-0">
+            <img src={brand.imageUrl} alt={brand.name} className="w-32 h-32 object-contain" />
           </div>
         ))}
-        {/* Duplicar para efecto infinito */}
         {brands.map((brand) => (
-          <div
-            key={`duplicate-${brand._id}`}
-            className="brand-carousel-item mx-4 flex-shrink-0"
-          >
-            <img
-              src={brand.imageUrl}
-              alt={brand.name}
-              className="w-32 h-32 object-contain"
-            />
+          <div key={`duplicate-${brand._id}`} className="brand-carousel-item mx-4 flex-shrink-0">
+            <img src={brand.imageUrl} alt={brand.name} className="w-32 h-32 object-contain" />
           </div>
         ))}
       </div>

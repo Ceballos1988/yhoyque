@@ -2,15 +2,21 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: '/',  // Mantiene la base desde raíz
+  base: '/',
   plugins: [react()],
   server: {
+    port: 5173,
     proxy: {
       "/api": {
-        target: "https://yhoyque.onrender.com",
+        target: "http://localhost:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+    },
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+      port: 5173,
     },
   },
   build: {
@@ -18,7 +24,7 @@ export default defineConfig({
     manifest: true,
     assetsDir: "assets",
     rollupOptions: {
-      input: "/index.html",  // Cambia la ruta para asegurar que apunta a la raíz
+      input: "/index.html",
     },
     copyPublicDir: true,
   },

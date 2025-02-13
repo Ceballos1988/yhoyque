@@ -135,7 +135,7 @@ const RecipeWall = () => {
   const loadAllRecipes = useCallback(async () => {
     setIsLoading(true); // Activar el spinner
     const token = localStorage.getItem("token");
-  
+
     try {
       let endpoint = `${import.meta.env.VITE_API_URL}/api/recipes`;
       let method = "get";
@@ -148,39 +148,52 @@ const RecipeWall = () => {
           sortOption: filters.sortOption || null,
         },
       };
-  
+
       if (filters.savedRecipesOnly && user) {
         endpoint = `${import.meta.env.VITE_API_URL}/api/favorites`;
       } else if (filters.userRecipesOnly && user) {
-        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/user/${user.id}`;
+        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/user/${
+          user.id
+        }`;
       } else if (searchIngredients.length > 0) {
-        endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/searchByIngredients`;
+        endpoint = `${
+          import.meta.env.VITE_API_URL
+        }/api/recipes/searchByIngredients`;
         method = "post";
         requestData = {
           ...requestData,
-          data: { ingredients: searchIngredients, filters: buildParams.filters },
+          data: {
+            ingredients: searchIngredients,
+            filters: buildParams.filters,
+          },
         };
       } else if (searchTerm) {
         endpoint = `${import.meta.env.VITE_API_URL}/api/recipes/search`;
         requestData.params = { ...requestData.params, name: searchTerm };
       }
-  
+
       const res = await axios({ method, url: endpoint, ...requestData });
-  
+
       setRecipes(res.data.recipes || res.data);
-      setTotalRecipes(Number.isInteger(res.data.totalCount) ? res.data.totalCount : 0);
-  
+      setTotalRecipes(
+        Number.isInteger(res.data.totalCount) ? res.data.totalCount : 0
+      );
+
       // Guardar en localStorage para el acceso offline
-      localStorage.setItem("recetasVistas", JSON.stringify(res.data.recipes || res.data));
-  
+      localStorage.setItem(
+        "recetasVistas",
+        JSON.stringify(res.data.recipes || res.data)
+      );
+
       if (filters.savedRecipesOnly && res.data.favorites) {
         setFavorites(res.data.favorites);
       }
     } catch (error) {
       console.error("Error al cargar las recetas:", error);
-  
+
       // En caso de error, intenta cargar las recetas desde localStorage
-      const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+      const recetasOffline =
+        JSON.parse(localStorage.getItem("recetasVistas")) || [];
       if (recetasOffline.length > 0) {
         setRecipes(recetasOffline);
       } else {
@@ -199,7 +212,6 @@ const RecipeWall = () => {
     filters.sortOption,
     user,
   ]);
-  
 
   useEffect(() => {
     loadAllRecipes();
@@ -207,26 +219,26 @@ const RecipeWall = () => {
 
   // Detectar cambios en la conexión
   // Detectar cambios en la conexión y cargar recetas desde el caché si está offline
-useEffect(() => {
-  const handleConnectionChange = () => {
-    setIsOffline(!navigator.onLine);
-    if (!navigator.onLine) {
-      const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
-      setRecipes(recetasOffline);
-    } else {
-      loadAllRecipes(); // Vuelve a cargar desde la API si hay conexión
-    }
-  };
-
-  window.addEventListener("online", handleConnectionChange);
-  window.addEventListener("offline", handleConnectionChange);
-
-  return () => {
-    window.removeEventListener("online", handleConnectionChange);
-    window.removeEventListener("offline", handleConnectionChange);
-  };
-}, [loadAllRecipes]);
-
+  useEffect(() => {
+    const handleConnectionChange = () => {
+      setIsOffline(!navigator.onLine);
+      if (!navigator.onLine) {
+        const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+        setRecipes(recetasOffline);
+      } else {
+        loadAllRecipes(); // Vuelve a cargar desde la API si hay conexión
+      }
+    };
+  
+    window.addEventListener("online", handleConnectionChange);
+    window.addEventListener("offline", handleConnectionChange);
+  
+    return () => {
+      window.removeEventListener("online", handleConnectionChange);
+      window.removeEventListener("offline", handleConnectionChange);
+    };
+  }, [loadAllRecipes]);
+  
 
   // Cargar recetas favoritas desde localStorage si está offline
   useEffect(() => {
@@ -245,6 +257,13 @@ useEffect(() => {
     }
   }, [recipes, isOffline]);
 
+  useEffect(() => {
+    if (isOffline) {
+      const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+      setRecipes(recetasOffline);
+    }
+  }, [isOffline]);
+  
   /**
    * Función para manejar la lógica de paginación.
    */
@@ -471,15 +490,17 @@ useEffect(() => {
               </p>
               {/* Mostrar mensaje si está sin conexión */}
               {isOffline && (
-                <div className="offline-message text-center text-white bg-azul-bg p-4 rounded-md shadow-md mb-4">
-                  <h2 className="text-naranja-bg text-2xl font-bold">
-                    Recetas guardadas como favoritos
-                  </h2>
-                  <p className="mt-2">
-                    Estás viendo tus recetas guardadas como favoritos. Si querés
-                    acceder a más recetas sin conexión, asegurate de guardarlas
-                    cuando tengas internet.
-                  </p>
+                <div className="offline-message text-center text-white p-4 rounded-md mb-4">
+                  <div className="bg-red-500 text-white p-4 rounded mb-4">
+                    <h2 className="text-2xl font-bold">
+                      Recetas disponibles sin conexión
+                    </h2>
+                    <p className="mt-2">
+                      Estás viendo las recetas que consultaste previamente. Para
+                      asegurarte de tener más recetas disponibles sin conexión,
+                      navegá por ellas cuando tengas internet.
+                    </p>
+                  </div>
                 </div>
               )}
               {isLoading ? (

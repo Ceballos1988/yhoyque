@@ -34,6 +34,21 @@ const CreateRecipe = () => {
   const [isImageUploading, setIsImageUploading] = useState(false); // Estado para la carga de imagen
   const [isPageLoading, setIsPageLoading] = useState(true); // Nuevo estado para la carga de la página
 
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchRecipe = async () => {
       if (recipeId) {
@@ -364,13 +379,21 @@ const CreateRecipe = () => {
             </div>
           )}
 
-          <div className="relative">
+          <div className="relative flex flex-col items-center justify-center">
             {isPageLoading && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10 rounded-lg">
                 <LoadingSpinner />
               </div>
             )}
 
+            {isOffline && (
+              <div className="bg-red-500 text-white p-4 rounded mb-4">
+                Estás sin conexión. Si creas una receta ahora, no se guardará en
+                el servidor. Conéctate a Internet para guardar tus recetas en la
+                comunidad.
+              </div>
+            )}
+            
             <form
               onSubmit={handleSubmit}
               className={`create-recipe-form glass-effect p-4 rounded-lg shadow-lg font-raleway ${
@@ -821,6 +844,7 @@ const CreateRecipe = () => {
               )}
             </form>
           </div>
+
           {/* Modal de Previsualización */}
           <Modal
             isOpen={showPreview}
