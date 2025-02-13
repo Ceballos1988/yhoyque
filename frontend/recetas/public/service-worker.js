@@ -1,4 +1,4 @@
-const CACHE_NAME = "v45"; // Incrementa el número de versión para forzar una actualización
+const CACHE_NAME = "v46"; // Incrementa el número de versión para forzar una actualización
 
 const urlsToCache = [
   "/",
@@ -24,6 +24,9 @@ const urlsToCache = [
   "/img/edit.png",
   "/img/offline.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png",
+  "/dist/index.html", // Asegurar que se cachea correctamente
+  "/dist/offline.html",
+  "/dist/manifest.json"
 ];
 
 // 🔹 Instalación: Almacena los archivos en la caché
@@ -77,7 +80,9 @@ self.addEventListener("fetch", (event) => {
         .catch(() => {
           // Si falla la red, devolver contenido alternativo
           if (request.mode === "navigate") {
-            return caches.match("/index.html"); // Mantener la SPA funcionando
+            return caches.match(self.location.origin + "/index.html").then(response => {
+              return response || fetch("index.html");
+            });
           } else if (request.destination === "image") {
             return caches.match("/img/recipe-null.png"); // Imagen por defecto
           } else {
