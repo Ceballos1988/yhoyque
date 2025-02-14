@@ -1,4 +1,4 @@
-const CACHE_NAME = "v46"; // Incrementa el número de versión para forzar una actualización
+const CACHE_NAME = "v47"; // Incrementa la versión al actualizar cambios
 
 const urlsToCache = [
   "/",
@@ -39,21 +39,20 @@ const urlsToCache = [
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png",
   "/dist/index.html", // Asegurar que se cachea correctamente
   "/dist/offline.html",
-  "/dist/manifest.json"
-  
+  "/dist/manifest.json",
 ];
 
-// 🔹 Instalación: Almacena los archivos en la caché
+// 🔹 Instalación: Guarda archivos esenciales en caché
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache);
     })
   );
-  self.skipWaiting(); // Activa el Service Worker inmediatamente
+  self.skipWaiting();
 });
 
-// 🔹 Activación: Elimina versiones antiguas del caché
+// 🔹 Activación: Borra cachés antiguas
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) =>
@@ -66,10 +65,10 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
-  self.clients.claim(); // Toma control de todas las páginas inmediatamente
+  self.clients.claim();
 });
 
-// 🔹 Manejo de las solicitudes de red
+// 🔹 Intercepta las peticiones y gestiona el caché
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
@@ -84,6 +83,7 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(request)
         .then((networkResponse) => {
+          // Guardar solo páginas y archivos en caché
           if (request.url.startsWith(self.location.origin)) {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, networkResponse.clone());
@@ -92,15 +92,11 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Si falla la red, devolver contenido alternativo
+          // Si falla la red, mostrar fallback adecuado
           if (request.mode === "navigate") {
-            return caches.match(self.location.origin + "/index.html").then(response => {
-              return response || fetch("index.html");
-            });
-          } else if (request.destination === "image") {
-            return caches.match("/img/recipe-null.png"); // Imagen por defecto
-          } else {
             return caches.match("/offline.html");
+          } else if (request.destination === "image") {
+            return caches.match("/img/recipe-null.png");
           }
         });
     })
