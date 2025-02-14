@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
@@ -17,40 +17,8 @@ import "../../styles/components/home/style.heroSection.css";
 function HeroSection({ isAuthenticated, logout }) {
   const [isPaused, setIsPaused] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [isInstallable, setIsInstallable] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true); // Estado para controlar la carga de la imagen
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);
-    };
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    };
-  }, []);
-
-  const handleInstallApp = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-
-      if (outcome === "accepted") {
-        console.log("La aplicación ha sido instalada.");
-      } else {
-        console.log("La instalación fue rechazada.");
-      }
-
-      setDeferredPrompt(null);
-      setIsInstallable(false);
-    }
-  };
 
   const handlePauseToggle = () => {
     setIsPaused((prev) => !prev);
@@ -128,15 +96,6 @@ function HeroSection({ isAuthenticated, logout }) {
                   aria-label="Botón para cerrar sesión"
                 />
               </>
-            )}
-            {isInstallable && (
-              <CustomButton
-                text="Instalar la App"
-                bgColor="bg-naranja-bg"
-                textColor="text-white"
-                aria-label="Botón para instalar la app"
-                onClick={handleInstallApp}
-              />
             )}
           </div>
         </motion.div>

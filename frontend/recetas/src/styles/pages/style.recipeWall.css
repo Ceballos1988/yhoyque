@@ -231,7 +231,7 @@ p {
   }
 
   .sidebar-container {
-    width: 340px !important; /* Ancho fijo para el sidebar expandido */
+    width: 90% !important; /* Ancho fijo para el sidebar expandido */
     height: 85vh !important;
     padding: 8px !important;
   }

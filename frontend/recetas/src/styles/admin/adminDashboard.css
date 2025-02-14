@@ -84,3 +84,30 @@
    
   }
 }
+
+.offline-message-admin {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 40px auto;
+  color: white;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  font-family: "Raleway", sans-serif;
+}
+
+.offline-message-admin h2 {
+  font-size: 2rem;
+  color: #ee8532;
+}
+
+.offline-message-admin p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.offline-icon {
+  font-size: 3rem;
+  margin-top: 20px;
+}

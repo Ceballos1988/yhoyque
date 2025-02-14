@@ -19,7 +19,7 @@ function DownloadSection() {
     try {
       await navigator.share({
         title: "¿Y HOY QUÉ?",
-        text: "¡Descubrí las mejores recetas personalizadas!",
+        text: "¡Descubrí las mejores recetas personalizadas y gestioná tus listas de compras sin conexión!",
         url: window.location.href,
       });
       console.log("📤 Contenido compartido con éxito.");
@@ -36,27 +36,27 @@ function DownloadSection() {
     >
       <div className="download-content container mx-auto flex flex-col lg:flex-row justify-center items-center gap-10">
         <div className="download-text lg:w-1/2 text-left mt-10 mb-10 ml-10">
-          <h2 id="download-title" className="section-title text-left pb-10 text-azul-bg">
-            ¡DESCARGÁ NUESTRA APP!
-          </h2>
+          <h2 id="download-title" className="section-title text-left text-3xl font-bold pb-10 text-azul-bg">
+            ACCEDÉ A LA APP EN CUALQUIER MOMENTO</h2>
 
           <p className="text-white text-left">
-            Llevá tus recetas favoritas siempre con vos. Nuestra aplicación está diseñada como una <strong>PWA</strong>, lo que significa que podés descargarla directamente desde tu navegador y acceder a todas las recetas sin conexión.
+            Nuestra aplicación funciona como una <strong>PWA</strong>, lo que te permite acceder rápidamente desde tu navegador y gestionar tus <strong>listas de compras</strong> incluso sin conexión.
           </p>
 
           <p className="text-white text-left mt-4">
-            Disfrutá de la flexibilidad de tener recetas personalizadas y actualizaciones automáticas sin la necesidad de una app store. Compatible con dispositivos Android, iOS, tablets y computadoras de escritorio.
+            No es necesario descargar nada desde una tienda de apps. Simplemente visitá nuestra web y utilizala como una app en tu dispositivo móvil o computadora.
           </p>
 
           <div className="mt-5 flex flex-col gap-4">
             {canShare && (
-              <button
-                className="button-download mt-6 font-raleway font-bold text-white mx-auto text-center"
-                onClick={handleShareApp}
-                aria-label="Compartir la aplicación"
-              >
-                Compartir la App
-              </button>
+             <button
+             className="button-download mt-6 font-raleway font-bold text-white text-left"
+             onClick={handleShareApp}
+             aria-label="Compartir la aplicación"
+           >
+             Compartir la App
+           </button>
+           
             )}
           </div>
         </div>
@@ -64,7 +64,7 @@ function DownloadSection() {
         <div className="download-image-container flex justify-center">
           <img
             src="/img/download-app.png"
-            alt="Representación visual de la app para descargar"
+            alt="Ilustración representando el acceso offline"
             className="download-image"
           />
         </div>

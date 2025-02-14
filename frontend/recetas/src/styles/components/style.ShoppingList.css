@@ -231,6 +231,10 @@ background-color:#0f172b!important;
     padding: 15px;
   }
 
+  .shopping-list-card .ico-hover img{
+    width: 35px;
+    height: 45px;
+  }
   .shopping-list-card h2 {
     font-size: 1.2rem!important;
   }

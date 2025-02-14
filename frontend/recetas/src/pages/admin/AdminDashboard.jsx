@@ -1,21 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/admin/adminDashboard.css";
 import UserManagement from "./UserManagement";
-import AdminReports from "./AdminReports"; // Importar el componente de reportes
-import AdminBrands from "./AdminBrands"; // Importar el nuevo componente de marcas
-import AdminStatistics from "./AdminStatistics"; // Importa el nuevo componente
+import AdminReports from "./AdminReports";
+import AdminBrands from "./AdminBrands";
+import AdminStatistics from "./AdminStatistics";
 
 const AdminDashboard = () => {
-  const [activePage, setActivePage] = useState("users"); // Página activa
+  const [activePage, setActivePage] = useState("users");
+  const [isOnline, setIsOnline] = useState(navigator.onLine); // Estado para detectar conexión
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   const renderContent = () => {
+    if (!isOnline) {
+      return (
+        <div className="offline-message-admin">
+          <h2>Sin conexión a Internet</h2>
+          <p>
+            Parece que estás desconectado. La información del panel de
+            administración está sincronizada con la base de datos en línea.
+          </p>
+          <p>Por favor, vuelve cuando tengas conexión.</p>
+          <div className="offline-icon">📶❌</div>
+        </div>
+      );
+    }
+
     switch (activePage) {
       case "users":
         return <UserManagement />;
       case "reports":
         return <AdminReports />;
       case "brands":
-        return <AdminBrands />; // Nuevo caso para el componente de marcas
+        return <AdminBrands />;
       case "statistics":
         return <AdminStatistics />;
       default:
@@ -45,7 +73,7 @@ const AdminDashboard = () => {
             className={activePage === "brands" ? "active" : ""}
             onClick={() => setActivePage("brands")}
           >
-            Marcas {/* Nuevo elemento del menú */}
+            Marcas
           </li>
           <li
             className={activePage === "statistics" ? "active" : ""}

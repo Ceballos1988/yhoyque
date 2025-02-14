@@ -2,85 +2,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
-/* Responsividad */
-@media (max-width: 550px) {
-.section-title-features {
-  font-size:1rem!important;
-
-}
-
-  .feature-card h3 {
-    font-size: 1.2rem !important;
-  }
-  .feature-card p {
-    font-size: 1rem !important;
-  }
-
-
-}
-
-
-@media (max-width: 1024px) {
-  .feature-card h1 {
-    font-size: 2.5rem !important;
-    text-align: center;
-  }
-  .feature-card h3 {
-    font-size: 1.5rem !important;
-    text-align: center;
-  }
-  .feature-card p {
-    font-size: 1rem !important;
-    text-align: center;
-  }
-
-  .feature-card {
-    width: 350px !important;
-    height: 220px !important;
-    margin-top: 80px !important;
-  }
-
-  .swiper-wrapper {
-    max-width: 800px;
-  }
-
-  /* Estilo para los puntos de paginación */
-  .swiper-pagination-bullet {
-    background: #ffffff; /* Puntos blancos */
-    border: 2px solid #ee8532; /* Borde naranja */
-    opacity: 1;
-    width: 12px;
-    height: 12px;
-    margin: 0 6px;
-  }
-
-  .swiper-pagination-bullet-active {
-    background: #ee8532; /* Punto activo */
-    border: none;
-  }
-
-  .slick-dots {
-    margin-top: -10px; /* Ajusta la distancia entre las tarjetas y los puntos */
-  }
-  
-
-  .slick-dots li button:before {
-    color: #cccccc;
-    font-size: 0.8rem;
-  }
-
-  .slick-dots li.slick-active button:before {
-    color: #ffffff;
-  }
-
-  .slick-prev:before,
-  .slick-next:before {
-    color: #ffffff;
-  }
-  .slick-track{
-    width: 80vw!important;
-  }
-}
 
 
 /* src/styles/components/home/style.featuresSection.css */
@@ -173,3 +94,88 @@
   font-family: "Raleway", sans-serif;
 }
 
+
+/* Responsividad */
+@media (max-width: 550px) {
+  .section-title-features {
+    font-size: 1rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.2rem !important;
+  }
+  .feature-card p {
+    font-size: 1rem !important;
+  }
+
+  .feature-card {
+    margin-bottom: 50px !important; /* Aumenta aún más la separación */
+  }
+
+  .features-grid {
+    gap: 6rem !important; /* Más espacio en pantallas muy pequeñas */
+  }
+
+ 
+}
+
+@media (max-width: 1024px) {
+  .feature-card h1 {
+    font-size: 2.5rem !important;
+    text-align: center;
+  }
+  .feature-card h3 {
+    font-size: 1.5rem !important;
+    text-align: center;
+  }
+  .feature-card p {
+    font-size: 1rem !important;
+    text-align: center;
+  }
+
+  .feature-card {
+    width: 320px !important;
+    height: 220px !important;
+    margin-top: 80px !important;
+  }
+
+  .swiper-wrapper {
+    max-width: 800px;
+  }
+
+  /* Estilo para los puntos de paginación */
+  .swiper-pagination-bullet {
+    background: #ffffff; /* Puntos blancos */
+    border: 2px solid #ee8532; /* Borde naranja */
+    opacity: 1;
+    width: 12px;
+    height: 12px;
+    margin: 0 6px;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: #ee8532; /* Punto activo */
+    border: none;
+  }
+
+  .slick-dots {
+    margin-top: -10px; /* Ajusta la distancia entre las tarjetas y los puntos */
+  }
+
+  .slick-dots li button:before {
+    color: #cccccc;
+    font-size: 0.8rem;
+  }
+
+  .slick-dots li.slick-active button:before {
+    color: #ffffff;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: #ffffff;
+  }
+  .slick-track {
+    width: 80vw !important;
+  }
+}

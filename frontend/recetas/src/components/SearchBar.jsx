@@ -117,7 +117,7 @@ const SearchBar = ({
 
   return (
     <div className="search-bar-background">
-      <div className="search-bar-container">
+      <div className="search-bar-container mt-10">
         {/* Icono de filtro solo decorativo */}
         <div className="search-icon flex">
           <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png" alt="Icono de filtros" />

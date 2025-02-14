@@ -223,22 +223,22 @@ const RecipeWall = () => {
     const handleConnectionChange = () => {
       setIsOffline(!navigator.onLine);
       if (!navigator.onLine) {
-        const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+        const recetasOffline =
+          JSON.parse(localStorage.getItem("recetasVistas")) || [];
         setRecipes(recetasOffline);
       } else {
         loadAllRecipes(); // Vuelve a cargar desde la API si hay conexión
       }
     };
-  
+
     window.addEventListener("online", handleConnectionChange);
     window.addEventListener("offline", handleConnectionChange);
-  
+
     return () => {
       window.removeEventListener("online", handleConnectionChange);
       window.removeEventListener("offline", handleConnectionChange);
     };
   }, [loadAllRecipes]);
-  
 
   // Cargar recetas favoritas desde localStorage si está offline
   useEffect(() => {
@@ -259,11 +259,12 @@ const RecipeWall = () => {
 
   useEffect(() => {
     if (isOffline) {
-      const recetasOffline = JSON.parse(localStorage.getItem("recetasVistas")) || [];
+      const recetasOffline =
+        JSON.parse(localStorage.getItem("recetasVistas")) || [];
       setRecipes(recetasOffline);
     }
   }, [isOffline]);
-  
+
   /**
    * Función para manejar la lógica de paginación.
    */
@@ -309,87 +310,93 @@ const RecipeWall = () => {
       className="recipe-wall-container min-h-screen flex text-azul-bg pb-20 pt-10 relative"
       role="main"
     >
-      {/* Sidebar con expansión */}
-      <div
-        className={` rounded-md shadow-md sidebar-container ${
-          isSidebarExpanded ? "" : "collapsed"
-        }`}
-      >
-        <button
-          className="expand-sidebar-button absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8  flex items-center justify-center"
-          onClick={toggleSidebar}
+      {/* Sidebar con expansión (oculto si está offline) */}
+      {!isOffline && (
+        <div
+          className={`rounded-md shadow-md sidebar-container ${
+            isSidebarExpanded ? "" : "collapsed"
+          }`}
         >
-          <img
-            src={isSidebarExpanded ? "https://res.cloudinary.com/dnlyti3zm/image/upload/v1739477335/cerrar_ngfyef.png" : "/img/abrir.png"}
-            alt={isSidebarExpanded ? "Cerrar Sidebar" : "Abrir Sidebar"}
-            className="w-8 h-8 mr-3"
-            title={isSidebarExpanded ? "Cerrar" : "Abrir"}
-          />
-        </button>
+          <button
+            className="expand-sidebar-button absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center"
+            onClick={toggleSidebar}
+          >
+            <img
+              src={
+                isSidebarExpanded
+                  ? "https://res.cloudinary.com/dnlyti3zm/image/upload/v1739477335/cerrar_ngfyef.png"
+                  : "/img/abrir.png"
+              }
+              alt={isSidebarExpanded ? "Cerrar Sidebar" : "Abrir Sidebar"}
+              className="w-8 h-8 mr-3"
+              title={isSidebarExpanded ? "Cerrar" : "Abrir"}
+            />
+          </button>
 
-        {isSidebarExpanded && (
-          <div className="flex flex-col">
-            {/* Sección de búsqueda */}
-            <div className="search-bar-section mb-6 ml-5">
-              <SearchBar
-                searchTerm={searchTerm}
-                ingredientTerm={searchIngredients.join(", ")}
-                onSearch={handleSearchChange}
-                onIngredientSearch={handleIngredientSearch}
-                onIdSearch={handleIdSearch} // Nueva función
-                onClearSearch={clearSearch}
-                isAdmin={user?.role === "admin"} // Verifica si el usuario es administrador
-                placeholder="Buscar por título o @usuario..."
-                ingredientPlaceholder="Buscar por ingredientes..."
-                idPlaceholder="Buscar por ID de receta..." // Placeholder para ID
-              />
+          {isSidebarExpanded && (
+            <div className="flex flex-col">
+              {/* Sección de búsqueda */}
+              <div className="search-bar-section mb-6 ml-5">
+                <SearchBar
+                  searchTerm={searchTerm}
+                  ingredientTerm={searchIngredients.join(", ")}
+                  onSearch={handleSearchChange}
+                  onIngredientSearch={handleIngredientSearch}
+                  onIdSearch={handleIdSearch}
+                  onClearSearch={clearSearch}
+                  isAdmin={user?.role === "admin"}
+                  placeholder="Buscar por título o @usuario..."
+                  ingredientPlaceholder="Buscar por ingredientes..."
+                  idPlaceholder="Buscar por ID de receta..."
+                />
 
-              {errorMessage && (
-                <p className="error-message text-red-500 text-center mt-2">
-                  {errorMessage}
-                </p>
-              )}
-              {/* Aviso de búsqueda activa */}
-              {(searchTerm || searchIngredients.length > 0) && (
-                <div className="filters-active-message text-raleway text-naranja-bg mt-2 text-center">
-                  Búsqueda aplicada:{" "}
-                  {searchTerm.startsWith("@")
-                    ? "Usuario"
-                    : searchTerm
-                    ? "Título"
-                    : searchIngredients.length > 0
-                    ? "Ingredientes"
-                    : ""}
-                  <button
-                    onClick={clearSearch} // Llama a clearSearch
-                    className="text-white underline ml-2"
-                    aria-label="Limpiar búsqueda"
-                  >
-                    Limpiar Búsqueda
-                  </button>
-                </div>
-              )}
+                {errorMessage && (
+                  <p className="error-message text-red-500 text-center mt-2">
+                    {errorMessage}
+                  </p>
+                )}
+                {/* Aviso de búsqueda activa */}
+                {(searchTerm || searchIngredients.length > 0) && (
+                  <div className="filters-active-message text-raleway text-naranja-bg mt-2 text-center">
+                    Búsqueda aplicada:{" "}
+                    {searchTerm.startsWith("@")
+                      ? "Usuario"
+                      : searchTerm
+                      ? "Título"
+                      : searchIngredients.length > 0
+                      ? "Ingredientes"
+                      : ""}
+                    <button
+                      onClick={clearSearch}
+                      className="text-white underline ml-2"
+                      aria-label="Limpiar búsqueda"
+                    >
+                      Limpiar Búsqueda
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Sección de filtros */}
+              <div className="filter-section mb-10">
+                <FilterPanel onClearFilters={handleClearFilters} />
+                {filtersActive && (
+                  <div className="filters-active-message text-raleway text-naranja-bg mt-2 text-center">
+                    Filtros y/u Ordenamiento aplicados:
+                    <button
+                      onClick={handleClearFilters}
+                      className="text-white underline ml-2"
+                      aria-label="Limpiar Filtros"
+                    >
+                      Limpiar Filtros
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-
-            {/* Sección de filtros */}
-            <div className="filter-section mb-10">
-              <FilterPanel onClearFilters={handleClearFilters} />
-              {filtersActive && (
-                <div className="filters-active-message text-raleway text-naranja-bg mt-2 text-center">
-                  Filtros y/u Ordenamiento aplicados:
-                  <button
-                    onClick={handleClearFilters}
-                    className="text-white underline ml-2"
-                    aria-label="Limpiar Filtros"
-                  >
-                    Limpiar Filtros
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Contenido principal */}
       <div
@@ -457,7 +464,7 @@ const RecipeWall = () => {
         {user && (
           <div className="welcome-message-wall text-center animate__animated animate__fadeIn">
             <h1 className="font-bold mb-10 mt-10 text-center text-white">
-              ¡Bienvenido a la Comunidad de Recetas!
+              ¡Bienvenidos a la <br /> Comunidad de Recetas!
             </h1>
             <h2 className="mb-5 text-center text-naranja-bg font-poppins">
               Aquí en nuestra comunidad, compartimos nuestras mejores recetas.{" "}
@@ -496,9 +503,7 @@ const RecipeWall = () => {
                       Recetas disponibles sin conexión
                     </h2>
                     <p className="mt-2">
-                      Estás viendo las recetas que consultaste previamente. Para
-                      asegurarte de tener más recetas disponibles sin conexión,
-                      navegá por ellas cuando tengas internet.
+                    Estás viendo solo las recetas recientes. Cuando te conectes a internet, podrás acceder a todas nuevamente.
                     </p>
                   </div>
                 </div>

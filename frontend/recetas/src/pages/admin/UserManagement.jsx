@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import "../../styles/admin/userManagement.css";
 import LoadingSpinner from "../../components/LoadingSpinner"; // Importa el componente del spinner
 
@@ -12,6 +12,8 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const tableContainerRef = useRef(null);
+
   const [editForm, setEditForm] = useState({
     firstName: "",
     lastName: "",
@@ -24,9 +26,10 @@ const UserManagement = () => {
     setError("");
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/admin/users?page=${currentPage}&limit=10&search=${searchQuery}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/admin/users?page=${currentPage}&limit=10&search=${searchQuery}`,
         {
-
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -50,12 +53,17 @@ const UserManagement = () => {
     fetchUsers();
   }, [fetchUsers]);
 
+  useEffect(() => {
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollLeft = 0; // Mueve el scroll al inicio
+    }
+  }, []);
+
   const deleteUser = async (userId) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/admin/users/${userId}`,
         {
-
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -98,7 +106,6 @@ const UserManagement = () => {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/admin/users/${userId}`,
         {
-
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -204,112 +211,118 @@ const UserManagement = () => {
         </div>
       </div>
 
-      <table className="user-table mb-10 mt-20">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              {editingUser === user._id ? (
-                <>
-                  <td>
-                    <input
-                      type="text"
-                      value={editForm.firstName}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, firstName: e.target.value })
-                      }
-                      className="input-edit"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      value={editForm.lastName}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, lastName: e.target.value })
-                      }
-                      className="input-edit"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      value={editForm.username}
-                      className="input-edit bg-gray-300 cursor-not-allowed"
-                      disabled={true} // 🔹 Bloquea la edición del username
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="email"
-                      value={editForm.email}
-                      className="input-edit bg-gray-300 cursor-not-allowed"
-                      disabled={true} // 🔹 Bloquea la edición del email
-                    />
-                  </td>
-                  <td>
-                    <select
-                      value={editForm.role}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, role: e.target.value })
-                      }
-                      className="select-edit"
-                    >
-                      <option value="admin">Admin</option>
-                      <option value="consumer">Consumer</option>
-                    </select>
-                  </td>
-                  <td>
-                    <button
-                      className="save-btn"
-                      onClick={() => saveUser(user._id)}
-                    >
-                      Guardar
-                    </button>
-                    <button
-                      className="cancel-btn"
-                      onClick={() => setEditingUser(null)}
-                    >
-                      Cancelar
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td>{user.firstName}</td>
-                  <td>{user.lastName}</td>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <button
-                      className="edit-btn"
-                      onClick={() => startEditing(user)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => deleteUser(user._id)}
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </>
-              )}
+      <div className="table-container" ref={tableContainerRef}>
+        <table className="user-table mb-10 mt-20">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id}>
+                {editingUser === user._id ? (
+                  <>
+                    <td>
+                      <input
+                        type="text"
+                        value={editForm.firstName}
+                        onChange={(e) =>
+                          setEditForm({
+                            ...editForm,
+                            firstName: e.target.value,
+                          })
+                        }
+                        className="input-edit"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={editForm.lastName}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, lastName: e.target.value })
+                        }
+                        className="input-edit"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={editForm.username}
+                        className="input-edit bg-gray-300 cursor-not-allowed"
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="email"
+                        value={editForm.email}
+                        className="input-edit bg-gray-300 cursor-not-allowed"
+                        disabled={true}
+                      />
+                    </td>
+                    <td>
+                      <select
+                        value={editForm.role}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, role: e.target.value })
+                        }
+                        className="select-edit"
+                      >
+                        <option value="admin">Admin</option>
+                        <option value="consumer">Consumer</option>
+                      </select>
+                    </td>
+                    <td>
+                      <button
+                        className="save-btn"
+                        onClick={() => saveUser(user._id)}
+                      >
+                        Guardar
+                      </button>
+                      <button
+                        className="cancel-btn"
+                        onClick={() => setEditingUser(null)}
+                      >
+                        Cancelar
+                      </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>{user.firstName}</td>
+                    <td>{user.lastName}</td>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <button
+                        className="edit-btn"
+                        onClick={() => startEditing(user)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteUser(user._id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <div className="pagination flex justify-center mt-10">
         <button
           onClick={() => handlePageChange(currentPage - 1)}

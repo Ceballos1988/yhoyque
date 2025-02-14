@@ -17,6 +17,11 @@
   height: 100px; /* Altura del spinner */
 }
 
+.admin-statistics {
+ 
+  padding-bottom: 200px!important;
+}
+
 .admin-statistics span {
   font-size: 1.2rem !important;
 }

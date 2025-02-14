@@ -29,8 +29,8 @@
 }
 
 .brand-form label {
-  font-family: "Josefin Slab", serif;
-  font-size: 1.3rem;
+  font-family: Raleway;
+  font-size: 1rem;
 }
 
 .form-input {
@@ -96,7 +96,7 @@ input[type="file"] {
 .custom-file-upload {
   font-family: "Raleway", sans-serif !important;
   font-size: 1.1rem !important;
-  padding: 10px 20px!important;
+  padding: 10px 10px!important;
   background-color: #EE8532!important;
   color: #ffffff!important;
   border: none!important;
@@ -247,15 +247,7 @@ input[type="file"] {
 
 /* Media Queries */
 @media (max-width: 1200px) {
-  .brand-form {
-    align-items: center;
-    width: 800px;
-  }
-
-  .brands-table-container{
-    width: 800px;
-    margin-left: 250px;
-  }
+  
 
   .form-input {
     width: 100%;
@@ -331,6 +323,30 @@ margin-left: 20px;
   .brands-table-container{
     width: 800px;
     margin-left: 420px;
+  }
+
+}
+
+@media (max-width: 700px) {
+  .brands-table-container{
+    width: 800px;
+    margin-left: 200px;
+  }
+}
+
+  @media (max-width: 600px) {
+    .brands-table-container{
+      width: 800px;
+      margin-left: 300px;
+    }
+  
+  }
+
+
+@media (max-width: 500px) {
+  .brands-table-container{
+    width: 800px;
+    margin-left: 500px;
   }
 
 }

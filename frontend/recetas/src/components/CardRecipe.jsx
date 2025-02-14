@@ -645,19 +645,19 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         <div className="mt-4 flex justify-end space-x-4">
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="flex items-center"
+            className="boton-editar flex items-center"
             title="Eliminar receta"
           >
             <img
               src="/img/delete-icon.png"
               alt="delete"
-              className="w-5 h-5 mr-2"
+              className="-5 h-5 mr-2"
             />{" "}
             Eliminar Receta
           </button>
           <button
             onClick={handleEditRecipe}
-            className="flex items-center"
+            className="boton-editar flex items-center"
             title="Editar receta"
           >
             <img src="/img/edit-icon.png" alt="edit" className="w-5 h-5 mr-2" />{" "}

@@ -307,7 +307,7 @@ input[type="file"] {
 
 @media (max-width: 1024px) {
   .create-recipe-form {
-    min-width: 350px;
+    width: 350px;
   }
   .create-recipe-container h1 {
     font-size: 1.5rem !important;
@@ -524,9 +524,9 @@ button[title="Eliminar ingrediente"] img {
   background-color: rgba(255, 255, 255, 0.1); /* Fondo del track */
 }
 
-@media (max-width: 500px) {
+@media (max-width: 550px) {
   .create-recipe-form {
-    width: 90% !important;
+    width: 95% !important;
     padding: 10px;
   }
 
@@ -584,6 +584,17 @@ button[title="Eliminar ingrediente"] img {
   }
   .span-real span {
     font-size: 0.7rem !important;
+  }
+
+  .create-recipe-form .ico-delete img {
+    width: 50px;
+    height: 45px;
+  }
+
+  
+  .create-recipe-form .ico-delete-1 img {
+    width: 40px;
+    height: 45px;
   }
 }
 

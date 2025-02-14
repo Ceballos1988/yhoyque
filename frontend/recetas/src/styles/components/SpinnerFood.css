@@ -15,7 +15,7 @@
 
 .spinner-image {
   width: 300px;
-  height: 300px;
+  height: 250px;
   animation: fade-in-out 1.5s infinite;
 }
 

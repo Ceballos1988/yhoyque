@@ -1,7 +1,6 @@
 .user-management {
   padding: 20px;
   max-width: 1400px;
-  min-width: 900px;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -12,17 +11,6 @@
   color: #ee8532;
   margin-bottom: 20px;
   text-align: center;
-}
-
-.user-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(230, 85, 23, 0.28);
-  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1);
-  table-layout: fixed;
 }
 
 .user-table th,
@@ -171,16 +159,14 @@
   color: white;
 }
 
-
 /* Estilo para la barra de búsqueda */
 .container-search .search-bar-container {
   display: flex;
-  flex-direction: row!important;
+  flex-direction: row !important;
   gap: 10px;
-  margin: 0!important;
+  margin: 0 !important;
   align-items: center;
 }
-
 
 .user-management .search-bar {
   width: 250px; /* Tamaño más pequeño */
@@ -214,10 +200,9 @@
   background-color: transparent;
 }
 
-
 .icon-button-borrar img {
-  width: 40px!important;
-  height: 50px!important;
+  width: 40px !important;
+  height: 50px !important;
   transition: transform 0.2s ease;
 }
 
@@ -227,60 +212,71 @@
   filter: drop-shadow(0px 0px 4px #ffffff);
 }
 
-/* Scrollbars personalizados */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #ee8532;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #ffa541;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f172b;
-}
-
-
 /* Responsividad */
 @media (max-width: 1024px) {
-  .user-table {
-    font-size: 0.9rem;
-  }
-
   .delete-btn {
     font-size: 0.8rem;
     padding: 6px 12px;
   }
 
-/* Estilo para la barra de búsqueda */
-.container-search .search-bar-container {
-  display: flex;
-  flex-direction: column!important;
-  gap: 10px;
-  align-items: center;
+  /* Estilo para la barra de búsqueda */
+  .container-search .search-bar-container {
+    display: flex;
+    flex-direction: column !important;
+    gap: 10px;
+    align-items: center;
+  }
 }
 
+/* Ajustes específicos para pantallas pequeñas */
+@media (max-width: 768px) {
+  .table-container {
+    padding: 10px;
+    overflow-x: auto;
+    margin-left: 250px;
+  }
 
+  .container-search .search-bar-container {
+    justify-content: center;
+  }
+}
+
+.table-container {
+  overflow-x: auto; /* Habilita el scroll horizontal */
+  margin-top: 20px;
+  padding-bottom: 10px;
+  white-space: nowrap; /* Evita que las celdas se dividan en varias líneas */
+  display: flex; /* Asegura que el contenido dentro se ajuste correctamente */
+  justify-content: flex-start; /* Alinea la tabla al inicio */
+}
 
 .user-table {
-  margin-left: 70px;
-  
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(230, 85, 23, 0.28);
+  box-shadow: 0px 5px 20px rgba(236, 125, 15, 0.1);
 }
 
+@media (max-width: 768px) {
+  .table-container {
+    margin-left: 200px;
+  }
 }
 
-/* Responsividad */
+@media (max-width: 600px) {
+  .table-container {
+    margin-left: 300px;
+  }
+}
+
 @media (max-width: 500px) {
- 
-.user-table {
-  margin-left: 230px;
-  
+  .table-container {
+    margin-left: 400px;
+  }
 }
 
+@media (max-width: 400px) {
+  .table-container {
+    margin-left: 500px;
+  }
 }

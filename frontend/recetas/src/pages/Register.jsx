@@ -186,7 +186,7 @@ function Register() {
               htmlFor="username"
               className="block font-semibold mb-2 text-naranja-bg"
             >
-              Nombre de Usuario:
+              Usuario:
             </label>
             <input
               id="username"
@@ -245,7 +245,7 @@ function Register() {
               htmlFor="confirm-password"
               className="block font-semibold mb-2 text-naranja-bg"
             >
-              Confirmar Contraseña:
+              Confirmar:
             </label>
             <input
               id="confirm-password"

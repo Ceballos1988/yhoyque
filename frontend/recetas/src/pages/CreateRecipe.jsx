@@ -425,7 +425,7 @@ const CreateRecipe = () => {
                     htmlFor="prepTime"
                     className="create-recipe-label font-semibold "
                   >
-                    Tiempo de preparación (min) (opcional)
+                    Tiempo de preparación (opcional)
                   </label>
                   <input
                     id="prepTime"
@@ -434,7 +434,7 @@ const CreateRecipe = () => {
                     value={recipe.prepTime || ""}
                     onChange={handleChange}
                     className="create-recipe-input mt-3 mb-3"
-                    placeholder="Ej: 30"
+                    placeholder="Ej: 30 min"
                   />
                 </div>
                 <div className="w-1/2">

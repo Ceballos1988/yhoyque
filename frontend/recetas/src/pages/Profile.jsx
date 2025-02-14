@@ -585,8 +585,8 @@ function Profile() {
           <p className="modal-session mb-6">
             ¿Realmente deseas eliminar tu cuenta?
           </p>
-          <p className="text-xs text-red-400 mb-2">
-            *Esta acción no se puede deshacer.
+          <p className="text-xs text-red-500 mb-2">
+            Esta acción no se puede deshacer.
           </p>
           <div className="flex justify-center">
             <button
