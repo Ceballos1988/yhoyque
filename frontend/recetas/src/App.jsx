@@ -18,8 +18,8 @@ import { FilterProvider } from "./context/FilterContext";
 import ShoppingListsPage from "./pages/ShoppingListsPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
-import { OfflineProvider } from "./context/OfflineContext";
 import "./styles/main.css";
+import { OfflineProvider } from "./context/OfflineContext";
 
 function App() {
   return (
@@ -44,11 +44,9 @@ function AppContent() {
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Manejar el evento de instalación de PWA
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
@@ -57,9 +55,7 @@ function AppContent() {
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
     window.addEventListener("appinstalled", () => {
-      console.log("✅ La aplicación ha sido instalada.");
       setIsInstallable(false);
     });
 
@@ -71,8 +67,7 @@ function AppContent() {
   const handleInstallApp = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(({ outcome }) => {
-        console.log(outcome === "accepted" ? "👍 Instalación aceptada." : "👎 Instalación rechazada.");
+      deferredPrompt.userChoice.then(() => {
         setDeferredPrompt(null);
         setIsInstallable(false);
       });
@@ -99,12 +94,11 @@ function AppContent() {
         <Route path="/admin/*" element={<AdminRoute />}>
           <Route path="dashboard" element={<AdminDashboard />} />
         </Route>
-        <Route path="*" element={<Home />} />  {/* Redirigir rutas desconocidas a Home */}
+        <Route path="*" element={<Home />} />
       </Routes>
 
       <Footer />
 
-      {/* Botón para volver arriba */}
       {showScrollTopButton && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -130,7 +124,6 @@ function AppContent() {
         </button>
       )}
 
-      {/* Botón de instalación en el lado izquierdo */}
       {isInstallable && (
         <button
           onClick={handleInstallApp}
