@@ -1,11 +1,11 @@
-const CACHE_NAME = "v63"; // Incrementa la versión para forzar actualización
-const API_CACHE = "api-cache"; // Caché separada para las peticiones a la API
+const CACHE_NAME = "v64"; // 🔹 Incrementar versión para forzar actualización
+const API_CACHE = "api-cache"; // 🔹 Caché separada para las peticiones a la API
 
 const urlsToCache = [
   "/",
   "/index.html",
   "/manifest.json",
-  "/offline.html",
+  "/offline.html", // 📌 Asegurar que se almacene en caché correctamente
   "/shopping-lists",
   "/recipe-wall",
   "/profile",
@@ -13,7 +13,6 @@ const urlsToCache = [
   "/img/offline.png",
   "/img/icon-192x192.png",
   "/img/icon-512x512.png",
-  "/img/offline.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png",
   "https://res.cloudinary.com/dnlyti3zm/image/upload/v1739476123/search_agsvwl.png",
 ];
@@ -24,20 +23,25 @@ self.addEventListener("install", (event) => {
 
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
+      .then(async (cache) => {
         console.log("📥 Intentando guardar en caché los archivos:", urlsToCache);
-        return cache.addAll(urlsToCache)
-          .then(() => console.log("✅ Archivos guardados en caché correctamente."))
-          .catch(err => console.error("❌ Error al agregar archivos a la caché:", err));
+        
+        try {
+          await cache.addAll(urlsToCache);
+          console.log("✅ Archivos guardados en caché correctamente.");
+        } catch (err) {
+          console.error("❌ Error al agregar archivos a la caché:", err);
+        }
       })
-      .catch(err => console.error("❌ Error al abrir caché:", err))
   );
+
   self.skipWaiting();
 });
 
 // 🔹 Activación: Borra cachés antiguas y activa inmediatamente el SW
 self.addEventListener("activate", (event) => {
   console.log("✅ Service Worker activado.");
+
   event.waitUntil(
     caches.keys().then((cacheNames) =>
       Promise.all(
@@ -50,6 +54,7 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
+
   self.clients.claim();
 });
 
@@ -71,12 +76,13 @@ self.addEventListener("fetch", (event) => {
       .catch(async () => {
         console.warn(`📌 No hay conexión. Intentando cargar desde caché: ${request.url}`);
 
-        // 🔹 Manejo especial para peticiones de navegación
+        // 🔹 Si la solicitud es de tipo "navigate" (página) y no hay conexión:
         if (request.mode === "navigate") {
           console.warn(`🚨 No se pudo cargar ${request.url}, mostrando offline.html`);
-          
+
           return caches.match(request) // Intenta cargar desde caché
             .then(response => response || caches.match("/offline.html")) // Si no está, usa offline.html
+            .then(response => response || caches.match("/")) // 📌 Si tampoco está, intenta con la página principal
             .then(response => response || new Response(
               `<h1 style="color:white; text-align:center;">Sin conexión</h1>
                <p style="color:white; text-align:center;">
@@ -87,7 +93,7 @@ self.addEventListener("fetch", (event) => {
 
         // 🔹 Si es una imagen y no está en caché, servir imagen de fallback
         if (request.destination === "image") {
-          return caches.match("/img/recipe-null.png");
+          return caches.match("/img/offline.png");
         }
 
         // 🔹 Si no es una página o imagen, simplemente rechazar
@@ -95,7 +101,6 @@ self.addEventListener("fetch", (event) => {
       })
   );
 });
-
 
 // 🔹 Permitir activación inmediata del nuevo Service Worker
 self.addEventListener("message", (event) => {
