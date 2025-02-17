@@ -1,4 +1,4 @@
-const CACHE_NAME = "v48"; // Incrementa la versión al actualizar cambios
+const CACHE_NAME = "v49"; // Incrementa la versión al actualizar cambios
 
 const urlsToCache = [
   "/",
