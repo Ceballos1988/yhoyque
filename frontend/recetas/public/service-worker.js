@@ -1,4 +1,4 @@
-const CACHE_NAME = "v47"; // Incrementa la versión al actualizar cambios
+const CACHE_NAME = "v48"; // Incrementa la versión al actualizar cambios
 
 const urlsToCache = [
   "/",
@@ -72,7 +72,7 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
-  // Ignorar peticiones que no sean GET
+  // Solo manejar peticiones GET
   if (request.method !== "GET") return;
 
   event.respondWith(
@@ -83,7 +83,6 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(request)
         .then((networkResponse) => {
-          // Guardar solo páginas y archivos en caché
           if (request.url.startsWith(self.location.origin)) {
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, networkResponse.clone());
@@ -92,9 +91,14 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // Si falla la red, mostrar fallback adecuado
+          // Si la petición es de navegación (una página), mostrar offline.html
           if (request.mode === "navigate") {
-            return caches.match("/offline.html");
+            return caches.match("/offline.html").then((response) => {
+              return response || new Response(
+                `<h1 style="color:white; text-align:center;">Sin conexión</h1><p style="color:white; text-align:center;">No puedes acceder a esta página sin internet.</p>`,
+                { headers: { "Content-Type": "text/html" } }
+              );
+            });
           } else if (request.destination === "image") {
             return caches.match("/img/recipe-null.png");
           }
@@ -102,6 +106,7 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
 
 // 🔹 Permitir que el nuevo Service Worker se active inmediatamente
 self.addEventListener("message", (event) => {
