@@ -7,14 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Ignora `node_modules`
 node_modules
-dist
+
+# Ignorar `dist/` excepto los archivos esenciales
+dist/*
 !dist/index.html
 !dist/manifest.json
 !dist/assets/
 !dist/styles/
 !dist/img/
+!dist/offline.html
+!dist/service-worker.js
+
+# Ignora `dist-ssr`
 dist-ssr
+
+# Archivos locales y de configuración
 *.local
 
 # Editor directories and files
@@ -28,7 +37,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Ignora los archivos de configuración sensibles
+# Ignora archivos sensibles
 .env
-
-!frontend/recetas/dist/index.html

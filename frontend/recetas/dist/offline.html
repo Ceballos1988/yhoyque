@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modo Offline - ¿Y HOY QUÉ?</title>
+    <style>
+      body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        background-color: #0f172b;
+        color: white;
+        padding: 50px;
+      }
+      h1 {
+        color: #ee8532;
+        font-family: "Josefin Slab", serif;
+      }
+      p {
+        font-size: 18px;
+      }
+      button {
+        background-color: #ee8532;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-family: raleway;
+      }
+      button:hover {
+        background-color: #0f172b; /* Color al pasar el cursor */
+      }
+
+      img {
+        width: 150px;
+        margin: 20px 0;
+      }
+      #status {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #ee8532;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Estás sin conexión</h1>
+    <img src="/img/offline.png" alt="Sin conexión" />
+    <!-- Asegúrate de tener esta imagen en la carpeta img -->
+    <p>
+      Parece que no tienes acceso a internet. Algunas funciones pueden no estar
+      disponibles.
+    </p>
+    <p>Cuando vuelvas a conectarte, podrás ver nuevas recetas.</p>
+
+    <button onclick="location.reload()">Reintentar</button>
+    <button onclick="window.location.href='/'">Ir a inicio</button>
+
+    <p id="status">Esperando reconexión...</p>
+
+    <script>
+      function checkOnlineStatus() {
+        if (navigator.onLine) {
+          document.getElementById("status").innerText =
+            "✅ Conexión restaurada. Recargando...";
+          setTimeout(() => location.reload(), 1500);
+        }
+      }
+      window.addEventListener("online", checkOnlineStatus);
+    </script>
+  </body>
+</html>
