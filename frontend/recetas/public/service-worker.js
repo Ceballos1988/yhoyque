@@ -1,4 +1,4 @@
-const CACHE_NAME = "v15"; // 🔹 Incrementar versión para forzar actualización
+const CACHE_NAME = "v16"; // 🔹 Incrementar versión para forzar actualización
 
 const urlsToCache = [
   "/", "/index.html", "/manifest.json", "/offline.html",
@@ -65,28 +65,18 @@ self.addEventListener("fetch", (event) => {
       })
       .catch(async () => {
         console.warn(`📌 No hay conexión. Intentando cargar desde caché: ${request.url}`);
-        const requestURL = new URL(request.url);
 
-        // 🔹 Páginas que deben seguir viéndose sin conexión (Home, Recipe-Wall y Lista de Compras)
-        if (["/", "/recipe-wall", "/shopping-lists"].includes(requestURL.pathname)) {
-          return caches.match(request).then(response => response || caches.match("/"));
-        }
-
-        // 🔹 Otras páginas deben mostrar `offline.html`
+        // 🔹 TODAS las páginas deben mostrar `offline.html` si se recargan sin internet
         if (request.mode === "navigate") {
-          return caches.match("/offline.html").then(response => {
-            if (response) return response;
-            console.warn("❌ `offline.html` no está en caché.");
-            return new Response(
-              `<h1 style="color:white; text-align:center;">Sin conexión</h1>
-               <p style="color:white; text-align:center;">
-               No puedes acceder a esta página sin internet.</p>`,
-              { headers: { "Content-Type": "text/html" } }
-            );
-          });
+          return caches.match("/offline.html").then(response => response || new Response(
+            `<h1 style="color:white; text-align:center;">Sin conexión</h1>
+             <p style="color:white; text-align:center;">
+             No puedes acceder a esta página sin internet.</p>`,
+            { headers: { "Content-Type": "text/html" } }
+          ));
         }
 
-        // 🔹 Manejo de imágenes: Si una imagen no está en caché, servir `offline.png`
+        // 🔹 Manejo de imágenes: Si está en caché, servirla; si no, usar `offline.png`
         if (request.destination === "image") {
           return caches.match(request).then(response => response || caches.match("/img/offline.png"));
         }
