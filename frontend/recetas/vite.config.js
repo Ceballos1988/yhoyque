@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
       "import.meta.env.VITE_NODE_ENV": JSON.stringify(env.VITE_NODE_ENV || "development"),
     },
     esbuild: {
-      drop: mode === "production" ? ["console", "debugger"] : [],
+      drop: env.MODE === "production" ? ["console"] : [],
     },
   };
 });

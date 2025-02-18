@@ -6,9 +6,11 @@ import "./styles/main.css";
 
 // 📌 Manejar el evento `beforeinstallprompt` para evitar el mensaje en consola
 window.addEventListener("beforeinstallprompt", (event) => {
-  event.preventDefault(); // Evita que el banner aparezca automáticamente
-  window.deferredPrompt = event; // Guarda el evento para activarlo manualmente si es necesario
-  console.log("📌 Evento `beforeinstallprompt` capturado correctamente.");
+  event.preventDefault();
+  if (import.meta.env.MODE === "development") {
+    console.log("📌 Instalación manual controlada.");
+  }
+  window.deferredPrompt = event; // Guardar el evento para mostrarlo después
 });
 
 // 📌 Verificar que el elemento root existe antes de renderizar

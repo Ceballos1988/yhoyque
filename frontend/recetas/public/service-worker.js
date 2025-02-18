@@ -1,25 +1,12 @@
-const CACHE_NAME = "v14"; // 🔹 Incrementar versión para forzar actualización
+const CACHE_NAME = "v15"; // 🔹 Incrementar versión para forzar actualización
 
 const urlsToCache = [
-  "/",
-  "/index.html",
-  "/manifest.json",
-  "/offline.html", // 📌 Asegurar que se almacene en caché correctamente
-  "/shopping-lists",
-  "/recipe-wall",
-  "/styles/main.css",
-  "/img/offline.png",
-  "/img/icon-192x192.png",
-  "/img/icon-512x512.png",
-  "/img/Logo2.png",
-  "/img/hero.webp",
-  "/img/bg-hero.jpg",
-  "/img/imagen1.png",
-  "/img/download-app.png",
-  "/img/imagen5.png",
-  "/img/delete.png",
-  "/img/edit.png",
-  "/img/recipe-null.png",
+  "/", "/index.html", "/manifest.json", "/offline.html",
+  "/shopping-lists", "/recipe-wall", "/styles/main.css",
+  "/img/offline.png", "/img/icon-192x192.png", "/img/icon-512x512.png",
+  "/img/Logo2.png", "/img/hero.webp", "/img/bg-hero.jpg",
+  "/img/imagen1.png", "/img/download-app.png", "/img/imagen5.png",
+  "/img/delete.png", "/img/edit.png", "/img/recipe-null.png"
 ];
 
 // 🔹 Instalación: Guarda archivos en caché con logs para depuración
@@ -27,16 +14,15 @@ self.addEventListener("install", (event) => {
   console.log("🛠️ Instalando Service Worker...");
 
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(async (cache) => {
-        console.log("📥 Intentando guardar en caché los archivos:", urlsToCache);
-        try {
-          await cache.addAll(urlsToCache);
-          console.log("✅ Archivos guardados en caché correctamente.");
-        } catch (err) {
-          console.error("❌ Error al agregar archivos a la caché:", err);
-        }
-      })
+    caches.open(CACHE_NAME).then(async (cache) => {
+      console.log("📥 Intentando guardar en caché los archivos:", urlsToCache);
+      try {
+        await cache.addAll(urlsToCache);
+        console.log("✅ Archivos guardados en caché correctamente.");
+      } catch (err) {
+        console.error("❌ Error al agregar archivos a la caché:", err);
+      }
+    })
   );
 
   self.skipWaiting();
@@ -45,6 +31,7 @@ self.addEventListener("install", (event) => {
 // 🔹 Activación: Borra cachés antiguas y activa inmediatamente el SW
 self.addEventListener("activate", (event) => {
   console.log("✅ Service Worker activado.");
+
   event.waitUntil(
     caches.keys().then((cacheNames) =>
       Promise.all(
@@ -78,8 +65,14 @@ self.addEventListener("fetch", (event) => {
       })
       .catch(async () => {
         console.warn(`📌 No hay conexión. Intentando cargar desde caché: ${request.url}`);
+        const requestURL = new URL(request.url);
 
-        // 🔹 Si es una página y no hay conexión, mostrar `offline.html`
+        // 🔹 Páginas que deben seguir viéndose sin conexión (Home, Recipe-Wall y Lista de Compras)
+        if (["/", "/recipe-wall", "/shopping-lists"].includes(requestURL.pathname)) {
+          return caches.match(request).then(response => response || caches.match("/"));
+        }
+
+        // 🔹 Otras páginas deben mostrar `offline.html`
         if (request.mode === "navigate") {
           return caches.match("/offline.html").then(response => {
             if (response) return response;
@@ -93,9 +86,9 @@ self.addEventListener("fetch", (event) => {
           });
         }
 
-        // 🔹 Si es una imagen y no está en caché, servir imagen de fallback
+        // 🔹 Manejo de imágenes: Si una imagen no está en caché, servir `offline.png`
         if (request.destination === "image") {
-          return caches.match("/img/offline.png");
+          return caches.match(request).then(response => response || caches.match("/img/offline.png"));
         }
 
         return new Response("No disponible sin conexión", { status: 503 });

@@ -110,12 +110,15 @@ function AppContent() {
             backgroundColor: "#EE8532",
             color: "#fff",
             border: "none",
+            borderRadius: "8px",
             width: window.innerWidth < 550 ? "40px" : "50px",
             height: window.innerWidth < 550 ? "40px" : "50px",
             fontSize: window.innerWidth < 550 ? "20px" : "24px",
             cursor: "pointer",
             zIndex: 1000,
             transition: "background-color 0.3s ease",
+            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)" // 🔹 Sombra blanca
+
           }}
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#0f172b")}
           onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
@@ -135,13 +138,15 @@ function AppContent() {
             backgroundColor: "#0f172b",
             color: "#fff",
             border: "none",
-            borderRadius: "10px",
+            borderRadius: "8px",
             width: window.innerWidth < 550 ? "80px" : "90px",
             height: window.innerWidth < 550 ? "80px" : "90px",
             fontSize: window.innerWidth < 550 ? "16px" : "18px",
             cursor: "pointer",
             zIndex: 800,
             transition: "background-color 0.3s ease",
+            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)" // 🔹 Sombra blanca
+
           }}
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
           onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
