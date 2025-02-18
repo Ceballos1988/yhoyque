@@ -30,18 +30,19 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn(`❌ Bloqueado por CORS: ${origin}`);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // Permitir cookies y autenticación con tokens
-    optionsSuccessStatus: 200, // Algunas configuraciones CORS requieren este código
+      origin: (origin, callback) => {
+          if (!origin || allowedOrigins.includes(origin)) {
+              callback(null, true);
+          } else {
+              console.warn(`🚫 CORS bloqueó: ${origin}`);
+              callback(null, false); // No lanza error, solo bloquea
+          }
+      },
+      credentials: true,
+      optionsSuccessStatus: 200
   })
 );
+
 
 
 // Middleware para analizar cookies y procesar solicitudes JSON
