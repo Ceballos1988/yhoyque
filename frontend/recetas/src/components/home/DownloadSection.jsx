@@ -7,10 +7,14 @@ function DownloadSection() {
   // Verificar si la API de compartir está disponible
   useEffect(() => {
     if (navigator.share) {
-      console.log("📤 API de compartir disponible.");
+      if (import.meta.env.MODE === "development") { // 🔹 Solo en desarrollo
+        console.log("📤 API de compartir disponible.");
+      }
       setCanShare(true);
     } else {
-      console.log("🚫 API de compartir no soportada en este navegador.");
+      if (import.meta.env.MODE === "development") { // 🔹 Solo en desarrollo
+        console.log("🚫 API de compartir no soportada en este navegador.");
+      }
     }
   }, []);
 

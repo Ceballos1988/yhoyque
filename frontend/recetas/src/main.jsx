@@ -4,10 +4,12 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.jsx";
 import "./styles/main.css";
 
+const isDevelopment = import.meta.env.MODE === "development";
+
 // 📌 Manejar el evento `beforeinstallprompt` para evitar el mensaje en consola
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
-  if (import.meta.env.MODE === "development") {
+  if (isDevelopment) {
     console.log("📌 Instalación manual controlada.");
   }
   window.deferredPrompt = event; // Guardar el evento para mostrarlo después
@@ -33,11 +35,14 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/service-worker.js")
       .then((registration) => {
-        if (import.meta.env.MODE === "development") {
+        if (isDevelopment) {
           console.log("✅ Service Worker registrado correctamente:", registration);
         }
+
         if (registration.waiting) {
-          console.log("🆕 Nueva versión esperando activación.");
+          if (isDevelopment) {
+            console.log("🆕 Nueva versión esperando activación.");
+          }
           registration.waiting.postMessage({ type: "SKIP_WAITING" });
         }
 
@@ -47,7 +52,9 @@ if ("serviceWorker" in navigator) {
           if (installingWorker) {
             installingWorker.onstatechange = () => {
               if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
-                console.log("🔄 Nueva versión disponible.");
+                if (isDevelopment) {
+                  console.log("🔄 Nueva versión disponible.");
+                }
                 showUpdateNotification();
               }
             };
@@ -55,13 +62,17 @@ if ("serviceWorker" in navigator) {
         };
       })
       .catch((error) => {
-        console.error("❌ Error al registrar el Service Worker:", error);
+        if (isDevelopment) {
+          console.error("❌ Error al registrar el Service Worker:", error);
+        }
       });
   });
 
   // 🔹 Detectar cambios en el Service Worker y recargar
   navigator.serviceWorker.addEventListener("controllerchange", () => {
-    console.log("🔄 Se activó un nuevo Service Worker. Recargando...");
+    if (isDevelopment) {
+      console.log("🔄 Se activó un nuevo Service Worker. Recargando...");
+    }
     window.location.reload();
   });
 }
