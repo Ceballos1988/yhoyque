@@ -4,6 +4,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.jsx";
 import "./styles/main.css";
 
+// 📌 Manejar el evento `beforeinstallprompt` para evitar el mensaje en consola
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault(); // Evita que el banner aparezca automáticamente
+  window.deferredPrompt = event; // Guarda el evento para activarlo manualmente si es necesario
+  console.log("📌 Evento `beforeinstallprompt` capturado correctamente.");
+});
+
 // 📌 Verificar que el elemento root existe antes de renderizar
 const rootElement = document.getElementById("root");
 if (!rootElement) {
@@ -24,8 +31,9 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/service-worker.js")
       .then((registration) => {
-        console.log("✅ Service Worker registrado correctamente:", registration);
-
+        if (import.meta.env.MODE === "development") {
+          console.log("✅ Service Worker registrado correctamente:", registration);
+        }
         if (registration.waiting) {
           console.log("🆕 Nueva versión esperando activación.");
           registration.waiting.postMessage({ type: "SKIP_WAITING" });

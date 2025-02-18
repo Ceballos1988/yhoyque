@@ -1,4 +1,4 @@
-const CACHE_NAME = "v13"; // 🔹 Incrementar versión para forzar actualización
+const CACHE_NAME = "v14"; // 🔹 Incrementar versión para forzar actualización
 
 const urlsToCache = [
   "/",
@@ -12,6 +12,11 @@ const urlsToCache = [
   "/img/icon-192x192.png",
   "/img/icon-512x512.png",
   "/img/Logo2.png",
+  "/img/hero.webp",
+  "/img/bg-hero.jpg",
+  "/img/imagen1.png",
+  "/img/download-app.png",
+  "/img/imagen5.png",
   "/img/delete.png",
   "/img/edit.png",
   "/img/recipe-null.png",
