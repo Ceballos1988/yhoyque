@@ -307,14 +307,17 @@ const RecipeWall = () => {
   const handleLikeToggle = async (recipeId) => {
     try {
       const token = localStorage.getItem("token");
+      const API_URL =
+        import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
+
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipeId}`,
+        `${API_URL}/api/recipes/like/${recipeId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
+
       if (response && response.data.likes) {
         setRecipes((prevRecipes) =>
           prevRecipes.map((recipe) =>
@@ -328,10 +331,7 @@ const RecipeWall = () => {
       console.error("Error al manejar el like:", error);
     }
   };
-  
-  
-  
-  
+
   return (
     <div
       className="recipe-wall-container min-h-screen flex text-azul-bg pb-20 pt-10 relative"
@@ -530,7 +530,8 @@ const RecipeWall = () => {
                       Recetas disponibles sin conexión
                     </h2>
                     <p className="mt-2">
-                    Estás viendo solo las recetas recientes. Cuando te conectes a internet, podrás acceder a todas nuevamente.
+                      Estás viendo solo las recetas recientes. Cuando te
+                      conectes a internet, podrás acceder a todas nuevamente.
                     </p>
                   </div>
                 </div>
@@ -540,44 +541,51 @@ const RecipeWall = () => {
               ) : recipes.length > 0 ? (
                 <div className="recipes-flex animate__animated animate__fadeIn">
                   {recipes.map((recipe) => (
-                   <CardRecipe
-                   key={recipe._id}
-                   recipe={recipe}
-                   currentUserId={user?._id || null}
-                   userIngredients={searchIngredients}
-                   onDelete={(recipeId) =>
-                     setRecipes((prev) => prev.filter((r) => r._id !== recipeId))
-                   }
-                   isFavorite={favorites.some((fav) => fav.recipeId === recipe._id)}
-                   toggleFavorite={async () => {
-                    try {
-                      const token = localStorage.getItem("token");
-                      let updatedFavorites = [];
-                  
-                      if (favorites.some((fav) => fav.recipeId === recipe._id)) {
-                        const response = await axios.delete(
-                          `${import.meta.env.VITE_API_URL}/api/favorites/${recipe._id}`,
-                          { headers: { Authorization: `Bearer ${token}` } }
-                        );
-                        updatedFavorites = response.data.favorites;
-                      } else {
-                        const response = await axios.post(
-                          `${import.meta.env.VITE_API_URL}/api/favorites`,
-                          { recipeId: recipe._id },
-                          { headers: { Authorization: `Bearer ${token}` } }
-                        );
-                        updatedFavorites = response.data.favorites;
+                    <CardRecipe
+                      key={recipe._id}
+                      recipe={recipe}
+                      currentUserId={user?._id || null}
+                      userIngredients={searchIngredients}
+                      onDelete={(recipeId) =>
+                        setRecipes((prev) =>
+                          prev.filter((r) => r._id !== recipeId)
+                        )
                       }
-                  
-                      // 🔹 ACTUALIZA EL ESTADO GLOBAL SIN RECARGAR LA PÁGINA
-                      setFavorites(updatedFavorites);
-                    } catch (error) {
-                      console.error("Error al manejar favorito:", error);
-                    }
-                  }}
-                   onLikeToggle={handleLikeToggle}  // 🔹 Pasa la función de like
-                 />
-                 
+                      isFavorite={favorites.some(
+                        (fav) => fav.recipeId === recipe._id
+                      )}
+                      toggleFavorite={async () => {
+                        try {
+                          const token = localStorage.getItem("token");
+                          let updatedFavorites = [];
+
+                          if (
+                            favorites.some((fav) => fav.recipeId === recipe._id)
+                          ) {
+                            const response = await axios.delete(
+                              `${import.meta.env.VITE_API_URL}/api/favorites/${
+                                recipe._id
+                              }`,
+                              { headers: { Authorization: `Bearer ${token}` } }
+                            );
+                            updatedFavorites = response.data.favorites;
+                          } else {
+                            const response = await axios.post(
+                              `${import.meta.env.VITE_API_URL}/api/favorites`,
+                              { recipeId: recipe._id },
+                              { headers: { Authorization: `Bearer ${token}` } }
+                            );
+                            updatedFavorites = response.data.favorites;
+                          }
+
+                          // 🔹 ACTUALIZA EL ESTADO GLOBAL SIN RECARGAR LA PÁGINA
+                          setFavorites(updatedFavorites);
+                        } catch (error) {
+                          console.error("Error al manejar favorito:", error);
+                        }
+                      }}
+                      onLikeToggle={handleLikeToggle} // 🔹 Pasa la función de like
+                    />
                   ))}
                 </div>
               ) : isOffline ? (

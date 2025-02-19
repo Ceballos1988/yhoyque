@@ -53,20 +53,17 @@ function AppContent() {
             console.log("📌 Instalación manual controlada en desarrollo.");
         }
 
-        e.preventDefault(); // 🔹 Evita el banner automático del navegador solo en desarrollo
-        setDeferredPrompt(e);
+        setDeferredPrompt(e); // 🔹 Guardamos el evento sin bloquear el banner
         setIsInstallable(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.addEventListener("appinstalled", () => {
-        setIsInstallable(false);
-    });
 
     return () => {
         window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
 }, []);
+
 
 
   const handleInstallApp = () => {
