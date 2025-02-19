@@ -314,9 +314,23 @@ const RecipeWall = () => {
   
       const API_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
   
+      // Actualiza la UI sin esperar respuesta
+      setRecipes((prevRecipes) =>
+        prevRecipes.map((recipe) =>
+          recipe._id === recipeId
+            ? {
+                ...recipe,
+                likes: recipe.likes.includes(user.id)
+                  ? recipe.likes.filter((id) => id !== user.id)
+                  : [...recipe.likes, user.id],
+              }
+            : recipe
+        )
+      );
+  
       const response = await axios.put(
         `${API_URL}/api/recipes/like/${recipeId}`,
-        null, // ⬅️ Cambiado de `{}` a `null` para evitar problemas
+        null,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -337,6 +351,7 @@ const RecipeWall = () => {
       console.error("Error al manejar el like:", error.response?.data || error.message);
     }
   };
+  
   
 
   return (

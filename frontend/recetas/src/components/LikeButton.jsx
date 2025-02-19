@@ -45,6 +45,11 @@ const LikeButton = React.memo(({ likes = [], onLike, currentUserId, recipeId }) 
       console.warn("Usuario no autenticado, no puede dar like.");
       return;
     }
+  
+    // Simula el cambio en la UI inmediatamente
+    setUserHasLiked(!userHasLiked);
+    setTotalLikes((prev) => (userHasLiked ? prev - 1 : prev + 1));
+  
     try {
       const response = await onLike(recipeId);
       if (response && response.likes) {
@@ -55,6 +60,7 @@ const LikeButton = React.memo(({ likes = [], onLike, currentUserId, recipeId }) 
       console.error("Error al dar/quitar like:", error);
     }
   };
+  
   
 
   return (

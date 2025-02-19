@@ -204,10 +204,19 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       return;
     }
   
+    // Actualizar la UI inmediatamente sin esperar respuesta del servidor
+    setLikes((prevLikes) => {
+      if (prevLikes.includes(currentUserId)) {
+        return prevLikes.filter((id) => id !== currentUserId);
+      } else {
+        return [...prevLikes, currentUserId];
+      }
+    });
+  
     try {
-      const response = await axios.put(  // ✅ Cambiar POST por PUT
-        `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipe._id}`, // ✅ Corregir la URL
-        {},
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipe._id}`,
+        null, // No enviar body
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
