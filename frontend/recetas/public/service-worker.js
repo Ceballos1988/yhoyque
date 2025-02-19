@@ -1,4 +1,4 @@
-const CACHE_NAME = "v19"; // 🔹 Incrementar versión para forzar actualización
+const CACHE_NAME = "v21"; // 🔹 Incrementar versión para forzar actualización
 
 const urlsToCache = [
   "/", "/index.html", "/manifest.json", "/offline.html",
@@ -80,10 +80,12 @@ self.addEventListener("message", (event) => {
 });
 
 // 🔹 Notificar a los clientes cuando haya una nueva versión del SW
-self.addEventListener("install", () => {
+self.addEventListener("activate", () => {
   self.clients.matchAll().then((clients) => {
-    clients.forEach(client => {
-      client.postMessage({ type: "NEW_VERSION_AVAILABLE" });
-    });
+    if (clients.length > 0) {
+      clients.forEach(client => {
+        client.postMessage({ type: "NEW_VERSION_AVAILABLE" });
+      });
+    }
   });
 });
