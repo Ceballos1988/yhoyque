@@ -635,41 +635,42 @@ const ShoppingListsPage = () => {
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         </div>
 
-        <div className="shopping-lists-grid ">
-          {isLoadingLists ? (
-            <LoadingSpinner />
-          ) : shoppingLists.length > 0 ? (
-            shoppingLists.map((list) => (
-              <ShoppingList
-                key={list._id}
-                list={list}
-                onAddCategory={(listId, title) =>
-                  handleAddCategory(listId, title)
-                }
-                onEditCategory={(categoryId, newTitle) =>
-                  handleEditCategory(list._id, categoryId, newTitle)
-                }
-                onDeleteCategory={(categoryId) =>
-                  handleDeleteCategory(list._id, categoryId)
-                }
-                onAddItem={(categoryId, itemData) =>
-                  handleAddItem(categoryId, list._id, itemData)
-                }
-                onDeleteItem={(itemId, categoryId) =>
-                  handleDeleteItem(itemId, categoryId, list._id)
-                }
-                onTogglePurchased={(itemId, categoryId) =>
-                  handleTogglePurchased(itemId, categoryId, list._id)
-                }
-                onDelete={() => handleDeleteList(list._id)}
-                onEditName={handleEditName} // Aquí se pasa la función como prop
-                isOffline={isOffline} // Pasar estado de offline al componente
-              />
-            ))
-          ) : (
-            <p className="text-center">No tienes listas de compras aún.</p>
-          )}
-        </div>
+        <div className="shopping-lists-grid">
+  {isLoadingLists ? (
+    <div className="flex justify-center items-center mt-10">
+      <LoadingSpinner />
+    </div>
+  ) : shoppingLists.length > 0 ? (
+    shoppingLists.map((list) => (
+      <ShoppingList
+        key={list._id}
+        list={list}
+        onAddCategory={(listId, title) => handleAddCategory(listId, title)}
+        onEditCategory={(categoryId, newTitle) =>
+          handleEditCategory(list._id, categoryId, newTitle)
+        }
+        onDeleteCategory={(categoryId) =>
+          handleDeleteCategory(list._id, categoryId)
+        }
+        onAddItem={(categoryId, itemData) =>
+          handleAddItem(categoryId, list._id, itemData)
+        }
+        onDeleteItem={(itemId, categoryId) =>
+          handleDeleteItem(itemId, categoryId, list._id)
+        }
+        onTogglePurchased={(itemId, categoryId) =>
+          handleTogglePurchased(itemId, categoryId, list._id)
+        }
+        onDelete={() => handleDeleteList(list._id)}
+        onEditName={handleEditName} // Aquí se pasa la función como prop
+        isOffline={isOffline} // Pasar estado de offline al componente
+      />
+    ))
+  ) : (
+    <p className="text-center">No tienes listas de compras aún.</p>
+  )}
+</div>
+
 
         {/* Agregar el componente BrandCarousel */}
         <BrandCarousel />
