@@ -304,7 +304,30 @@ const RecipeWall = () => {
       setErrorMessage("No se encontró una receta con ese ID.");
     }
   };
-
+  const handleLikeToggle = async (recipeId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipeId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+  
+      setRecipes((prevRecipes) =>
+        prevRecipes.map((recipe) =>
+          recipe._id === recipeId
+            ? { ...recipe, likes: response.data.likes } // 🔹 ACTUALIZA los likes en tiempo real
+            : recipe
+        )
+      );
+    } catch (error) {
+      console.error("Error al manejar el like:", error);
+    }
+  };
+  
+  
   return (
     <div
       className="recipe-wall-container min-h-screen flex text-azul-bg pb-20 pt-10 relative"
@@ -513,45 +536,44 @@ const RecipeWall = () => {
               ) : recipes.length > 0 ? (
                 <div className="recipes-flex animate__animated animate__fadeIn">
                   {recipes.map((recipe) => (
-                    <CardRecipe
-                      key={recipe._id}
-                      recipe={recipe}
-                      currentUserId={user?._id || null}
-                      userIngredients={searchIngredients}
-                      onDelete={(recipeId) =>
-                        setRecipes((prev) =>
-                          prev.filter((r) => r._id !== recipeId)
-                        )
+                   <CardRecipe
+                   key={recipe._id}
+                   recipe={recipe}
+                   currentUserId={user?._id || null}
+                   userIngredients={searchIngredients}
+                   onDelete={(recipeId) =>
+                     setRecipes((prev) => prev.filter((r) => r._id !== recipeId))
+                   }
+                   isFavorite={favorites.some((fav) => fav.recipeId === recipe._id)}
+                   toggleFavorite={async () => {
+                    try {
+                      const token = localStorage.getItem("token");
+                      let updatedFavorites = [];
+                  
+                      if (favorites.some((fav) => fav.recipeId === recipe._id)) {
+                        const response = await axios.delete(
+                          `${import.meta.env.VITE_API_URL}/api/favorites/${recipe._id}`,
+                          { headers: { Authorization: `Bearer ${token}` } }
+                        );
+                        updatedFavorites = response.data.favorites;
+                      } else {
+                        const response = await axios.post(
+                          `${import.meta.env.VITE_API_URL}/api/favorites`,
+                          { recipeId: recipe._id },
+                          { headers: { Authorization: `Bearer ${token}` } }
+                        );
+                        updatedFavorites = response.data.favorites;
                       }
-                      isFavorite={favorites.some(
-                        (fav) => fav.recipeId === recipe._id
-                      )}
-                      toggleFavorite={async () => {
-                        try {
-                          const token = localStorage.getItem("token");
-                          if (
-                            favorites.some((fav) => fav.recipeId === recipe._id)
-                          ) {
-                            const response = await axios.delete(
-                              `${import.meta.env.VITE_API_URL}/api/favorites/${
-                                recipe._id
-                              }`,
-                              { headers: { Authorization: `Bearer ${token}` } }
-                            );
-                            setFavorites(response.data.favorites);
-                          } else {
-                            const response = await axios.post(
-                              `${import.meta.env.VITE_API_URL}/api/favorites`,
-                              { recipeId: recipe._id },
-                              { headers: { Authorization: `Bearer ${token}` } }
-                            );
-                            setFavorites(response.data.favorites);
-                          }
-                        } catch (error) {
-                          console.error("Error al manejar favorito:", error);
-                        }
-                      }}
-                    />
+                  
+                      // 🔹 ACTUALIZA EL ESTADO GLOBAL SIN RECARGAR LA PÁGINA
+                      setFavorites(updatedFavorites);
+                    } catch (error) {
+                      console.error("Error al manejar favorito:", error);
+                    }
+                  }}
+                   onLikeToggle={handleLikeToggle}  // 🔹 Pasa la función de like
+                 />
+                 
                   ))}
                 </div>
               ) : isOffline ? (

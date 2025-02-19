@@ -27,12 +27,12 @@ const safeAxiosGet = async (url, config = {}) => {
   }
 };
 
-const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
+const CardRecipe = ({ recipe, onDelete, userIngredients, onLikeToggle }) => {
   const { user: currentUser } = useAuth();
   const currentUserId = currentUser?.id || "guest"; // Cambia `._id` por `.id` si esa es la estructura del objeto
 
   const [isLoaded] = useState(false); // Estado para la clase 'loaded'
-  const [likes, setLikes] = useState(recipe.likes || []);
+  const [, setLikes] = useState(recipe.likes || []);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // Controlar la visibilidad del modal
   const [showComments, setShowComments] = useState({}); // Estado para mostrar comentarios por receta
   const [comments, setComments] = useState({}); // Comentarios por receta
@@ -199,24 +199,10 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   };
 
   const handleLikeRecipe = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setMessage(
-        "No estás autenticado. Inicia sesión para dar like a la receta."
-      );
-      return;
-    }
+    if (!onLikeToggle) return; // Verifica que la función exista
 
     try {
-      const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipe._id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      setLikes(res.data.likes);
+      await onLikeToggle(recipe._id); // 🔹 Llama la función de `RecipeWall`
     } catch (error) {
       console.error("Error al dar/quitar like:", error);
     }
@@ -597,8 +583,8 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         <div className="flex items-center mb-2">
           <LikeButton
             recipeId={recipe._id}
-            likes={likes}
-            onLike={handleLikeRecipe}
+            likes={recipe.likes} // 🔹 Usa los likes actualizados
+            onLike={handleLikeRecipe} // 🔹 Ahora actualiza el estado en `RecipeWall`
             currentUserId={currentUserId}
           />
         </div>
@@ -732,6 +718,7 @@ CardRecipe.propTypes = {
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
   userIngredients: PropTypes.arrayOf(PropTypes.string).isRequired, // Nueva prop
+  onLikeToggle: PropTypes.func.isRequired, // Agregar validación
 };
 
 export default CardRecipe;

@@ -123,7 +123,7 @@ function Login() {
           aria-required="true"
         />
 
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mt-5">
           <CustomButton
             text={isLoading ? <LoadingSpinner /> : "Iniciar Sesión"}
             bgColor="bg-naranja-bg"

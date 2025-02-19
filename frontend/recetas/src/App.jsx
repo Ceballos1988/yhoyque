@@ -49,20 +49,25 @@ function AppContent() {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);
+        if (import.meta.env.MODE === "development") {
+            console.log("📌 Instalación manual controlada en desarrollo.");
+        }
+
+        e.preventDefault(); // 🔹 Evita el banner automático del navegador solo en desarrollo
+        setDeferredPrompt(e);
+        setIsInstallable(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", () => {
-      setIsInstallable(false);
+        setIsInstallable(false);
     });
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+        window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
-  }, []);
+}, []);
+
 
   const handleInstallApp = () => {
     if (deferredPrompt) {
