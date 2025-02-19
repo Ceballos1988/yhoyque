@@ -37,12 +37,12 @@ function AppContent() {
   const [showScrollTopButton, setShowScrollTopButton] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [updateAvailable, setUpdateAvailable] = useState(false); // 🔹 Detecta actualizaciones
 
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTopButton(window.scrollY > 300);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -74,6 +74,17 @@ function AppContent() {
     }
   };
 
+  // 🔹 Escuchar cambios en el Service Worker para mostrar notificación de actualización
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "NEW_VERSION_AVAILABLE") {
+          setUpdateAvailable(true);
+        }
+      });
+    }
+  }, []);
+
   return (
     <div className="App">
       <Navbar />
@@ -99,6 +110,42 @@ function AppContent() {
 
       <Footer />
 
+      {/* 🔹 Mostrar notificación de actualización cuando haya una nueva versión */}
+      {updateAvailable && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#ff8c00",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: "10px",
+            zIndex: 9999,
+            fontSize: "16px",
+            textAlign: "center",
+          }}
+        >
+          🔄 Nueva versión disponible.{" "}
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginLeft: "10px",
+              padding: "5px 10px",
+              backgroundColor: "white",
+              color: "#ff8c00",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Actualizar
+          </button>
+        </div>
+      )}
+
+      {/* 🔹 Botón para volver arriba */}
       {showScrollTopButton && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -117,8 +164,7 @@ function AppContent() {
             cursor: "pointer",
             zIndex: 1000,
             transition: "background-color 0.3s ease",
-            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)" // 🔹 Sombra blanca
-
+            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)", // 🔹 Sombra blanca
           }}
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#0f172b")}
           onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
@@ -127,6 +173,7 @@ function AppContent() {
         </button>
       )}
 
+      {/* 🔹 Botón de instalación (más pequeño en móviles) */}
       {isInstallable && (
         <button
           onClick={handleInstallApp}
@@ -139,19 +186,18 @@ function AppContent() {
             color: "#fff",
             border: "none",
             borderRadius: "8px",
-            width: window.innerWidth < 550 ? "80px" : "90px",
-            height: window.innerWidth < 550 ? "80px" : "90px",
-            fontSize: window.innerWidth < 550 ? "16px" : "18px",
+            width: window.innerWidth < 550 ? "60px" : "90px",  // 🔹 Más pequeño en móviles
+            height: window.innerWidth < 550 ? "60px" : "90px",
+            fontSize: window.innerWidth < 550 ? "12px" : "16px",
             cursor: "pointer",
             zIndex: 800,
             transition: "background-color 0.3s ease",
-            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)" // 🔹 Sombra blanca
-
+            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)",
           }}
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#EE8532")}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = "#0f172b")}
         >
-          Instalar App
+          Instalar
         </button>
       )}
     </div>

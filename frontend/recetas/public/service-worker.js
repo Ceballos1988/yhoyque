@@ -1,4 +1,4 @@
-const CACHE_NAME = "v18"; // 🔹 Incrementar versión para forzar actualización
+const CACHE_NAME = "v19"; // 🔹 Incrementar versión para forzar actualización
 
 const urlsToCache = [
   "/", "/index.html", "/manifest.json", "/offline.html",
@@ -80,7 +80,7 @@ self.addEventListener("message", (event) => {
 });
 
 // 🔹 Notificar a los clientes cuando haya una nueva versión del SW
-self.addEventListener("updatefound", () => {
+self.addEventListener("install", () => {
   self.clients.matchAll().then((clients) => {
     clients.forEach(client => {
       client.postMessage({ type: "NEW_VERSION_AVAILABLE" });
