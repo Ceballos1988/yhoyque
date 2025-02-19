@@ -207,7 +207,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/recipes/${recipe._id}/like`,
-        {},
+  {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

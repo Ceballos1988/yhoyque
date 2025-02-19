@@ -42,42 +42,21 @@ const LikeButton = React.memo(({ likes = [], onLike, currentUserId, recipeId }) 
   // Función para manejar el like
   const handleLike = async () => {
     if (isOffline) {
-      // Manejo offline: modificar estado localmente
       setUserHasLiked(!userHasLiked);
       setTotalLikes(userHasLiked ? totalLikes - 1 : totalLikes + 1);
-
-      // Guardar en localStorage
-      localStorage.setItem(
-        `likes-${recipeId}`,
-        JSON.stringify({
-          userId: currentUserId,
-          userHasLiked: !userHasLiked,
-          totalLikes: userHasLiked ? totalLikes - 1 : totalLikes + 1,
-        })
-      );
     } else {
-      // Manejo online: actualizar desde el backend
       try {
-        const response = await onLike();
+        const response = await onLike(); // <- Asegúrate de que `onLike` está pasando los datos correctos
         if (response && response.likes) {
           setUserHasLiked(response.likes.includes(currentUserId));
           setTotalLikes(response.likes.length);
-
-          // Guardar estado actualizado en localStorage
-          localStorage.setItem(
-            `likes-${recipeId}`,
-            JSON.stringify({
-              userId: currentUserId,
-              userHasLiked: response.likes.includes(currentUserId),
-              totalLikes: response.likes.length,
-            })
-          );
         }
       } catch (error) {
         console.error("Error al dar/quitar like:", error);
       }
     }
   };
+  
 
   return (
     <span
