@@ -203,18 +203,18 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       setMessage("Debes iniciar sesión para dar like.");
       return;
     }
-
+  
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/recipes/${recipe._id}/like`,
-  {},
+      const response = await axios.put(  // ✅ Cambiar POST por PUT
+        `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipe._id}`, // ✅ Corregir la URL
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-
+  
       if (response.data.likes) {
         setLikes(response.data.likes);
       }
@@ -223,7 +223,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       setMessage("Hubo un error al procesar el like.");
     }
   };
-
+  
   const handleFavoriteRecipe = async () => {
     const token = localStorage.getItem("token");
     if (!token) {

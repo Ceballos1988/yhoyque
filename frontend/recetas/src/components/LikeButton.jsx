@@ -39,14 +39,14 @@ const LikeButton = React.memo(({ likes = [], onLike, currentUserId, recipeId }) 
     }
   }, [isOffline, userHasLiked, totalLikes, currentUserId, recipeId]);
 
-  // Función para manejar el like
+  // 🔹 Nueva función para manejar el like correctamente
   const handleLike = async () => {
     if (isOffline) {
       setUserHasLiked(!userHasLiked);
-      setTotalLikes(userHasLiked ? totalLikes - 1 : totalLikes + 1);
+      setTotalLikes((prev) => (userHasLiked ? prev - 1 : prev + 1));
     } else {
       try {
-        const response = await onLike(); // <- Asegúrate de que `onLike` está pasando los datos correctos
+        const response = await onLike(recipeId); // ✅ Pasar el ID de la receta correctamente
         if (response && response.likes) {
           setUserHasLiked(response.likes.includes(currentUserId));
           setTotalLikes(response.likes.length);
@@ -56,7 +56,6 @@ const LikeButton = React.memo(({ likes = [], onLike, currentUserId, recipeId }) 
       }
     }
   };
-  
 
   return (
     <span

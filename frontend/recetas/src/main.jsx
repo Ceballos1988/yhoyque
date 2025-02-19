@@ -6,14 +6,7 @@ import "./styles/main.css";
 
 const isDevelopment = import.meta.env.MODE === "development";
 
-// 📌 Manejar el evento `beforeinstallprompt` para evitar el mensaje en consola
-window.addEventListener("beforeinstallprompt", (event) => {
-  event.preventDefault();
-  if (isDevelopment) {
-    console.log("📌 Instalación manual controlada.");
-  }
-  window.deferredPrompt = event; // Guardar el evento para mostrarlo después
-});
+
 
 // 📌 Verificar que el elemento root existe antes de renderizar
 const rootElement = document.getElementById("root");

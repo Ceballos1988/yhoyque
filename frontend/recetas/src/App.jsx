@@ -49,31 +49,35 @@ function AppContent() {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-        if (import.meta.env.MODE === "development") {
-            console.log("📌 Instalación manual controlada en desarrollo.");
-        }
-
-        setDeferredPrompt(e); // 🔹 Guardamos el evento sin bloquear el banner
-        setIsInstallable(true);
+      e.preventDefault(); // ✅ Bloquea el banner automático de Chrome
+      setDeferredPrompt(e); // ✅ Guarda el evento para mostrarlo después
+      setIsInstallable(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-        window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
-}, []);
+  }, []);
 
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
 
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
 
-  const handleInstallApp = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        setDeferredPrompt(null);
-        setIsInstallable(false);
-      });
+    if (outcome === "accepted") {
+      console.log("✅ El usuario instaló la app");
+    } else {
+      console.log("❌ El usuario canceló la instalación");
     }
+
+    setDeferredPrompt(null);
+    setIsInstallable(false);
   };
 
   // 🔹 Escuchar cambios en el Service Worker para mostrar notificación de actualización
@@ -188,7 +192,7 @@ function AppContent() {
             color: "#fff",
             border: "none",
             borderRadius: "8px",
-            width: window.innerWidth < 550 ? "60px" : "90px",  // 🔹 Más pequeño en móviles
+            width: window.innerWidth < 550 ? "60px" : "90px", // 🔹 Más pequeño en móviles
             height: window.innerWidth < 550 ? "60px" : "90px",
             fontSize: window.innerWidth < 550 ? "12px" : "16px",
             cursor: "pointer",
