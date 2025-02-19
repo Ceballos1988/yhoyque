@@ -41,21 +41,21 @@ const LikeButton = React.memo(({ likes = [], onLike, currentUserId, recipeId }) 
 
   // 🔹 Nueva función para manejar el like correctamente
   const handleLike = async () => {
-    if (isOffline) {
-      setUserHasLiked(!userHasLiked);
-      setTotalLikes((prev) => (userHasLiked ? prev - 1 : prev + 1));
-    } else {
-      try {
-        const response = await onLike(recipeId); // ✅ Pasar el ID de la receta correctamente
-        if (response && response.likes) {
-          setUserHasLiked(response.likes.includes(currentUserId));
-          setTotalLikes(response.likes.length);
-        }
-      } catch (error) {
-        console.error("Error al dar/quitar like:", error);
+    if (!currentUserId) {
+      console.warn("Usuario no autenticado, no puede dar like.");
+      return;
+    }
+    try {
+      const response = await onLike(recipeId);
+      if (response && response.likes) {
+        setUserHasLiked(response.likes.includes(currentUserId || ""));
+        setTotalLikes(response.likes.length);
       }
+    } catch (error) {
+      console.error("Error al dar/quitar like:", error);
     }
   };
+  
 
   return (
     <span

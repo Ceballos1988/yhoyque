@@ -30,20 +30,20 @@
     <script type="module" src="/src/main.jsx"></script>
 
     <script>
-              if ("serviceWorker" in navigator) {
-                  window.addEventListener("load", () => {
-                      navigator.serviceWorker.register("/service-worker.js")
-                      .then((registration) => {
-          if (import.meta.env.MODE === "development") {
-              console.log("✅ Service Worker registrado:", registration);
-          }
-      })
-
-                          .catch((error) => {
-                              console.error("❌ Error al registrar el Service Worker:", error);
-                          });
-                  });
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/service-worker.js")
+            .then((registration) => {
+              // ✅ Detectar entorno sin usar `import.meta`
+              if (window.location.hostname === "localhost") {
+                console.log("✅ Service Worker registrado en desarrollo:", registration);
               }
+            })
+            .catch((error) => {
+              console.error("❌ Error al registrar el Service Worker:", error);
+            });
+        });
+      }
     </script>
   </body>
 </html>

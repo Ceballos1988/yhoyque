@@ -22,7 +22,7 @@
     />
 
     <link rel="stylesheet" href="/styles/main.css" />
-    <script type="module" crossorigin src="/assets/index-B3IuGkeP.js"></script>
+    <script type="module" crossorigin src="/assets/index-vzac2fRV.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-qs5TaNJ1.css">
   </head>
   <body>
@@ -31,20 +31,20 @@
     <!-- ✅ Asegurar que Vite carga el script principal -->
 
     <script>
-              if ("serviceWorker" in navigator) {
-                  window.addEventListener("load", () => {
-                      navigator.serviceWorker.register("/service-worker.js")
-                      .then((registration) => {
-          if (import.meta.env.MODE === "development") {
-              console.log("✅ Service Worker registrado:", registration);
-          }
-      })
-
-                          .catch((error) => {
-                              console.error("❌ Error al registrar el Service Worker:", error);
-                          });
-                  });
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/service-worker.js")
+            .then((registration) => {
+              // ✅ Detectar entorno sin usar `import.meta`
+              if (window.location.hostname === "localhost") {
+                console.log("✅ Service Worker registrado en desarrollo:", registration);
               }
+            })
+            .catch((error) => {
+              console.error("❌ Error al registrar el Service Worker:", error);
+            });
+        });
+      }
     </script>
   </body>
 </html>

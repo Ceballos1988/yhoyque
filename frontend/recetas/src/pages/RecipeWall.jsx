@@ -307,30 +307,37 @@ const RecipeWall = () => {
   const handleLikeToggle = async (recipeId) => {
     try {
       const token = localStorage.getItem("token");
-      const API_URL =
-        import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
-
+      if (!token) {
+        console.error("No hay token, no se puede dar like.");
+        return;
+      }
+  
+      const API_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
+  
       const response = await axios.put(
         `${API_URL}/api/recipes/like/${recipeId}`,
-        {},
+        null, // ⬅️ Cambiado de `{}` a `null` para evitar problemas
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      if (response && response.data.likes) {
+  
+      if (response.data && response.data.likes) {
         setRecipes((prevRecipes) =>
           prevRecipes.map((recipe) =>
             recipe._id === recipeId
-              ? { ...recipe, likes: response.data.likes } // 🔹 ACTUALIZA los likes en tiempo real
+              ? { ...recipe, likes: response.data.likes }
               : recipe
           )
         );
+      } else {
+        console.warn("Respuesta inesperada en likes:", response.data);
       }
     } catch (error) {
-      console.error("Error al manejar el like:", error);
+      console.error("Error al manejar el like:", error.response?.data || error.message);
     }
   };
+  
 
   return (
     <div

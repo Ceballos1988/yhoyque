@@ -49,35 +49,26 @@ function AppContent() {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault(); // ✅ Bloquea el banner automático de Chrome
-      setDeferredPrompt(e); // ✅ Guarda el evento para mostrarlo después
-      setIsInstallable(true);
+      e.preventDefault(); // Previene el banner automático
+      setDeferredPrompt(e);
+      setIsInstallable(true); // Permite mostrar el botón manualmente después
     };
-
+  
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
+  
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
-  const handleInstallApp = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      console.log("✅ El usuario instaló la app");
-    } else {
-      console.log("❌ El usuario canceló la instalación");
+  const handleInstallApp = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        setDeferredPrompt(null);
+        setIsInstallable(false);
+      });
     }
-
-    setDeferredPrompt(null);
-    setIsInstallable(false);
   };
 
   // 🔹 Escuchar cambios en el Service Worker para mostrar notificación de actualización
