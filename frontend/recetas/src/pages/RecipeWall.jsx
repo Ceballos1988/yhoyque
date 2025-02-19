@@ -315,17 +315,21 @@ const RecipeWall = () => {
         }
       );
   
-      setRecipes((prevRecipes) =>
-        prevRecipes.map((recipe) =>
-          recipe._id === recipeId
-            ? { ...recipe, likes: response.data.likes } // 🔹 ACTUALIZA los likes en tiempo real
-            : recipe
-        )
-      );
+      if (response && response.data.likes) {
+        setRecipes((prevRecipes) =>
+          prevRecipes.map((recipe) =>
+            recipe._id === recipeId
+              ? { ...recipe, likes: response.data.likes } // 🔹 ACTUALIZA los likes en tiempo real
+              : recipe
+          )
+        );
+      }
     } catch (error) {
       console.error("Error al manejar el like:", error);
     }
   };
+  
+  
   
   
   return (

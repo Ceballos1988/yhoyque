@@ -27,12 +27,12 @@ const safeAxiosGet = async (url, config = {}) => {
   }
 };
 
-const CardRecipe = ({ recipe, onDelete, userIngredients, onLikeToggle }) => {
+const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   const { user: currentUser } = useAuth();
   const currentUserId = currentUser?.id || "guest"; // Cambia `._id` por `.id` si esa es la estructura del objeto
 
   const [isLoaded] = useState(false); // Estado para la clase 'loaded'
-  const [, setLikes] = useState(recipe.likes || []);
+  const [likes, setLikes] = useState(recipe.likes || []);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // Controlar la visibilidad del modal
   const [showComments, setShowComments] = useState({}); // Estado para mostrar comentarios por receta
   const [comments, setComments] = useState({}); // Comentarios por receta
@@ -199,12 +199,28 @@ const CardRecipe = ({ recipe, onDelete, userIngredients, onLikeToggle }) => {
   };
 
   const handleLikeRecipe = async () => {
-    if (!onLikeToggle) return; // Verifica que la función exista
+    if (!currentUserId || currentUserId === "guest") {
+      setMessage("Debes iniciar sesión para dar like.");
+      return;
+    }
 
     try {
-      await onLikeToggle(recipe._id); // 🔹 Llama la función de `RecipeWall`
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/recipes/${recipe._id}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.likes) {
+        setLikes(response.data.likes);
+      }
     } catch (error) {
-      console.error("Error al dar/quitar like:", error);
+      console.error("Error al dar like:", error);
+      setMessage("Hubo un error al procesar el like.");
     }
   };
 
@@ -583,8 +599,8 @@ const CardRecipe = ({ recipe, onDelete, userIngredients, onLikeToggle }) => {
         <div className="flex items-center mb-2">
           <LikeButton
             recipeId={recipe._id}
-            likes={recipe.likes} // 🔹 Usa los likes actualizados
-            onLike={handleLikeRecipe} // 🔹 Ahora actualiza el estado en `RecipeWall`
+            likes={likes} // ✅ Ahora pasamos el estado actualizado
+            onLike={handleLikeRecipe} // ✅ Se asegura de llamar a la función correcta
             currentUserId={currentUserId}
           />
         </div>
