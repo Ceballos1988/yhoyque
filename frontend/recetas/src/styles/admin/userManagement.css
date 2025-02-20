@@ -239,6 +239,9 @@
   .container-search .search-bar-container {
     justify-content: center;
   }
+  .container-search{
+    margin-left: 60px;
+  }
 }
 
 .table-container {
