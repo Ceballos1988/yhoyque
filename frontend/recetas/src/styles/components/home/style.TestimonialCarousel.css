@@ -129,8 +129,8 @@
     font-size: 1rem !important;
   }
   .testimonial-section .testimonial-item {
-    max-width: 280px;
-    height: 250px;
+    max-width: 250px;
+    height: 260px;
     margin: 0 auto;
   }
 }

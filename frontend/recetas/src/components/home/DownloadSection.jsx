@@ -39,8 +39,8 @@ function DownloadSection() {
       aria-labelledby="download-title"
     >
       <div className="download-content container mx-auto flex flex-col lg:flex-row justify-center items-center gap-10">
-        <div className="download-text lg:w-1/2 text-left mt-10 mb-10 ml-10">
-          <h2 id="download-title" className="section-title text-left text-3xl font-bold pb-10 text-azul-bg">
+        <div className="download-text  text-left ">
+          <h2 id="download-title" className="section-title text-left text-3xl font-bold  text-azul-bg">
             ACCEDÉ A LA APP EN CUALQUIER MOMENTO</h2>
 
           <p className="text-white text-left">

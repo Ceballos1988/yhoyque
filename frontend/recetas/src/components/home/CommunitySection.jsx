@@ -11,7 +11,7 @@ import "../../styles/components/home/style.communitySection.css";
 function CommunitySection() {
   return (
     <section
-      className="community-section mt-10 mb-10 py-10"
+      className="community-section mt-10 py-10"
       data-aos="zoom-out-down"
       id="comunidad"
       aria-labelledby="community-title"

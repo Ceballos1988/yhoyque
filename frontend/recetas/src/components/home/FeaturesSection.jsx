@@ -77,11 +77,11 @@ function FeaturesSection() {
       {isMobileView ? (
         <Slider {...sliderSettings} key={isMobileView} className="features-slider">
           {features.map((feature, index) => (
-            <div key={index} className="features-carousel-item tilt">
+            <div key={index} className="features-carousel-item tilt ">
               <div className="features-icon-container">
                 <img src={feature.icon} alt={`Icono de ${feature.title.toLowerCase()}`} className="features-icon" />
               </div>
-              <h3>{feature.title}</h3>
+              <h3 className="text-naranja-bg">{feature.title}</h3>
               <p>{feature.description}</p>
             </div>
           ))}

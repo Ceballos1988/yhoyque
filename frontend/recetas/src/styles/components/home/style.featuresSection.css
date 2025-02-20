@@ -5,6 +5,8 @@
 .features-section h3 {
   font-size: 1.3rem !important;
   margin-bottom: 15px;
+  font-weight: bold; /* Esto hará que el texto sea negrita */
+
 }
 
 /* Sección principal */
@@ -124,13 +126,13 @@
   }
 
   .features-section .features-slider {
-    max-width: 320px;
-    min-width: 320px;
-    height: 300px;
+    max-width: 300px;
+    min-width: 200px;
+    height: 320px;
   }
 
   .features-section .features-carousel-item{
-    height: 230px;
+    height: 250px;
     
   }
 
