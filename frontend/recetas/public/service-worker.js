@@ -1,4 +1,4 @@
-const CACHE_NAME = "v26"; // 🔹 Incrementar versión para forzar actualización
+const CACHE_NAME = "v27"; // 🔹 Incrementar versión para forzar actualización
 
 const urlsToCache = [
   "/", "/index.html", "/manifest.json", "/offline.html",

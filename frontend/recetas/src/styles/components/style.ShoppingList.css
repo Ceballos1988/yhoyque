@@ -287,3 +287,13 @@ background-color:#0f172b!important;
   
 }
 
+
+
+.item-text {
+  display: inline-block; /* Asegura que solo afecte al texto */
+}
+
+.item-text.line-through {
+  text-decoration: line-through;
+  color: #ee8532; /* O el color que prefieras */
+}

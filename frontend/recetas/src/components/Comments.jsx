@@ -26,7 +26,8 @@ const Comments = ({
   // Cargar comentarios desde localStorage si está offline
   useEffect(() => {
     if (!navigator.onLine) {
-      const storedComments = JSON.parse(localStorage.getItem(`comments-${recipeId}`)) || [];
+      const storedComments =
+        JSON.parse(localStorage.getItem(`comments-${recipeId}`)) || [];
       setOfflineComments(storedComments);
     } else {
       // Guardar los comentarios en localStorage si estamos online
@@ -61,9 +62,15 @@ const Comments = ({
 
       // Actualiza localStorage después de agregar un comentario
       const updatedComments = [...comments, comment];
-      localStorage.setItem(`comments-${recipeId}`, JSON.stringify(updatedComments));
+      localStorage.setItem(
+        `comments-${recipeId}`,
+        JSON.stringify(updatedComments)
+      );
     } catch (error) {
-      console.error("Error al agregar el comentario:", error.response?.data || error);
+      console.error(
+        "Error al agregar el comentario:",
+        error.response?.data || error
+      );
       setMessage("Hubo un error al agregar el comentario.");
     }
   };
@@ -73,7 +80,9 @@ const Comments = ({
     const token = localStorage.getItem("token");
 
     if (!token) {
-      setMessage("No estás autenticado. Inicia sesión para eliminar comentarios.");
+      setMessage(
+        "No estás autenticado. Inicia sesión para eliminar comentarios."
+      );
       return;
     }
 
@@ -83,17 +92,25 @@ const Comments = ({
     }
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/comments/${commentId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (onDeleteComment) {
         onDeleteComment(commentId);
       }
 
       // Actualiza localStorage después de eliminar un comentario
-      const updatedComments = comments.filter((comment) => comment._id !== commentId);
-      localStorage.setItem(`comments-${recipeId}`, JSON.stringify(updatedComments));
+      const updatedComments = comments.filter(
+        (comment) => comment._id !== commentId
+      );
+      localStorage.setItem(
+        `comments-${recipeId}`,
+        JSON.stringify(updatedComments)
+      );
     } catch (error) {
       console.error("Error al eliminar el comentario:", error);
       setMessage("Hubo un error al eliminar el comentario.");
@@ -152,7 +169,10 @@ const Comments = ({
       setReportMessage("Reporte enviado con éxito.");
       setTimeout(() => closeReportModal(), 2000); // Cierra el modal tras 2 segundos
     } catch (error) {
-      console.error("Error al enviar el reporte:", error.response?.data || error);
+      console.error(
+        "Error al enviar el reporte:",
+        error.response?.data || error
+      );
       setReportMessage("Hubo un error al enviar el reporte.");
     }
   };
@@ -197,14 +217,15 @@ const Comments = ({
           </div>
         ))}
 
-      {Array.isArray(displayedComments) && displayedComments.length > visibleCommentsCount && (
-        <button
-          className="bg-transparent text-orange-500 mt-2"
-          onClick={handleLoadMoreComments}
-        >
-          Cargar más
-        </button>
-      )}
+      {Array.isArray(displayedComments) &&
+        displayedComments.length > visibleCommentsCount && (
+          <button
+            className="bg-transparent text-orange-500 mt-2"
+            onClick={handleLoadMoreComments}
+          >
+            Cargar más
+          </button>
+        )}
 
       <label htmlFor="new-comment" className="sr-only">
         Nuevo comentario
@@ -240,17 +261,26 @@ const Comments = ({
         <p className="modal-session mb-4 text-white">
           ¿Por qué deseas reportar este comentario?
         </p>
-        <div className="report-reasons ml-7">
-          <select
-            value={reportReason}
-            onChange={(e) => setReportReason(e.target.value)}
-            className="filter-dropdown search-bar text-white"
-          >
-            <option value="">Selecciona un motivo</option>
-            <option value="Spam">Spam</option>
-            <option value="Contenido ofensivo">Contenido ofensivo</option>
-          </select>
+
+        <div className="report-reasons">
+          {["Spam", "Contenido ofensivo"].map((reason) => (
+            <label
+              key={reason}
+              className="reason-item text-white flex items-center"
+            >
+              <input
+                type="radio"
+                name="reportReason"
+                value={reason}
+                checked={reportReason === reason}
+                onChange={() => setReportReason(reason)}
+                className="mr-2 mt-3"
+              />
+              {reason}
+            </label>
+          ))}
         </div>
+
         {reportMessage && (
           <p
             className={`mt-2 ${

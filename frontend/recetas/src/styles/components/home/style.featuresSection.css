@@ -2,21 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
-
-
-/* src/styles/components/home/style.featuresSection.css */
-.features-section h1 {
-  font-size: 2rem !important;
-  margin-top: 100px !important;
-}
-
 .features-section h3 {
-  font-size: 1.5rem !important;
-}
-.features-section p {
-  font-size: 1rem !important;
+  font-size: 1.3rem !important;
+  margin-bottom: 15px;
 }
 
+/* Sección principal */
 .features-section {
   display: flex;
   justify-content: center;
@@ -25,14 +16,17 @@
   padding: 4rem 2rem;
 }
 
-.section-title-features {
+/* Título */
+.features-section-title {
   font-size: 1.5rem;
   color: #ee8532;
   margin-bottom: 2rem;
   font-family: "Josefin Slab", serif;
   font-weight: bold;
+  text-align: center;
 }
 
+/* Diseño en pantalla grande */
 .features-grid {
   margin-top: 5rem;
   display: grid;
@@ -41,141 +35,109 @@
   justify-items: center;
 }
 
-.feature-card {
+/* Tarjetas de características */
+.feature-card,
+.features-carousel-item {
   position: relative;
   color: white;
   background-color: #828362;
   border-radius: 10px 100px 70px 70px;
   padding: 3rem;
-  transform-style: preserve-3d;
-  perspective: 500px;
+  margin: 50px auto;
   transition: transform 0.3s, box-shadow 0.3s;
-  margin: 0 auto 20px; /* Reduce el margen inferior de las tarjetas */
-  box-shadow: 0 4px 4px rgba(255, 255, 255, 0.2),
-    0 6px 20px rgba(255, 255, 255, 0.2);
 }
 
-.feature-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-}
-
-.feature-icon-container {
+/* Íconos */
+.features-icon-container {
   position: absolute;
   top: -40px;
-  left: 90%;
+  left: 50%;
   transform: translateX(-50%);
   background-color: #ffffff;
   border-radius: 50%;
   padding: 5px;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.feature-icon {
+.features-icon {
   width: 100%;
 }
 
-.feature-card h3 {
-  font-size: 1.5rem;
+/* Estilos del Carrusel */
+.features-slider {
+  width: 90%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.features-slider .slick-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.features-slider .slick-dots {
+  margin-top: 10px;
+}
+
+.features-slider .slick-dots li button:before {
   color: white;
-  margin-bottom: 0.5rem;
-  font-family: "Josefin Slab", serif;
 }
 
-.feature-card p {
-  font-size: 1rem;
-  color: #fff;
-  line-height: 1.5;
-  font-family: "Raleway", sans-serif;
+.features-slider .slick-dots li.slick-active button:before {
+  color: #ee8532;
 }
 
 
-/* Responsividad */
-@media (max-width: 550px) {
-  .section-title-features {
+@media (min-width: 1024px) {
+  .features-slider {
+    display: none; /* Ocultar carrusel en pantallas grandes */
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 1024px) {
+  .features-grid {
+    display: none; /* Esconder grid en pantallas pequeñas */
+  }
+
+  .features-slider {
+    display: block; /* Mostrar el carrusel */
+  }
+  .features-section-title {
     font-size: 1rem !important;
   }
 
-  .feature-card h3 {
+  .features-carousel-item h3 {
     font-size: 1.2rem !important;
   }
-  .feature-card p {
+  
+  .features-carousel-item p {
     font-size: 1rem !important;
   }
 
-  .feature-card {
-    margin-bottom: 50px !important; /* Aumenta aún más la separación */
+  .features-section .features-carousel-item {
+    margin-bottom: 50px !important; /* Aumenta la separación */
   }
 
-  .features-grid {
-    gap: 6rem !important; /* Más espacio en pantallas muy pequeñas */
+  .features-section .features-slider {
+    max-width: 320px;
+    min-width: 320px;
+    height: 300px;
   }
 
- 
+  .features-section .features-carousel-item{
+    height: 230px;
+    
+  }
+
+  
 }
 
-@media (max-width: 1024px) {
-  .feature-card h1 {
-    font-size: 2.5rem !important;
-    text-align: center;
-  }
-  .feature-card h3 {
-    font-size: 1.5rem !important;
-    text-align: center;
-  }
-  .feature-card p {
-    font-size: 1rem !important;
-    text-align: center;
-  }
 
-  .feature-card {
-    width: 320px !important;
-    height: 220px !important;
-    margin-top: 80px !important;
-  }
 
-  .swiper-wrapper {
-    max-width: 800px;
-  }
 
-  /* Estilo para los puntos de paginación */
-  .swiper-pagination-bullet {
-    background: #ffffff; /* Puntos blancos */
-    border: 2px solid #ee8532; /* Borde naranja */
-    opacity: 1;
-    width: 12px;
-    height: 12px;
-    margin: 0 6px;
-  }
 
-  .swiper-pagination-bullet-active {
-    background: #ee8532; /* Punto activo */
-    border: none;
-  }
-
-  .slick-dots {
-    margin-top: -10px; /* Ajusta la distancia entre las tarjetas y los puntos */
-  }
-
-  .slick-dots li button:before {
-    color: #cccccc;
-    font-size: 0.8rem;
-  }
-
-  .slick-dots li.slick-active button:before {
-    color: #ffffff;
-  }
-
-  .slick-prev:before,
-  .slick-next:before {
-    color: #ffffff;
-  }
-  .slick-track {
-    width: 80vw !important;
-  }
-}

@@ -8,7 +8,7 @@
 }
 
 .testimonial-section .container-testimonial {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 70px auto;
   padding: 0 1rem;
 }
@@ -23,24 +23,24 @@
 }
 
 /* Slick Carousel Adjustments */
-.slick-slider {
+.testimonial-section .slick-slider {
   display: flex;
   justify-content: center;
 }
 
-.slick-list {
+.testimonial-section .slick-list {
   overflow: hidden !important;
   max-width: 100vw;
   margin-bottom: 50px !important;
 }
 
-.slick-track {
+.testimonial-section .slick-track {
   display: flex !important;
   gap: 100px !important;
 }
 
 /* Testimonial Item Styling */
-.testimonial-item {
+.testimonial-section .testimonial-item {
   color: white;
   background-color: #828362;
   border-radius: 100px 10px 100px 10px;
@@ -56,64 +56,64 @@
   text-align: center;
 }
 
-.testimonial-item.slick-center {
+.testimonial-section .testimonial-item.slick-center {
   background-color: #ee8532;
   color: #ffffff;
 }
 
-.testimonial-item p {
+.testimonial-section .testimonial-item p {
   color: #ffffff;
   font-size: 1rem;
   margin-top: 20px;
   line-height: 1.5;
 }
 
-.testimonial-item .testimonial-footer {
+.testimonial-section .testimonial-item .testimonial-footer {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 1rem;
 }
 
-.testimonial-item img {
+.testimonial-section .testimonial-item img {
   width: 50px;
   height: 50px;
   margin-right: 0.5rem;
   border-radius: 50%;
 }
 
-.testimonial-item h5 {
+.testimonial-section .testimonial-item h5 {
   color: #ffffff;
   margin: 0;
   font-weight: bold;
 }
 
-.testimonial-item small {
+.testimonial-section .testimonial-item small {
   color: #cccccc;
 }
 
 /* Slick Dots */
-.slick-dots {
+.testimonial-section .slick-dots {
   margin-top: 1rem;
 }
 
-.slick-dots li button:before {
+.testimonial-section .slick-dots li button:before {
   color: #cccccc;
   font-size: 0.8rem;
 }
 
-.slick-dots li.slick-active button:before {
+.testimonial-section .slick-dots li.slick-active button:before {
   color: #ffffff;
 }
 
 /* Slick Navigation Arrows */
-.slick-prev:before,
-.slick-next:before {
+.testimonial-section .slick-prev:before,
+.testimonial-section .slick-next:before {
   color: #ffffff;
 }
 
 @media (max-width: 1024px) {
-  .testimonial-item {
+  .testimonial-section .testimonial-item {
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
@@ -127,5 +127,10 @@
 @media (max-width: 768px) {
   .testimonial-section h2 {
     font-size: 1rem !important;
+  }
+  .testimonial-section .testimonial-item {
+    max-width: 280px;
+    height: 250px;
+    margin: 0 auto;
   }
 }

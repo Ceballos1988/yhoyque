@@ -10,12 +10,7 @@ const ReportButton = ({ recipeId, commentId }) => {
   const [details, setDetails] = useState("");
   const [message, setMessage] = useState("");
 
-  const reasons = [
-    "Información incorrecta",
-    "Contenido ofensivo",
-    "Spam",
-    
-  ];
+  const reasons = ["Información incorrecta", "Contenido ofensivo", "Spam"];
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -34,12 +29,12 @@ const ReportButton = ({ recipeId, commentId }) => {
     try {
       const token = localStorage.getItem("token");
       if (import.meta.env.MODE === "development") {
-      console.log("Datos enviados al backend:", {
-        recipeId,
-        commentId,
-        reason: selectedReason,
-        details,
-      });
+        console.log("Datos enviados al backend:", {
+          recipeId,
+          commentId,
+          reason: selectedReason,
+          details,
+        });
       }
 
       await axios.post(
@@ -91,28 +86,37 @@ const ReportButton = ({ recipeId, commentId }) => {
             ? "¿Por qué deseas reportar este comentario?"
             : "¿Por qué deseas reportar esta receta?"}
         </p>
+
+        {/* Reemplazamos el <select> por los checkboxes como en "Reportar Receta" */}
         <div className="report-reasons ml-7">
           {reasons.map((reason) => (
-            <label key={reason} className="reason-item">
+            <label
+              key={reason}
+              className="reason-item text-white flex items-center"
+            >
               <input
                 type="radio"
                 name="reportReason"
                 value={reason}
                 checked={selectedReason === reason}
                 onChange={() => setSelectedReason(reason)}
+                className="mr-2"
               />
               {reason}
             </label>
           ))}
         </div>
 
-       
         {message && (
-         <p className={`mt-2 ${message.includes("exitosamente") ? "text-success" : "text-error"}`}>
-
+          <p
+            className={`mt-2 ${
+              message.includes("exitosamente") ? "text-success" : "text-error"
+            }`}
+          >
             {message}
           </p>
         )}
+
         <div className="flex justify-center mt-4">
           <button
             onClick={closeModal}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import "../styles/components/style.cardRecipe.css";
 import LikeButton from "./LikeButton";
 import FavoriteButton from "./FavoriteButton";
@@ -39,21 +39,30 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
   const [commentsCount, setCommentsCount] = useState(0); // Inicializamos commentsCount en 0
   const [message, setMessage] = useState(""); // Mensaje para mostrar errores de autenticación
   const [userName, setUserName] = useState(recipe.userName); // Estado para el nombre de usuario de la receta
+  const [userImage, setUserImage] = useState("/img/user-icon.png");
+
   const [isFavorited, setIsFavorited] = useState(false); // Estado para manejar el "favorito"
   const navigate = useNavigate(); // Hook para la navegación
   const [showUserModal, setShowUserModal] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
 
   // Estado para manejar la tarjeta expandida
-  const [expandedCardId, setExpandedCardId] = useState(null);
+  const [expandedIngredientsId, setExpandedIngredientsId] = useState(null);
+  const [expandedStepsId, setExpandedStepsId] = useState(null);
 
   // Estado para el modal de ingredientes faltantes
   const [missingIngredients, setMissingIngredients] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Función para alternar la expansión de la tarjeta
-  const toggleExpansion = (recipeId) => {
-    setExpandedCardId((prevId) => (prevId === recipeId ? null : recipeId));
+  const toggleIngredientsExpansion = (recipeId) => {
+    setExpandedIngredientsId((prevId) =>
+      prevId === recipeId ? null : recipeId
+    );
+  };
+
+  const toggleStepsExpansion = (recipeId) => {
+    setExpandedStepsId((prevId) => (prevId === recipeId ? null : recipeId));
   };
 
   // Función para calcular ingredientes faltantes
@@ -203,7 +212,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       setMessage("Debes iniciar sesión para dar like.");
       return;
     }
-  
+
     // Actualizar la UI inmediatamente sin esperar respuesta del servidor
     setLikes((prevLikes) => {
       if (prevLikes.includes(currentUserId)) {
@@ -212,7 +221,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
         return [...prevLikes, currentUserId];
       }
     });
-  
+
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/recipes/like/${recipe._id}`,
@@ -223,7 +232,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           },
         }
       );
-  
+
       if (response.data.likes) {
         setLikes(response.data.likes);
       }
@@ -232,7 +241,7 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       setMessage("Hubo un error al procesar el like.");
     }
   };
-  
+
   const handleFavoriteRecipe = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -407,6 +416,17 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     }
   }, [recipe._id]);
 
+  const stepsRef = useRef(null); // Referencia al contenedor de los pasos
+  const [isTruncated, setIsTruncated] = useState(false); // Estado para saber si hay truncado
+
+  useEffect(() => {
+    if (stepsRef.current) {
+      setIsTruncated(
+        stepsRef.current.scrollHeight > stepsRef.current.clientHeight
+      );
+    }
+  }, [recipe.steps]); // Se ejecuta cuando cambian los pasos
+
   useEffect(() => {
     const cacheImage = async () => {
       if (!navigator.onLine || !recipe.image) return;
@@ -447,15 +467,42 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
     cacheImage();
   }, [recipe.image, recipe._id]);
 
+  useEffect(() => {
+    const updateUserDetails = async () => {
+      if (!navigator.onLine) {
+        // Si estás offline, intenta recuperar la info del usuario desde localStorage
+        const cachedUser = JSON.parse(
+          localStorage.getItem(`user-${recipe.userId}`)
+        );
+        if (cachedUser) {
+          setUserName(cachedUser.username);
+          setUserImage(cachedUser.profileImage || "/img/user-icon.png"); // Usa la imagen guardada o el icono predeterminado
+        }
+        return;
+      }
+
+      const res = await safeAxiosGet(
+        `${import.meta.env.VITE_API_URL}/api/user/${recipe.userId}`
+      );
+
+      if (res) {
+        setUserName(res.data.username);
+        setUserImage(res.data.profileImage || "/img/user-icon.png"); // Usa la imagen de la API o el icono predeterminado
+
+        // Guarda los datos en localStorage para que se mantengan después de recargar
+        localStorage.setItem(`user-${recipe.userId}`, JSON.stringify(res.data));
+      }
+    };
+
+    updateUserDetails();
+  }, [recipe.userId]);
+
   const cachedImages = JSON.parse(localStorage.getItem("cachedImages")) || {};
   const recipeImage =
     cachedImages[recipe._id]?.data || recipe.image || "/img/recipe-null.png";
+
   return (
-    <div
-      className={`mb-10 recipe-card relative ${isLoaded ? "loaded" : ""} ${
-        expandedCardId === recipe._id ? "expanded" : ""
-      }`}
-    >
+    <div className={`mb-10 recipe-card relative ${isLoaded ? "loaded" : ""}`}>
       <div className="title-container">
         <h2 className="text-2xl text-center">{recipe.title}</h2>
         <span
@@ -463,7 +510,11 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           onClick={handleUserClick}
           title="Ver perfil"
         >
-          <img src="/img/user-icon.png" alt="User" className="w-9 mr-1" />
+          <img
+            src={userImage}
+            alt="User"
+            className="w-9 h-9 rounded-full object-cover mr-1"
+          />
           {userName || "Anónimo"}
         </span>
       </div>
@@ -547,10 +598,12 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
       </div>
 
       <div className="list-ingredientes">
-        <p className="font-semibold mt-4 text-left">Ingredientes:</p>
+        <p className="text-naranja-bg font-semibold mt-4 text-left">
+          Ingredientes:
+        </p>
         <div
           className={`ingredients-container ${
-            expandedCardId === recipe._id
+            expandedIngredientsId === recipe._id
               ? "expanded-ingredients"
               : "line-clamp-4"
           }`}
@@ -570,19 +623,20 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
 
         {recipe.ingredients?.length > 4 && (
           <button
-            onClick={() => toggleExpansion(recipe._id)}
-            className="bg-transparent text-orange-500 mt-2 flex items-center"
+            onClick={() => toggleIngredientsExpansion(recipe._id)}
+            className="bg-transparent text-red-500 mt-2 flex items-center"
           >
-            {expandedCardId === recipe._id ? "Ver menos" : "Ver más"}
+            {expandedIngredientsId === recipe._id ? "Ver menos" : "Ver más"}
           </button>
         )}
       </div>
 
       <div className="list-pasos">
-        <p className="font-semibold mt-4 text-left">Pasos:</p>
+        <p className="text-naranja-bg font-semibold mt-4 text-left">Pasos:</p>
         <div
+          ref={stepsRef} // Agregamos la referencia
           className={`steps-container ${
-            expandedCardId === recipe._id ? "expanded-steps" : "line-clamp-4"
+            expandedStepsId === recipe._id ? "expanded-steps" : "line-clamp-4"
           }`}
         >
           <ol className="list-decimal ml-4">
@@ -594,12 +648,13 @@ const CardRecipe = ({ recipe, onDelete, userIngredients }) => {
           </ol>
         </div>
 
-        {recipeSteps.length > 4 && (
+        {/* Mostrar botón si hay más de 4 pasos o si el contenido se está truncando */}
+        {(isTruncated || recipeSteps.length > 4) && (
           <button
-            onClick={() => toggleExpansion(recipe._id)}
-            className="bg-transparent text-orange-500 mt-2 flex items-center"
+            onClick={() => toggleStepsExpansion(recipe._id)}
+            className="bg-transparent text-red-500 mt-2 flex items-center"
           >
-            {expandedCardId === recipe._id ? "Ver menos" : "Ver más"}
+            {expandedStepsId === recipe._id ? "Ver menos" : "Ver más"}
           </button>
         )}
       </div>

@@ -375,7 +375,7 @@ function Profile() {
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="input-field text-black"
+                    className="input-field text-white"
                     placeholder="Nombre registrado"
                     disabled={isOffline}
                   />
@@ -392,7 +392,7 @@ function Profile() {
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="input-field text-black"
+                    className="input-field text-white"
                     placeholder="Apellido registrado"
                     disabled={isOffline}
                   />
@@ -413,7 +413,7 @@ function Profile() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="input-field text-black"
+                    className="input-field text-white"
                     placeholder="Nombre de usuario"
                     disabled={isOffline}
                   />
@@ -430,7 +430,7 @@ function Profile() {
                     type="text"
                     value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
-                    className="input-field text-black"
+                    className="input-field text-white"
                     placeholder="Tu cuenta de Instagram"
                     disabled={isOffline}
                   />
@@ -446,7 +446,7 @@ function Profile() {
                   id="bio"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="input-field text-black"
+                  className="input-field text-white"
                   placeholder="Escribe algo sobre ti"
                   disabled={isOffline}
                 />
@@ -467,7 +467,7 @@ function Profile() {
                   type="email"
                   value={email}
                   disabled
-                  className="input-field text-black mt-2"
+                  className="input-field text-white mt-2"
                 />
               </div>
 
@@ -502,7 +502,7 @@ function Profile() {
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="input-field text-black"
+                    className="input-field text-white"
                     placeholder="Contraseña actual"
                     disabled={isOffline}
                   />

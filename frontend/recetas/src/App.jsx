@@ -53,11 +53,14 @@ function AppContent() {
       setDeferredPrompt(e);
       setIsInstallable(true); // Permite mostrar el botón manualmente después
     };
-  
+
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-  
+
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
@@ -183,13 +186,17 @@ function AppContent() {
             color: "#fff",
             border: "none",
             borderRadius: "8px",
-            width: window.innerWidth < 550 ? "60px" : "90px", // 🔹 Más pequeño en móviles
-            height: window.innerWidth < 550 ? "60px" : "90px",
-            fontSize: window.innerWidth < 550 ? "12px" : "16px",
+            width: window.innerWidth < 550 ? "55px" : "80px", // 🔹 Menos ancho
+            height: window.innerWidth < 550 ? "40px" : "50px", // 🔹 Menos alto
+            fontSize: window.innerWidth < 550 ? "10px" : "14px", // 🔹 Ajusta tamaño del texto
             cursor: "pointer",
             zIndex: 800,
             transition: "background-color 0.3s ease",
-            boxShadow: "0px 4px 10px rgba(255, 255, 255, 0.6)",
+            boxShadow: "0px 0px 10px rgba(255, 255, 255, 0.6)",
+            display: "flex",
+            alignItems: "center", // 🔹 Centra el texto verticalmente
+            justifyContent: "center", // 🔹 Centra el texto horizontalmente
+            textAlign: "center",
           }}
           onMouseEnter={(e) => (e.target.style.backgroundColor = "#EE8532")}
           onMouseLeave={(e) => (e.target.style.backgroundColor = "#0f172b")}

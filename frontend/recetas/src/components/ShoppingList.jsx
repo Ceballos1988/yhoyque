@@ -111,7 +111,7 @@ const ShoppingList = ({
       alert("El nombre de la categoría no puede estar vacío.");
       return;
     }
-  
+
     if (!navigator.onLine) {
       // Crear categoría localmente con ID temporal
       const nuevaCategoria = {
@@ -119,17 +119,16 @@ const ShoppingList = ({
         title: newCategoryTitle.trim(),
         items: [],
       };
-  
-      onAddCategory(list._id, nuevaCategoria);  // Enviar al callback del padre para actualizar el estado
+
+      onAddCategory(list._id, nuevaCategoria); // Enviar al callback del padre para actualizar el estado
       closeCategoryModal();
       return;
     }
-  
+
     // Si hay conexión, usar el comportamiento original
     onAddCategory(list._id, newCategoryTitle.trim());
     closeCategoryModal();
   };
-  
 
   return (
     <div className="shopping-list-card  p-4   rounded-lg shadow-md">
@@ -302,13 +301,17 @@ const ShoppingList = ({
                   {safeItems.length > 0 ? (
                     safeItems.map((item) => (
                       <li
-                        key={item._id || item.name} // Fallback para items sin ID
-                        className={`flex justify-between items-center mb-2 ${
-                          item.isPurchased ? "line-through text-gray-400" : ""
-                        }`}
+                        key={item._id || item.name}
+                        className="flex justify-between items-center mb-2"
                       >
                         <div className="flex space-x-2">
-                          <span>
+                          <span
+                            className={`item-text ${
+                              item.isPurchased
+                                ? "line-through text-gray-400"
+                                : ""
+                            }`}
+                          >
                             {item.quantity && `${item.quantity} `}
                             {item.unit && `${item.unit} `}
                             {item.name}

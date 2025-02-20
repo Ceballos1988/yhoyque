@@ -36,6 +36,7 @@ const CreateRecipe = () => {
 
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
+  
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
@@ -132,12 +133,14 @@ const CreateRecipe = () => {
 
   // Asegurar que cada paso esté bien formateado
   const handleStepChange = (index, value) => {
-    const updatedSteps = [...recipe.steps];
-    updatedSteps[index] = value;
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
-      steps: updatedSteps,
-    }));
+    if (value.length <= 150) {
+      const updatedSteps = [...recipe.steps];
+      updatedSteps[index] = value;
+      setRecipe((prevRecipe) => ({
+        ...prevRecipe,
+        steps: updatedSteps,
+      }));
+    }
   };
 
   // Manejar cambios en otros campos
@@ -191,15 +194,14 @@ const CreateRecipe = () => {
     formData.append("difficulty", recipe.difficulty);
     formData.append("courseType", recipe.courseType);
 
-    // Manejar dietType como un array
+    // Si no hay valores seleccionados, enviar "None"
     if (recipe.dietType.length > 0) {
       recipe.dietType.forEach((diet, index) => {
-        formData.append(`dietType[${index}]`, diet);
+        formData.append(`dietType[${index}]`, diet); // ✅ Ahora los valores ya están en inglés
       });
     } else {
       formData.append("dietType[0]", "None");
     }
-
     // Manejar ingredientes
     recipe.ingredients.forEach((ingredient, index) => {
       formData.append(`ingredients[${index}][name]`, ingredient.name);
@@ -295,7 +297,11 @@ const CreateRecipe = () => {
           className="back-button"
           aria-label="Volver"
         >
-          <img src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png" alt="Volver" className="arrow-icon" />
+          <img
+            src="https://res.cloudinary.com/dnlyti3zm/image/upload/v1738963346/volver_vfhz7r.png"
+            alt="Volver"
+            className="arrow-icon"
+          />
         </button>
 
         <nav className="breadcrumb-wall" aria-label="breadcrumb">
@@ -393,7 +399,7 @@ const CreateRecipe = () => {
                 comunidad.
               </div>
             )}
-            
+
             <form
               onSubmit={handleSubmit}
               className={`create-recipe-form glass-effect p-4 rounded-lg shadow-lg font-raleway ${
@@ -425,7 +431,7 @@ const CreateRecipe = () => {
                     htmlFor="prepTime"
                     className="create-recipe-label font-semibold "
                   >
-                    Tiempo de preparación (opcional)
+                    Tiempo de preparación min (opcional)
                   </label>
                   <input
                     id="prepTime"
@@ -434,7 +440,7 @@ const CreateRecipe = () => {
                     value={recipe.prepTime || ""}
                     onChange={handleChange}
                     className="create-recipe-input mt-3 mb-3"
-                    placeholder="Ej: 30 min"
+                    placeholder="Ej: 30"
                   />
                 </div>
                 <div className="w-1/2">
@@ -510,18 +516,18 @@ const CreateRecipe = () => {
               </label>
               <div className="flex flex-wrap gap-4 mb-4">
                 {[
-                  "Vegetarian",
-                  "Vegan",
-                  "Gluten-Free",
-                  "Dairy-Free",
-                  "Keto",
-                  "Paleo",
+                  { label: "Vegetariana", value: "Vegetarian" },
+                  { label: "Vegana", value: "Vegan" },
+                  { label: "Sin gluten", value: "Gluten-Free" },
+                  { label: "Sin lácteos", value: "Dairy-Free" },
+                  { label: "Keto", value: "Keto" },
+                  { label: "Paleo", value: "Paleo" },
                 ].map((diet) => (
-                  <label key={diet} className="custom-checkbox">
+                  <label key={diet.value} className="custom-checkbox">
                     <input
                       type="checkbox"
-                      value={diet}
-                      checked={recipe.dietType.includes(diet)}
+                      value={diet.value} // ✅ Enviar el valor en inglés al backend
+                      checked={recipe.dietType.includes(diet.value)}
                       onChange={(e) => {
                         const { checked, value } = e.target;
                         setRecipe((prevRecipe) => ({
@@ -534,7 +540,7 @@ const CreateRecipe = () => {
                         }));
                       }}
                     />
-                    {diet}
+                    {diet.label} {/* ✅ Muestra la etiqueta en español */}
                   </label>
                 ))}
               </div>
@@ -649,17 +655,23 @@ const CreateRecipe = () => {
               >
                 Pasos
               </label>
+
               <div className="steps-scroll-container">
                 {recipe.steps.map((step, index) => (
-                  <div key={index} className="flex items-center gap-2 ">
-                    {/* Textarea para el paso */}
-                    <div className="w-full">
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 w-full mb-3"
+                  >
+                    <div className="w-4/5 flex flex-col">
+                      {/* Label con el número del paso */}
                       <label
                         htmlFor={`step-${index}`}
-                        className="block text-sm text-gray-300 mb-2"
+                        className="text-sm text-gray-300 mb-1"
                       >
-                        Paso {index + 1}
+                        Paso {index + 1} (Máximo 150 caracteres)
                       </label>
+
+                      {/* Textarea con límite de 150 caracteres */}
                       <textarea
                         id={`step-${index}`}
                         value={step || ""}
@@ -667,9 +679,15 @@ const CreateRecipe = () => {
                           handleStepChange(index, e.target.value)
                         }
                         placeholder={`Paso ${index + 1}`}
-                        className="create-recipe-textarea w-full"
+                        className="create-recipe-textarea w-full h-20 p-2 resize-none" // Tamaño reducido
+                        maxLength={150} // Límite visual en la interfaz
                         required
                       ></textarea>
+
+                      {/* Contador de caracteres en tiempo real */}
+                      <span className="text-left text-xs text-gray-400 mt-1 hover:text-gray-400 ">
+                        {step.length} / 150 caracteres
+                      </span>
                     </div>
 
                     {/* Botón Eliminar Paso */}
@@ -697,7 +715,7 @@ const CreateRecipe = () => {
                   title="Añadir paso"
                   className="flex items-center justify-center bg-naranja-bg text-white font-bold px-4 py-2 rounded-md hover:bg-azul-bg hover:text-white transition duration-300"
                 >
-                  + Añadir
+                  + Añadir paso
                 </button>
               </div>
 
