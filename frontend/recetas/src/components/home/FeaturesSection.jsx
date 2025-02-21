@@ -50,8 +50,6 @@ function FeaturesSection() {
     speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
     centerMode: true,
     centerPadding: "0px",
     adaptiveHeight: true,
@@ -67,6 +65,7 @@ function FeaturesSection() {
       },
     ],
   };
+  
 
   return (
     <section className="features-section mb-10 mt-5" data-aos="zoom-in" aria-labelledby="features-title">

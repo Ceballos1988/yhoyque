@@ -116,14 +116,15 @@
 
 /* Pantallas pequeñas */
 @media (max-width: 1024px) {
-
+  .features-icon-container {
+    top: -20px;
+    
+  }
   .features-carousel-item{
     width: 90%!important; /* Asegura que la tarjeta no se corte */
     max-width: 280px!important; /* Evita que se haga demasiado grande */
   }
-  .features-slider .slick-slide {
-    margin: 0 20px; /* Ajusta el margen entre tarjetas */
-  }
+ 
 
   .features-grid {
     display: none; /* Esconder grid en pantallas pequeñas */
@@ -138,7 +139,7 @@
 
   .features-carousel-item h3 {
     font-size: 1.2rem !important;
-    margin-top: 35px;
+    margin-top: 55px;
   }
 
   .features-carousel-item p {
