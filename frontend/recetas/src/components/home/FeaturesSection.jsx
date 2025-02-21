@@ -36,22 +36,22 @@ function FeaturesSection() {
   }, []);
 
   const features = [
-    { icon: "/img/ico-1.png", title: "Búsqueda", description: "Encontrá recetas personalizadas con los ingredientes que tenés en casa, evitando desperdicios y ahorrando tiempo." },
+    { icon: "/img/ico-1.png", title: "Búsqueda", description: "Encontrá recetas personalizadas con los ingredientes que tenés en casa, evitando desperdicios." },
     { icon: "/img/ico-2.png", title: "Preparación", description: "Seguí las recetas paso a paso con un modo de preparación fácil de usar y bien detallado." },
     { icon: "/img/ico-3.png", title: "Filtros", description: "Filtrá las recetas según el tiempo de preparación y nivel de dificultad para adaptarlas a tus necesidades." },
     { icon: "/img/ico-4.png", title: "Favoritos", description: "Guardá tus recetas favoritas para acceder rápidamente a ellas cuando las necesites." },
-    { icon: "/img/ico-5.png", title: "Comunidad", description: "Unite a una comunidad de cocineros, compartí tus propias recetas y encontrá inspiración en las creaciones de otros usuarios." },
+    { icon: "/img/ico-5.png", title: "Comunidad", description: "Unite a una comunidad de cocineros, compartí tus recetas y encontrá inspiración." },
     { icon: "/img/ico-6.png", title: "Opinión", description: "Compartí tu opinión y revisá las experiencias de otros usuarios para descubrir las recetas más populares." },
   ];
 
   const sliderSettings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 4000,
     centerMode: true,
     centerPadding: "0px",
     adaptiveHeight: true,
@@ -82,7 +82,7 @@ function FeaturesSection() {
                 <img src={feature.icon} alt={`Icono de ${feature.title.toLowerCase()}`} className="features-icon" />
               </div>
               <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
+              <p className="text-description">{feature.description}</p>
             </div>
           ))}
         </Slider>
