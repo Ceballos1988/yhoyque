@@ -109,8 +109,7 @@ function Navbar() {
     <>
       {isOffline && (
         <div className="offline-banner bg-red-600 text-white text-center">
-          🚫 Estás en modo offline. Algunas funciones pueden no estar
-          disponibles.
+          🚫 Sin conexión. Funciones limitadas.
         </div>
       )}
       <nav className="navbar text-white p-2">

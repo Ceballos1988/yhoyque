@@ -164,7 +164,8 @@
   .features-slider {
     max-width: 300px;
     min-width: 200px;
-    height: 400px;
+    height: 400px!important;
+    margin-top: 40px;
   }
 
   .features-section .features-carousel-item {
