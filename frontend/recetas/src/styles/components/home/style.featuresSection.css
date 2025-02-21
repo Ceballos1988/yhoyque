@@ -5,7 +5,21 @@
 .features-section h3 {
   font-size: 1.3rem !important;
   margin-bottom: 15px;
+  margin-top: 35px;
   font-weight: bold; /* Esto hará que el texto sea negrita */
+
+}
+
+.features-section h2 {
+  font-size: 1.5rem !important;
+  margin-bottom: 45px;
+  margin-top: 35px;
+  font-weight: bold; /* Esto hará que el texto sea negrita */
+
+}
+
+.features-section p {
+  font-family: "Raleway", sans-serif!important;
 
 }
 
@@ -44,11 +58,14 @@
   color: white;
   background-color: #828362;
   border-radius: 10px 100px 70px 70px;
-  padding: 3rem;
+  padding: 1rem;
   margin: 50px auto;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
+.feature-card{
+  height: 230px;
+}
 /* Íconos */
 .features-icon-container {
   position: absolute;
@@ -97,14 +114,18 @@
 @media (min-width: 1024px) {
   .features-slider {
     display: none; /* Ocultar carrusel en pantallas grandes */
-    }
+  
+  }
 }
 
 /* Pantallas pequeñas */
 @media (max-width: 1024px) {
   .features-grid {
     display: none; /* Esconder grid en pantallas pequeñas */
+  
   }
+
+ 
 
   .features-slider {
     display: block; /* Mostrar el carrusel */
@@ -115,17 +136,30 @@
 
   .features-carousel-item h3 {
     font-size: 1.2rem !important;
+    margin-top: 35px;
   }
   
   .features-carousel-item p {
     font-size: 1rem !important;
+    font-family: "Josefin Slab", serif;
+
   }
 
   .features-section .features-carousel-item {
     margin-bottom: 50px !important; /* Aumenta la separación */
   }
 
-  .features-section .features-slider {
+  .features-section  {
+    width: 100%;
+    height: 520px;
+    display: flex;
+    justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  }
+
+  .features-slider {
     max-width: 300px;
     min-width: 200px;
     height: 320px;

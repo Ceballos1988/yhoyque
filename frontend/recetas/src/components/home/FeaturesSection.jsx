@@ -81,7 +81,7 @@ function FeaturesSection() {
               <div className="features-icon-container">
                 <img src={feature.icon} alt={`Icono de ${feature.title.toLowerCase()}`} className="features-icon" />
               </div>
-              <h3 className="text-naranja-bg">{feature.title}</h3>
+              <h3>{feature.title}</h3>
               <p>{feature.description}</p>
             </div>
           ))}
