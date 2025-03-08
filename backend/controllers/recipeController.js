@@ -845,15 +845,12 @@ export const toggleLikeRecipe = async (req, res) => {
 
 // Obtener receta por ID solo para administrador
 export const getRecipeByIdForAdmin = async (req, res) => {
-  const { id } = req.query; // Se espera que el ID venga como query param
+  const { id } = req.query;
+  if (!id) {
+    return res.status(400).json({ message: "ID de receta no proporcionado" });
+  }
 
   try {
-    // Verificar que se haya proporcionado un ID
-    if (!id) {
-      return res.status(400).json({ message: "ID de receta no proporcionado" });
-    }
-
-    // Buscar la receta en la base de datos
     const recipe = await Recipe.findById(id);
     if (!recipe) {
       return res.status(404).json({ message: "Receta no encontrada" });
@@ -861,9 +858,8 @@ export const getRecipeByIdForAdmin = async (req, res) => {
 
     res.status(200).json({ recipe });
   } catch (error) {
-    logger.error(
-      `Error al buscar receta por ID para administrador: ${error.message}`
-    );
+    logger.error(`Error al buscar receta por ID para administrador: ${error.message}`);
     res.status(500).json({ message: "Error al buscar la receta", error });
   }
 };
+
