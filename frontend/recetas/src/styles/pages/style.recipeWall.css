@@ -7,6 +7,13 @@
   font-size: 1.8rem;
 }
 
+.flecha h5{
+  
+   color: #EE8532!important;
+   font-size: 1.5rem;
+   
+ }
+
 .recipe-wall-container h2 {
   font-size: 1.2rem;
 }
@@ -275,5 +282,30 @@ p {
   .pagination button {
    
     font-size: 0.6rem!important;
+  }
+}
+
+.flecha img{
+  width: 10%;
+}
+
+@media (max-width:
+1300px) {
+  .flecha{
+    margin-left: 20px;
+  }
+
+}
+
+@media (max-width:
+550px) {
+  .flecha{
+    margin-left: 5px;
+  }
+  .flecha h5{
+  
+    color: #EE8532!important;
+    font-size: 1.2rem;
+    
   }
 }

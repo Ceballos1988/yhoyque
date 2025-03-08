@@ -13,7 +13,8 @@ const AdminBrands = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
   const [isTableLoading] = useState(false);
-  const [ setIsAddingBrand] = useState(false);
+  const [isAddingBrand, setIsAddingBrand] = useState(false);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [brandToDelete, setBrandToDelete] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,13 +31,15 @@ const AdminBrands = () => {
         setErrorMessage("No estás autenticado.");
         return; // No olvides detener el spinner
       }
-  
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/brands`, {
-        headers: {
 
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/brands`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setBrands(response.data); // Cargar marcas en el estado
     } catch (error) {
       console.error("Error al cargar las marcas:", error);
@@ -45,7 +48,6 @@ const AdminBrands = () => {
       setLoading(false); // Detener spinner global siempre
     }
   };
-  
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -69,12 +71,12 @@ const AdminBrands = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!newBrand.name || !newBrand.image) {
       setErrorMessage("Por favor, completa todos los campos.");
       return;
     }
-  
+
     try {
       setIsAddingBrand(true); // Spinner para agregar marca
       const token = localStorage.getItem("token");
@@ -82,11 +84,11 @@ const AdminBrands = () => {
         setErrorMessage("No estás autenticado.");
         return;
       }
-  
+
       const formData = new FormData();
       formData.append("name", newBrand.name);
       formData.append("image", newBrand.image);
-  
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/brands`,
         formData,
@@ -98,7 +100,7 @@ const AdminBrands = () => {
           },
         }
       );
-  
+
       setSuccessMessage(response.data.message || "Marca agregada con éxito.");
       setNewBrand({ name: "", image: null });
       setPreviewImage(null);
@@ -110,7 +112,6 @@ const AdminBrands = () => {
       setIsAddingBrand(false); // Detener el spinner
     }
   };
-  
 
   const handleEditSubmit = async (e, brand) => {
     e.preventDefault(); // Esto ya no causará un error
@@ -163,12 +164,14 @@ const AdminBrands = () => {
         return;
       }
 
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/brands/${brandToDelete}`, {
-        headers: {
-
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/brands/${brandToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setSuccessMessage("Marca eliminada con éxito.");
       fetchBrands(); // Refrescar las marcas después de eliminar
@@ -225,7 +228,10 @@ const AdminBrands = () => {
         </label>
 
         <div className="button-group-a mt-10">
-          <label htmlFor="file-upload" className=" text-base px-4 py-2 rounded-md  font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]  text-white">
+          <label
+            htmlFor="file-upload"
+            className=" text-base px-4 py-2 rounded-md  font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]  text-white"
+          >
             Seleccionar Imagen
           </label>
           <input
@@ -236,8 +242,16 @@ const AdminBrands = () => {
             id="file-upload"
             className="hidden"
           />
-          <button type="submit" className="text-base px-4 py-2 rounded-md  font-bold transition-all duration-300 bg-[#EE8532] hover:bg-[#0f172b]  text-white">
-            Agregar +
+          <button
+            type="submit"
+            disabled={isAddingBrand}
+            className={`text-base px-4 py-2 rounded-md font-bold transition-all duration-300 ${
+              isAddingBrand
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#EE8532] hover:bg-[#0f172b] text-white"
+            }`}
+          >
+            {isAddingBrand ? "Agregando..." : "Agregar +"}
           </button>
         </div>
         {previewImage && (

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 /**
@@ -8,7 +8,19 @@ import { AuthContext } from "../context/AuthContext";
  * @returns {Object} - Objeto que contiene el usuario actual (si está autenticado).
  */
 export const useAuth = () => {
-  const { currentUser, isLoading } = useContext(AuthContext);
+  const { currentUser, isLoading, fetchUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      fetchUser(); // 🔹 Refresca el usuario cuando cambie la sesión
+    };
+
+    window.addEventListener("authChanged", handleAuthChange);
+
+    return () => {
+      window.removeEventListener("authChanged", handleAuthChange);
+    };
+  }, [fetchUser]); // 🔹 Se ejecuta solo si `fetchUser` cambia
 
   return { user: currentUser, isLoading };
 };

@@ -102,6 +102,7 @@ function Login() {
           onChange={(e) => setEmail(e.target.value)}
           className="input-field"
           autoComplete="email"
+          placeholder="tucorreo@ejemplo.com"  // 📌 Placeholder corregido
           required
           aria-required="true"
         />
@@ -118,6 +119,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="input-field"
+          placeholder="********"  // 📌 Placeholder corregido
           autoComplete="current-password"
           required
           aria-required="true"
@@ -151,7 +153,7 @@ function Login() {
         </button>
       </div>
 
-      <p className="mt-10 text-lg mb-2 flex flex-wrap justify-center">
+      <p className="mt-2 text-lg mb-2 flex flex-wrap justify-center">
         ¿No tienes cuenta?
       </p>
       <button onClick={() => navigate("/register")} className="text-naranja-bg">

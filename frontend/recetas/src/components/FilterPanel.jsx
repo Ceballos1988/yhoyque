@@ -230,7 +230,7 @@ const FilterPanel = ({ onFilterChange = () => {} }) => {
           </div>
         </div>
 
-        <div className="sort-actions pb-20">
+        <div className="sort-actions pb-54">
           <button
             type="submit"
             className="apply-sort-button font-poppins text-base"

@@ -55,7 +55,18 @@ const fetchWithCache = async (url, options = {}, token) => {
 // 🔹 Funciones API optimizadas con caché
 
 // Buscar receta por ID
-export const searchRecipeById = (id, token) => fetchWithCache(`/api/recipes/admin/searchById?id=${id}`, {}, token);
+export const searchRecipeById = async (id, token) => {
+  try {
+    const response = await api.get(`/api/recipes/admin/searchById`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { id },
+    });
+    return response.data.recipe;
+  } catch (error) {
+    console.error("Error en searchRecipeById:", error);
+    throw error;
+  }
+};
 
 // Obtener estadísticas de administrador
 export const getAdminStatistics = (token) => fetchWithCache(`/api/admin/statistics`, {}, token);

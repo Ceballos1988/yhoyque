@@ -57,10 +57,13 @@ const AuthProvider = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    sessionStorage.clear(); // Opcional: limpiar toda la sesión
+    sessionStorage.clear(); // 🔹 Limpia la sesión si es necesario
     setCurrentUser(null);
+    
+    // 🔹 Disparar evento global para sincronizar cambios
     window.dispatchEvent(new Event("authChanged"));
   };
+  
 
   // Memoizamos handleAuthChange para evitar recrearla en cada render
   const handleAuthChange = useCallback(() => {

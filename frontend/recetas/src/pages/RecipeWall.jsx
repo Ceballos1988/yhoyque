@@ -292,11 +292,17 @@ const RecipeWall = () => {
 
   const handleIdSearch = async (id) => {
     try {
-      const token = localStorage.getItem("token"); // Obtener el token del usuario
-      const recipe = await searchRecipeById(id, token); // Llamar al servicio
-      setRecipes([recipe]); // Mostrar solo la receta encontrada
-      setTotalRecipes(1); // Ajustar la paginación
-      console.log("Receta encontrada:", recipe);
+      const token = localStorage.getItem("token");
+      const recipe = await searchRecipeById(id, token);
+  
+      if (recipe) {
+        setRecipes([recipe]);
+        setTotalRecipes(1);
+      } else {
+        setRecipes([]);
+        setTotalRecipes(0);
+        setErrorMessage("No se encontró una receta con ese ID.");
+      }
     } catch (error) {
       console.error("Error al buscar receta por ID:", error);
       setRecipes([]);
@@ -304,6 +310,8 @@ const RecipeWall = () => {
       setErrorMessage("No se encontró una receta con ese ID.");
     }
   };
+  
+
   const handleLikeToggle = async (recipeId) => {
     try {
       const token = localStorage.getItem("token");
@@ -311,9 +319,10 @@ const RecipeWall = () => {
         console.error("No hay token, no se puede dar like.");
         return;
       }
-  
-      const API_URL = import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
-  
+
+      const API_URL =
+        import.meta.env.VITE_API_URL || "https://yhoyque.onrender.com";
+
       // Actualiza la UI sin esperar respuesta
       setRecipes((prevRecipes) =>
         prevRecipes.map((recipe) =>
@@ -327,7 +336,7 @@ const RecipeWall = () => {
             : recipe
         )
       );
-  
+
       const response = await axios.put(
         `${API_URL}/api/recipes/like/${recipeId}`,
         null,
@@ -335,7 +344,7 @@ const RecipeWall = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
+
       if (response.data && response.data.likes) {
         setRecipes((prevRecipes) =>
           prevRecipes.map((recipe) =>
@@ -348,11 +357,12 @@ const RecipeWall = () => {
         console.warn("Respuesta inesperada en likes:", response.data);
       }
     } catch (error) {
-      console.error("Error al manejar el like:", error.response?.data || error.message);
+      console.error(
+        "Error al manejar el like:",
+        error.response?.data || error.message
+      );
     }
   };
-  
-  
 
   return (
     <div
@@ -427,7 +437,8 @@ const RecipeWall = () => {
               </div>
 
               {/* Sección de filtros */}
-              <div className="filter-section mb-10">
+              <div className="filter-section mb-10 pb-20
+              ">
                 <FilterPanel onClearFilters={handleClearFilters} />
                 {filtersActive && (
                   <div className="filters-active-message text-raleway text-naranja-bg mt-2 text-center">
@@ -539,6 +550,18 @@ const RecipeWall = () => {
                   creado. Las recetas te indicarán cuáles son los ingredientes
                   que te faltan para poder armar fácilmente tu lista de compras.
                 </p>
+                <div className="flecha flex items-center">
+                  <h5 className="font-josefin font-xl flex items-center gap-2 flecha">
+                    <img
+                      src="/img/flecha.png"
+                      srcSet="/img/flecha-celu.png 550w, /img/flecha.png 1024w"
+                      sizes="(max-width: 550px) 550px, 1024px"
+                      alt="Flecha señalando el menú"
+                      className="flecha"
+                    />
+                    Abrí el menú para buscar recetas, filtrar y ordenar.
+                  </h5>
+                </div>
               </div>
 
               <p className="mt-10 mb-10 text-white text-center font-josefin">

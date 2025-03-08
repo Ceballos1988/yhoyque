@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../styles/components/style.navbar.css";
 import Modal from "react-modal";
 import { useOffline } from "../context/useOffline";
@@ -22,12 +22,56 @@ function Navbar() {
   const location = useLocation();
   const { isOffline } = useOffline(); // 🟢 Obtiene el estado de conexión
 
+  // ✅ Función para cerrar sesión
+  const logout = useCallback(() => {
+    console.log("🔴 Cerrando sesión...");
+    closeLogoutModal();
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setUserName("");
+    setUserRole("");
+    window.dispatchEvent(new Event("authChanged"));
+    navigate("/");
+  }, [navigate]);
+
+  // ✅ Función para obtener info del usuario
+  const fetchUserInfo = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAuthenticated(false);
+      setUserName("");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/user-info`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserName(data.username.toUpperCase());
+        setUserRole(data.role);
+      } else if (response.status === 401) {
+        console.warn("🔴 Sesión expirada, cerrando sesión automáticamente.");
+        logout(); // 🚀 Cierra sesión automáticamente si el token expiró
+      }
+    } catch (error) {
+      console.error("⚠️ Error al obtener la información del usuario:", error);
+      setIsAuthenticated(false);
+    }
+  }, [logout]);
+
   useEffect(() => {
     const checkAuthentication = () => {
       const token = localStorage.getItem("token");
       if (token) {
         setIsAuthenticated(true);
-        fetchUserInfo(token);
+        fetchUserInfo();
       } else {
         setIsAuthenticated(false);
         setUserName("");
@@ -39,18 +83,11 @@ function Navbar() {
     window.addEventListener("authChanged", checkAuthentication);
     window.addEventListener("storage", checkAuthentication);
 
-    const handleResize = () => {
-      if (window.innerWidth >= 769) setIsMobileMenuOpen(false);
-    };
-
-    window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("authChanged", checkAuthentication);
       window.removeEventListener("storage", checkAuthentication);
-      window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [fetchUserInfo]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -64,37 +101,6 @@ function Navbar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const fetchUserInfo = (token) => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/auth/user-info`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((data) => {
-        setUserName(data.username.toUpperCase());
-        setUserRole(data.role); // Guardar el rol del usuario
-      })
-      .catch((error) =>
-        console.error("Error al obtener la información del usuario:", error)
-      );
-  };
-
-  const logout = () => {
-    // Cierra el modal antes de realizar el cierre de sesión
-    closeLogoutModal();
-
-    // Eliminar el token y limpiar el estado de favoritos y usuario
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-    setUserName("");
-    window.dispatchEvent(new Event("authChanged"));
-
-    // Redirigir a la página principal o login
-    navigate("/");
-  };
-
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const isActive = (path) => (location.pathname === path ? "active-page" : "");
@@ -104,7 +110,6 @@ function Navbar() {
 
   // Función para cerrar el modal de confirmación de cierre de sesión
   const closeLogoutModal = () => setShowLogoutModal(false);
-
   return (
     <>
       {isOffline && (
